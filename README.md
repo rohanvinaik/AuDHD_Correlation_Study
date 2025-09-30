@@ -34,6 +34,15 @@ A comprehensive, production-ready system for discovering biologically distinct p
 - **Ensemble Consensus**: Combine multiple methods for robust subgroup discovery
 - **Extended Validation**: Autonomic, circadian, environmental, sensory, interoceptive differentiation tests
 
+### Automated Genetic Analysis (NEW)
+- **Pipeline Integration**: Automatically analyzes significant SNPs/genes after identification
+- **BLAST/NCBI Lookups**: Gene function, variant pathogenicity, clinical significance
+- **Literature Mining**: PubMed searches for disease/phenotype associations
+- **Causal Inference**: Extracts mechanistic connections from literature
+- **Optional LLM Synthesis**: AI-generated summaries of findings (~$0.001/gene)
+- **Researcher Reports**: Human-readable reports with key findings and novel associations
+- **Cost-Optimized**: Aggressive caching keeps costs <$1/month
+
 ### Analysis Pipeline
 - **Multi-Omics Integration**: MOFA/PCA/CCA with configurable methods
 - **Advanced Clustering**: HDBSCAN, K-means, hierarchical with automatic parameter selection
@@ -64,6 +73,9 @@ A comprehensive, production-ready system for discovering biologically distinct p
 ### Integration & Clustering Documentation (NEW)
 - **[Prompt 3.1 Summary](docs/PROMPT_3_1_SUMMARY.md)** - Extended multi-modal integration system
 - **[Prompt 3.2 Summary](docs/PROMPT_3_2_SUMMARY.md)** - Enhanced clustering with extended features
+
+### Genetic Analysis Documentation (NEW)
+- **[Genetic Analysis System](docs/GENETIC_ANALYSIS_SYSTEM.md)** - BLAST/NCBI integration, literature mining, LLM synthesis
 
 ### Data Acquisition Documentation
 - **[Pipeline README](scripts/pipeline/README.md)** - Automated download system
@@ -184,6 +196,43 @@ from audhd_correlation.features.sensory_detailed import SensoryProcessor
 sensory_processor = SensoryProcessor()
 sensory_results = sensory_processor.process_sensory_battery(sensory_data)
 print(f"P50 gating ratio: {sensory_results['p50_gating_ratio']:.3f}")
+```
+
+**Integrated Genetic Analysis (NEW):**
+
+After identifying significant genetic findings, the pipeline automatically analyzes them:
+
+```python
+from audhd_correlation.analysis import run_integrated_pipeline
+
+# After GWAS, DEG, or pathway analysis, automatically lookup and analyze findings
+results = run_integrated_pipeline(
+    gwas_file='data/processed/gwas/significant_snps.csv',
+    deg_file='data/processed/expression/differentially_expressed_genes.csv',
+    pathway_file='data/processed/pathways/enriched_pathways.csv',
+    use_llm=True  # Optional: AI synthesis for ~$0.001/gene
+)
+
+# Results include:
+# - GWAS variants: Clinical significance, disease associations
+# - DEG genes: Function, literature support, causal connections
+# - Pathway genes: Biological roles, mechanistic links
+# - Researcher reports: Human-readable markdown files
+# - Master report: Cross-analysis findings
+
+print(f"GWAS variants analyzed: {results['gwas']['variants_analyzed']}")
+print(f"DEG genes analyzed: {results['deg']['genes_analyzed']}")
+print(f"Researcher reports: {results['master_report']}")
+```
+
+The system automatically:
+1. Looks up each SNP/gene in NCBI/ClinVar/dbSNP
+2. Searches PubMed for disease/phenotype associations
+3. Extracts causal connections from literature
+4. Generates researcher-friendly reports for review
+5. Identifies high-confidence genes appearing across multiple analyses
+
+See [Genetic Analysis System docs](docs/GENETIC_ANALYSIS_SYSTEM.md) for details
 
 # Interoception
 from audhd_correlation.features.interoception import InteroceptionProcessor
@@ -395,6 +444,20 @@ AuDHD_Correlation_Study/
 - **Ensemble Consensus**: Combine multiple methods (K-means, spectral, agglomerative, HDBSCAN) for robust subgroups
 - **Extended Validation**: Test autonomic, circadian, environmental, sensory, interoceptive differentiation across clusters
 
+### Automated Genetic Analysis (NEW)
+
+**1,600 Lines of Code | Pipeline-Integrated | Cost-Optimized**
+
+- **Genetic Lookup System (980 lines)**: NCBI/dbSNP/ClinVar integration with aggressive caching
+- **Pipeline Integration (620 lines)**: Automatic analysis after GWAS/DEG/pathway identification
+- **Literature Mining**: PubMed searches for disease/phenotype associations with relevance ranking
+- **Causal Inference**: Extracts mechanistic connections from paper titles and abstracts
+- **Optional LLM Synthesis**: Claude Haiku (~$0.001/gene) or GPT-4o-mini for AI summaries
+- **Researcher Reports**: Human-readable markdown with key findings, novel associations, cross-analysis overlaps
+- **Cost Tracking**: API call counts, cache hit rates, estimated LLM costs
+- **3-Tier Caching**: API responses (30-day TTL), LLM syntheses (permanent), final results (permanent)
+- **Target Cost**: <$1/month with 80% cache hit rate after initial run
+
 ## 📊 Data Summary
 
 ### Downloaded Data (14.7 GB)
@@ -532,11 +595,12 @@ pip install tslearn
 ## 📈 Performance Metrics
 
 **System Scale:**
-- ~7,950 lines of production code
+- ~9,550 lines of production code
 - 376 configured features across 11 modalities
 - 14.7 GB downloaded data (8 GEO datasets, 72 SRA samples, 278 papers)
 - 4 hierarchical integration levels
 - 5 advanced clustering methods
+- Automated genetic analysis with pipeline integration
 - 500+ comprehensive tests
 
 **Computational Performance:**
@@ -573,10 +637,20 @@ pip install tslearn
 - ✅ Ensemble consensus from multiple methods
 - ✅ Extended validation framework (autonomic, circadian, environmental, sensory tests)
 
+**Automated Genetic Analysis (1,600 lines)**
+- ✅ Genetic lookup system with NCBI/dbSNP/ClinVar integration (980 lines)
+- ✅ Pipeline integration for GWAS/DEG/pathway results (620 lines)
+- ✅ PubMed literature mining with causal inference
+- ✅ Optional LLM synthesis (Claude Haiku/GPT-4o-mini)
+- ✅ Researcher-friendly markdown reports with key findings
+- ✅ 3-tier aggressive caching (API/LLM/results)
+- ✅ Cost tracking and optimization (<$1/month target)
+- ✅ Cross-analysis overlap detection
+
 ### System Updates
 
 - ✅ Configuration expanded to 376 feature definitions
-- ✅ Comprehensive documentation (5 detailed summary files)
+- ✅ Comprehensive documentation (6 detailed summary files)
 - ✅ Data acquisition complete (14.7 GB across 5 sources)
 - ✅ Automated monitoring paused (manual check mode)
 

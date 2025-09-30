@@ -12,6 +12,11 @@ from .genetic_lookup import (
     quick_variant_lookup
 )
 
+from .pipeline_integration import (
+    PipelineGeneticAnalysis,
+    run_integrated_pipeline
+)
+
 __all__ = [
     'GeneticAnalysisSystem',
     'GeneticLookupResult',
@@ -19,5 +24,7 @@ __all__ = [
     'PubMedClient',
     'LLMSynthesizer',
     'quick_gene_lookup',
-    'quick_variant_lookup'
+    'quick_variant_lookup',
+    'PipelineGeneticAnalysis',
+    'run_integrated_pipeline'
 ]
