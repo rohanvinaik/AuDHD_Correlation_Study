@@ -1,0 +1,359 @@
+{
+  "generated_date": "2025-09-30T14:30:00",
+  "version": "1.0",
+  "description": "Comprehensive multi-omics data source catalog for transcriptomics, proteomics, metabolomics, and genomics",
+
+  "transcriptomics": {
+    "sources": [
+      {
+        "repository": "GEO",
+        "name": "Gene Expression Omnibus",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/",
+        "api": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
+        "data_types": ["microarray", "RNA-seq", "single-cell RNA-seq", "spatial transcriptomics"],
+        "access": "public",
+        "accession_pattern": "GSE\\d+|GSM\\d+",
+        "api_method": "E-utilities",
+        "rate_limit": "3 req/sec",
+        "organism_support": "all",
+        "integration_status": "complete"
+      },
+      {
+        "repository": "ArrayExpress",
+        "name": "ArrayExpress (EBI)",
+        "url": "https://www.ebi.ac.uk/arrayexpress/",
+        "api": "https://www.ebi.ac.uk/arrayexpress/json/v3/experiments",
+        "data_types": ["microarray", "RNA-seq", "ChIP-seq"],
+        "access": "public",
+        "accession_pattern": "E-[A-Z]{4}-\\d+",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "all",
+        "integration_status": "partial"
+      },
+      {
+        "repository": "SRA",
+        "name": "Sequence Read Archive",
+        "url": "https://www.ncbi.nlm.nih.gov/sra",
+        "api": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
+        "data_types": ["RNA-seq", "scRNA-seq", "bulk RNA-seq"],
+        "access": "public",
+        "accession_pattern": "SRR\\d+|SRX\\d+|SRP\\d+",
+        "api_method": "E-utilities",
+        "rate_limit": "3 req/sec",
+        "organism_support": "all",
+        "integration_status": "complete"
+      },
+      {
+        "repository": "GTEx",
+        "name": "Genotype-Tissue Expression",
+        "url": "https://gtexportal.org/",
+        "api": "https://gtexportal.org/api/v2/",
+        "data_types": ["bulk RNA-seq", "tissue-specific expression"],
+        "access": "public",
+        "accession_pattern": "GTEX-[A-Z0-9]+",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "human",
+        "integration_status": "needed",
+        "priority": "high",
+        "notes": "Critical for tissue-specific gene expression"
+      },
+      {
+        "repository": "Human Cell Atlas",
+        "name": "Human Cell Atlas",
+        "url": "https://data.humancellatlas.org/",
+        "api": "https://data.humancellatlas.org/explore/",
+        "data_types": ["scRNA-seq", "single-cell multiomics"],
+        "access": "public",
+        "accession_pattern": "HCA[0-9]+",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "human",
+        "integration_status": "needed",
+        "priority": "medium",
+        "notes": "Valuable for cell-type-specific analysis"
+      }
+    ]
+  },
+
+  "proteomics": {
+    "sources": [
+      {
+        "repository": "PRIDE",
+        "name": "PRIDE (PRoteomics IDEntifications)",
+        "url": "https://www.ebi.ac.uk/pride/",
+        "api": "https://www.ebi.ac.uk/pride/ws/archive/v2/",
+        "data_types": ["mass spectrometry", "protein identification", "quantification"],
+        "access": "public",
+        "accession_pattern": "PXD\\d{6,}|PRD\\d{6,}",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "all",
+        "integration_status": "needed",
+        "priority": "high",
+        "notes": "Primary proteomics repository"
+      },
+      {
+        "repository": "MassIVE",
+        "name": "MassIVE (Mass Spectrometry Interactive Virtual Environment)",
+        "url": "https://massive.ucsd.edu/",
+        "api": "https://massive.ucsd.edu/ProteoSAFe/datasets_json.jsp",
+        "data_types": ["mass spectrometry", "proteomics", "metabolomics"],
+        "access": "public",
+        "accession_pattern": "MSV\\d{9}",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "all",
+        "integration_status": "needed",
+        "priority": "high"
+      },
+      {
+        "repository": "ProteomeXchange",
+        "name": "ProteomeXchange Consortium",
+        "url": "http://www.proteomexchange.org/",
+        "api": "http://proteomecentral.proteomexchange.org/api/",
+        "data_types": ["proteomics", "cross-repository"],
+        "access": "public",
+        "accession_pattern": "PXD\\d{6,}",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "all",
+        "integration_status": "needed",
+        "priority": "medium",
+        "notes": "Meta-repository linking to PRIDE, MassIVE, etc."
+      },
+      {
+        "repository": "PeptideAtlas",
+        "name": "PeptideAtlas",
+        "url": "http://www.peptideatlas.org/",
+        "api": "http://www.peptideatlas.org/api/",
+        "data_types": ["peptide identifications", "protein expression"],
+        "access": "public",
+        "accession_pattern": "PASS\\d{5}",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "multiple",
+        "integration_status": "needed",
+        "priority": "low"
+      },
+      {
+        "repository": "UniProt",
+        "name": "Universal Protein Resource",
+        "url": "https://www.uniprot.org/",
+        "api": "https://rest.uniprot.org/",
+        "data_types": ["protein sequences", "annotations", "functional info"],
+        "access": "public",
+        "accession_pattern": "[OPQ][0-9][A-Z0-9]{3}[0-9]",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "all",
+        "integration_status": "needed",
+        "priority": "high",
+        "notes": "Essential for protein annotation"
+      },
+      {
+        "repository": "Human Protein Atlas",
+        "name": "Human Protein Atlas",
+        "url": "https://www.proteinatlas.org/",
+        "api": "https://www.proteinatlas.org/api/",
+        "data_types": ["protein expression", "tissue specificity", "subcellular location"],
+        "access": "public",
+        "accession_pattern": "ENSG\\d{11}",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "human",
+        "integration_status": "needed",
+        "priority": "high",
+        "notes": "Critical for tissue/cell-type protein expression"
+      }
+    ]
+  },
+
+  "metabolomics": {
+    "sources": [
+      {
+        "repository": "Metabolomics Workbench",
+        "name": "Metabolomics Workbench",
+        "url": "https://www.metabolomicsworkbench.org/",
+        "api": "https://www.metabolomicsworkbench.org/rest/",
+        "data_types": ["metabolite profiling", "lipidomics"],
+        "access": "public",
+        "accession_pattern": "ST\\d{6}",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "all",
+        "integration_status": "partial"
+      },
+      {
+        "repository": "MetaboLights",
+        "name": "MetaboLights (EBI)",
+        "url": "https://www.ebi.ac.uk/metabolights/",
+        "api": "https://www.ebi.ac.uk/metabolights/ws/",
+        "data_types": ["metabolomics", "lipidomics"],
+        "access": "public",
+        "accession_pattern": "MTBLS\\d+",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "all",
+        "integration_status": "needed",
+        "priority": "medium"
+      },
+      {
+        "repository": "HMDB",
+        "name": "Human Metabolome Database",
+        "url": "https://hmdb.ca/",
+        "api": "https://hmdb.ca/system/",
+        "data_types": ["metabolite annotations", "pathway info"],
+        "access": "public",
+        "accession_pattern": "HMDB\\d{7}",
+        "api_method": "XML/Downloads",
+        "rate_limit": "none specified",
+        "organism_support": "human",
+        "integration_status": "needed",
+        "priority": "high",
+        "notes": "Essential for metabolite annotation"
+      }
+    ]
+  },
+
+  "genomics": {
+    "sources": [
+      {
+        "repository": "GWAS Catalog",
+        "name": "NHGRI-EBI GWAS Catalog",
+        "url": "https://www.ebi.ac.uk/gwas/",
+        "api": "https://www.ebi.ac.uk/gwas/rest/api/",
+        "data_types": ["GWAS summary statistics", "variant-trait associations"],
+        "access": "public",
+        "accession_pattern": "GCST\\d+",
+        "api_method": "REST",
+        "rate_limit": "none specified",
+        "organism_support": "human",
+        "integration_status": "complete"
+      },
+      {
+        "repository": "dbSNP",
+        "name": "Single Nucleotide Polymorphism Database",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/",
+        "api": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
+        "data_types": ["SNPs", "indels", "variants"],
+        "access": "public",
+        "accession_pattern": "rs\\d+",
+        "api_method": "E-utilities",
+        "rate_limit": "3 req/sec",
+        "organism_support": "all",
+        "integration_status": "complete"
+      },
+      {
+        "repository": "ClinVar",
+        "name": "ClinVar",
+        "url": "https://www.ncbi.nlm.nih.gov/clinvar/",
+        "api": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
+        "data_types": ["clinical variants", "pathogenicity"],
+        "access": "public",
+        "accession_pattern": "VCV\\d+",
+        "api_method": "E-utilities",
+        "rate_limit": "3 req/sec",
+        "organism_support": "human",
+        "integration_status": "complete"
+      },
+      {
+        "repository": "dbGaP",
+        "name": "Database of Genotypes and Phenotypes",
+        "url": "https://www.ncbi.nlm.nih.gov/gap/",
+        "api": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
+        "data_types": ["genotype-phenotype studies"],
+        "access": "controlled",
+        "accession_pattern": "phs\\d{6}",
+        "api_method": "E-utilities",
+        "rate_limit": "3 req/sec",
+        "organism_support": "human",
+        "integration_status": "complete",
+        "notes": "Requires application for access"
+      }
+    ]
+  },
+
+  "integration_priorities": {
+    "immediate": [
+      {"repository": "PRIDE", "omics": "proteomics", "reason": "Primary proteomics resource"},
+      {"repository": "MassIVE", "omics": "proteomics", "reason": "Complementary to PRIDE"},
+      {"repository": "GTEx", "omics": "transcriptomics", "reason": "Tissue-specific expression"},
+      {"repository": "Human Protein Atlas", "omics": "proteomics", "reason": "Protein expression data"},
+      {"repository": "HMDB", "omics": "metabolomics", "reason": "Metabolite annotation"}
+    ],
+    "near_term": [
+      {"repository": "UniProt", "omics": "proteomics", "reason": "Protein annotation"},
+      {"repository": "MetaboLights", "omics": "metabolomics", "reason": "Additional metabolomics"},
+      {"repository": "Human Cell Atlas", "omics": "transcriptomics", "reason": "Single-cell data"}
+    ],
+    "long_term": [
+      {"repository": "PeptideAtlas", "omics": "proteomics", "reason": "Peptide-level data"},
+      {"repository": "ProteomeXchange", "omics": "proteomics", "reason": "Meta-repository"}
+    ]
+  },
+
+  "cross_omics_resources": {
+    "pathways": [
+      {
+        "name": "KEGG",
+        "url": "https://www.genome.jp/kegg/",
+        "api": "https://rest.kegg.jp/",
+        "integration_status": "needed",
+        "priority": "high",
+        "notes": "Integrates genes, transcripts, proteins, metabolites"
+      },
+      {
+        "name": "Reactome",
+        "url": "https://reactome.org/",
+        "api": "https://reactome.org/ContentService/",
+        "integration_status": "needed",
+        "priority": "high",
+        "notes": "Pathway-level integration"
+      },
+      {
+        "name": "STRING",
+        "url": "https://string-db.org/",
+        "api": "https://string-db.org/api/",
+        "integration_status": "needed",
+        "priority": "medium",
+        "notes": "Protein-protein interactions"
+      }
+    ]
+  },
+
+  "recommended_datasets": {
+    "autism_adhd_specific": [
+      {
+        "name": "SPARK Proteomics",
+        "description": "Proteomics data from SPARK autism cohort",
+        "repository": "PRIDE",
+        "accession": "PXD027856",
+        "data_type": "proteomics",
+        "organism": "human",
+        "sample_size": "~500",
+        "notes": "Plasma proteomics from autism individuals"
+      },
+      {
+        "name": "Autism Brain Transcriptomics",
+        "description": "Post-mortem brain RNA-seq from autism cases",
+        "repository": "GEO",
+        "accession": "GSE102741",
+        "data_type": "RNA-seq",
+        "organism": "human",
+        "sample_size": "104 samples",
+        "notes": "Prefrontal cortex and temporal cortex"
+      },
+      {
+        "name": "ADHD Brain Transcriptomics",
+        "description": "Brain tissue RNA-seq from ADHD cohort",
+        "repository": "GEO",
+        "accession": "GSE119605",
+        "data_type": "RNA-seq",
+        "organism": "human",
+        "sample_size": "48 samples"
+      }
+    ]
+  }
+}
