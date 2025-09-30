@@ -5,24 +5,46 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A comprehensive, production-ready system for discovering biologically distinct patient subtypes through integrated multi-omics analysis. Includes complete data acquisition infrastructure, automated monitoring, and end-to-end analysis pipelines. Designed for ADHD/Autism research but applicable to any multi-omics clustering study.
+A comprehensive, production-ready system for discovering biologically distinct patient subtypes through integrated multi-omics and multi-modal phenotyping. Includes complete data acquisition infrastructure, 11-modality feature extraction pipelines, hierarchical integration methods, and advanced clustering with extended validation. Designed for AuDHD (Autism + ADHD) research but applicable to any multi-modal clustering study.
 
 ## 🎯 Key Features
 
-### Analysis Pipeline
-- **Multi-Omics Integration**: Genomic (VCF), clinical, metabolomic, and microbiome data with MOFA/PCA/CCA
-- **Advanced Clustering**: HDBSCAN, K-means, hierarchical clustering with automatic parameter selection
-- **Statistical Validation**: Bootstrap stability, cross-validation, permutation tests with standardized metrics
-- **Biological Interpretation**: GSEA pathway enrichment with configurable methods, gene ID normalization, drug target prediction
-- **Production-Ready**: Comprehensive testing (500+ tests), CI/CD, explicit error handling, no hardcoded fallbacks
-- **Reproducible**: Hydra configuration, checkpointing, version control, audit logging with git SHA tracking
+### Complete Feature Extraction Pipeline (NEW)
+- **Autonomic Function**: HRV (time/frequency/nonlinear), EDA, cardiovascular, respiratory measures
+- **Circadian Rhythms**: Cortisol awakening response, melatonin (DLMO), actigraphy, body temperature
+- **Salivary Biomarkers**: Stress hormones, inflammatory markers, oral microbiome
+- **Environmental Exposures**: Air/water quality, traffic, green space, socioeconomic indicators
+- **Toxicant Biomarkers**: Heavy metals, organic pollutants, PFAS, body burden indices
+- **Sensory Processing**: Auditory, visual, tactile, multisensory integration, sensory gating (P50)
+- **Interoception**: Heartbeat detection tasks, MAIA-2, BPQ, three-dimensional framework
+- **Voice & Speech**: Prosodic, spectral, temporal, pragmatic features using Praat and librosa
 
-### Data Acquisition Infrastructure (NEW)
-- **Automated Downloads**: Parallel downloads with retry logic, resume support, and checksum verification
-- **Data Monitoring**: Track 11+ repositories for new releases (SFARI, UK Biobank, ABCD, dbGaP, GEO, MetaboLights)
-- **Literature Tracking**: Monitor PubMed, bioRxiv, Scientific Data for dataset publications
-- **Smart Alerts**: Email and Slack notifications with priority filtering (immediate, digest, on-demand)
-- **Comprehensive Documentation**: Auto-generated READMEs, data dictionaries, quality reports, and usage examples
+### Extended Multi-Modal Integration (NEW)
+- **Hierarchical Integration**: 4-level structure (biological → environmental → cognitive/sensory → clinical)
+- **Time-Aware Adjustment**: Cosinor models for circadian features, standardize to collection time
+- **Feature Importance Weighting**: Data-driven weights based on proximity to phenotype
+- **Multimodal Networks**: Gene-metabolite, metabolite-clinical, GxE, autonomic-symptom networks
+- **11 Modalities**: Genetic, metabolomic, microbiome, autonomic, circadian, salivary, environmental, toxicants, sensory, interoception, voice
+
+### Enhanced Clustering (NEW)
+- **Feature-Aware Distances**: Custom metrics for continuous, categorical, cyclical, compositional data types
+- **Multi-View Clustering**: Integrate multiple complementary data views
+- **Temporal Clustering**: Dynamic Time Warping for longitudinal trajectories
+- **Biologically-Informed**: Constrained clustering with family structure and pathway priors
+- **Ensemble Consensus**: Combine multiple methods for robust subgroup discovery
+- **Extended Validation**: Autonomic, circadian, environmental, sensory, interoceptive differentiation tests
+
+### Analysis Pipeline
+- **Multi-Omics Integration**: MOFA/PCA/CCA with configurable methods
+- **Advanced Clustering**: HDBSCAN, K-means, hierarchical with automatic parameter selection
+- **Statistical Validation**: Bootstrap stability, cross-validation, permutation tests
+- **Biological Interpretation**: GSEA pathway enrichment, gene ID normalization, drug target prediction
+- **Production-Ready**: 500+ tests, CI/CD, explicit error handling, reproducible with version control
+
+### Data Acquisition Infrastructure
+- **Automated Downloads**: Parallel downloads with retry logic, resume support, checksum verification
+- **Literature Tracking**: Monitor PubMed, bioRxiv, Scientific Data for dataset publications (manual check mode)
+- **Comprehensive Documentation**: Auto-generated READMEs, data dictionaries, quality reports
 - **Provenance Tracking**: Complete data lineage from acquisition through processing
 
 ## 📚 Documentation
@@ -33,14 +55,21 @@ A comprehensive, production-ready system for discovering biologically distinct p
 - **[User Guides](https://audhd-pipeline.readthedocs.io/user_guide/)** - Detailed guides for each pipeline phase
 - **[API Reference](https://audhd-pipeline.readthedocs.io/api/)** - Complete API documentation
 - **[Tutorials](https://audhd-pipeline.readthedocs.io/tutorials/)** - Jupyter notebook tutorials
-- **[FAQ](https://audhd-pipeline.readthedocs.io/faq.html)** - Frequently asked questions
-- **[Troubleshooting](https://audhd-pipeline.readthedocs.io/troubleshooting.html)** - Common issues and solutions
+
+### Feature Extraction Documentation (NEW)
+- **[Prompt 2.1 Summary](docs/PROMPT_2_1_SUMMARY.md)** - Autonomic, Circadian, Salivary pipelines
+- **[Prompt 2.2 Summary](docs/PROMPT_2_2_SUMMARY.md)** - Environmental & Toxicant pipelines
+- **[Prompt 2.3 Summary](docs/PROMPT_2_3_SUMMARY.md)** - Sensory, Interoception, Voice pipelines
+
+### Integration & Clustering Documentation (NEW)
+- **[Prompt 3.1 Summary](docs/PROMPT_3_1_SUMMARY.md)** - Extended multi-modal integration system
+- **[Prompt 3.2 Summary](docs/PROMPT_3_2_SUMMARY.md)** - Enhanced clustering with extended features
 
 ### Data Acquisition Documentation
 - **[Pipeline README](scripts/pipeline/README.md)** - Automated download system
-- **[Monitoring README](scripts/monitoring/README.md)** - Data release monitoring
-- **[Documentation System](scripts/documentation/README.md)** - Auto-generated dataset docs
 - **[Access Tracker](data/catalogs/access_tracker.md)** - Dataset access status and applications
+
+**Note:** Automated data release monitoring is currently paused. Data availability checks are performed manually.
 
 ## 🚀 Quick Start
 
@@ -58,422 +87,407 @@ pip install -e .
 conda env create -f env/environment.yml
 conda activate audhd-study
 
-# Install data acquisition dependencies
-pip install requests tqdm pyyaml pandas feedparser beautifulsoup4
+# Optional: Install voice analysis dependencies
+pip install praat-parselmouth librosa
+
+# Optional: Install temporal clustering
+pip install tslearn
 ```
 
-### Basic Usage - Analysis Pipeline
+### Basic Usage - Extended Multi-Modal Analysis
 
-**Command Line:**
-
-```bash
-# Run complete pipeline
-audhd-pipeline run --config config.yaml
-
-# Or run individual stages
-audhd-pipeline preprocess --config config.yaml
-audhd-pipeline cluster --config config.yaml
-audhd-pipeline validate --config config.yaml
-```
-
-**Python API:**
+**Complete Workflow:**
 
 ```python
-from audhd_correlation import Pipeline
-
-# Create and run pipeline
-pipeline = Pipeline(config_path="config.yaml")
-results = pipeline.run()
-
-# Generate report with metadata
-pipeline.generate_report(
-    results,
-    output_path="report.html",
-    include_pdf=True  # Optional PDF export
+from audhd_correlation.integrate import integrate_extended_multiomics
+from audhd_correlation.modeling.extended_clustering import (
+    enhanced_clustering_with_extended_features,
+    validate_extended_clusters
 )
+import pandas as pd
+
+# 1. Load all modalities
+genetic_df = pd.read_csv('data/processed/genetics.csv', index_col=0)
+metabolomic_df = pd.read_csv('data/processed/metabolomics.csv', index_col=0)
+autonomic_df = pd.read_csv('data/processed/autonomic.csv', index_col=0)
+circadian_df = pd.read_csv('data/processed/circadian.csv', index_col=0)
+environmental_df = pd.read_csv('data/processed/environmental.csv', index_col=0)
+sensory_df = pd.read_csv('data/processed/sensory.csv', index_col=0)
+clinical_df = pd.read_csv('data/processed/clinical.csv', index_col=0)
+context_df = pd.read_csv('data/processed/context.csv', index_col=0)
+
+# 2. Extended integration (hierarchical, time-aware)
+integration_results = integrate_extended_multiomics(
+    genetic_df=genetic_df,
+    metabolomic_df=metabolomic_df,
+    autonomic_df=autonomic_df,
+    circadian_df=circadian_df,
+    environmental_df=environmental_df,
+    sensory_df=sensory_df,
+    clinical_df=clinical_df,
+    context_df=context_df  # For time adjustment
+)
+
+integrated_features = integration_results['integrated_features']
+
+# 3. Enhanced clustering
+clustering_results = enhanced_clustering_with_extended_features(
+    integrated_data=integrated_features,
+    feature_metadata={'feature_types': {'continuous': integrated_features.columns.tolist()}},
+    n_clusters=8
+)
+
+clusters = clustering_results['ensemble']
+
+# 4. Extended validation
+extended_features = {
+    'autonomic': autonomic_df,
+    'circadian': circadian_df,
+    'environmental': environmental_df,
+    'sensory': sensory_df
+}
+
+validation = validate_extended_clusters(
+    clusters=clusters,
+    extended_features=extended_features,
+    clinical_features=clinical_df
+)
+
+print(f"Subgroups identified: {len(np.unique(clusters))}")
+print(f"Validation tests significant: {validation['summary']['n_significant']}/{validation['summary']['n_tests']}")
+```
+
+**Feature Extraction Examples:**
+
+```python
+# Autonomic processing
+from audhd_correlation.features.autonomic import HRVAnalyzer
+
+hrv_analyzer = HRVAnalyzer()
+hrv_metrics = hrv_analyzer.analyze_hrv(rr_intervals, sample_rate=1000)
+print(f"SDNN: {hrv_metrics['sdnn']:.2f} ms")
+print(f"RMSSD: {hrv_metrics['rmssd']:.2f} ms")
+print(f"LF/HF ratio: {hrv_metrics['lf_hf_ratio']:.2f}")
+
+# Circadian analysis
+from audhd_correlation.features.circadian import CircadianAnalyzer
+
+circadian_analyzer = CircadianAnalyzer()
+car_metrics = circadian_analyzer.calculate_cortisol_awakening_response(
+    cortisol_samples, sample_times
+)
+print(f"CAR AUCi: {car_metrics['car_auci']:.2f}")
+
+# Sensory processing
+from audhd_correlation.features.sensory_detailed import SensoryProcessor
+
+sensory_processor = SensoryProcessor()
+sensory_results = sensory_processor.process_sensory_battery(sensory_data)
+print(f"P50 gating ratio: {sensory_results['p50_gating_ratio']:.3f}")
+
+# Interoception
+from audhd_correlation.features.interoception import InteroceptionProcessor
+
+intero_processor = InteroceptionProcessor()
+intero_metrics = intero_processor.calculate_heartbeat_counting_accuracy(
+    recorded_beats, counted_beats, confidence
+)
+print(f"Interoceptive accuracy: {intero_metrics['interoceptive_accuracy']:.3f}")
+
+# Voice analysis
+from audhd_correlation.features.voice_analysis import VoiceAnalyzer
+
+voice_analyzer = VoiceAnalyzer()
+voice_features = voice_analyzer.analyze_voice_sample('audio.wav')
+print(f"Mean pitch: {voice_features['pitch_mean_hz']:.1f} Hz")
+print(f"HNR: {voice_features['hnr_db']:.1f} dB")
 ```
 
 ### Data Acquisition Workflow
 
-**1. Download Data:**
+**Download Data:**
 
 ```bash
-# Add datasets to download queue
-python scripts/pipeline/queue_processor.py \
-    --add-url https://example.com/data.tar.gz \
-    --name my_dataset \
-    --priority high
+# Run comprehensive download script
+bash scripts/download_everything.sh
 
-# Process download queue with 5 parallel workers
-python scripts/pipeline/download_manager.py \
-    --config configs/download_config.yaml \
-    --parallel 5
+# Or download specific sources
+python scripts/downloaders/geo_downloader.py
+python scripts/downloaders/sra_downloader.py
+python scripts/papers/scrape_all.py
 ```
 
-**2. Monitor for Updates:**
+**Check Download Status:**
 
 ```bash
-# Check for new data releases (one-time)
-python scripts/monitoring/update_scanner.py --check-all
-
-# Run continuous monitoring
-python scripts/monitoring/update_scanner.py --daemon --interval 3600
-
-# Check literature for new publications
-python scripts/monitoring/literature_watcher.py --check-all
+python scripts/download_tracker.py
 ```
-
-**3. Send Alerts:**
-
-```bash
-# Send daily digest
-python scripts/monitoring/alert_system.py --send-digest --email user@example.com
-
-# Check for immediate high-priority alerts
-python scripts/monitoring/alert_system.py --check-updates
-```
-
-**4. Generate Documentation:**
-
-```bash
-# Generate docs for all datasets
-python scripts/documentation/generate_all_docs.py
-
-# Build searchable catalog
-python scripts/documentation/catalog_builder.py --build
-
-# Search catalog
-python scripts/documentation/catalog_builder.py --search "ADHD"
-```
-
-See individual README files in `scripts/` for detailed usage.
 
 ## 📊 Complete System Overview
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                  DATA ACQUISITION LAYER                      │
-├─────────────────────────────────────────────────────────────┤
-│  Monitoring → Download → Validate → Document → Integrate    │
-│      ↓           ↓          ↓          ↓           ↓        │
-│   11+ DBs    Parallel    Checksum   Auto-gen   Master      │
-│   RSS/API    Retry       Format     README     Catalog     │
-│   Alerts     Resume      QC          Dict       Search     │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                   ANALYSIS PIPELINE                          │
-├─────────────────────────────────────────────────────────────┤
-│  Load → Preprocess → Integrate → Cluster → Validate → Report│
-│   ↓         ↓            ↓          ↓         ↓         ↓   │
-│ VCF/CSV  Impute      MOFA/PCA   HDBSCAN  Silhouette  HTML  │
-│ Harmonize Scale      Factors    K-means  Stability   PDF   │
-│ QC Filter Batch      15-20d     UMAP     Bootstrap   Figs  │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│                    DATA ACQUISITION (14.7 GB)                        │
+├─────────────────────────────────────────────────────────────────────┤
+│  GEO (2.6GB) → SRA (12.1GB) → Papers (278) → GWAS (328MB)          │
+│  Manual monitoring for new releases and publications                │
+└─────────────────────────────────────────────────────────────────────┘
+                               ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│              FEATURE EXTRACTION (11 Modalities, 376 Features)        │
+├─────────────────────────────────────────────────────────────────────┤
+│  Autonomic (24) → Circadian (16) → Salivary (11)                   │
+│  Environmental (23) → Toxicants (26) → Sensory (13)                │
+│  Interoception (10) → Voice (13) → + Original modalities            │
+└─────────────────────────────────────────────────────────────────────┘
+                               ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│           EXTENDED INTEGRATION (Hierarchical, Time-Aware)            │
+├─────────────────────────────────────────────────────────────────────┤
+│  Level 1: Biological (genetic, metabolic, autonomic, circadian)    │
+│  Level 2: Environmental (exposures, toxicants)                      │
+│  Level 3: Cognitive/Sensory (sensory, interoception, voice)        │
+│  Level 4: Clinical phenotypes                                       │
+│  → Multimodal networks → Time-adjusted features                    │
+└─────────────────────────────────────────────────────────────────────┘
+                               ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│      ENHANCED CLUSTERING (Feature-Aware, Multi-View, Ensemble)      │
+├─────────────────────────────────────────────────────────────────────┤
+│  Custom distances → Multi-view → Temporal → Constrained → Ensemble │
+│  Extended validation: Autonomic, circadian, sensory, toxicant      │
+└─────────────────────────────────────────────────────────────────────┘
+                               ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│         VALIDATION & REPORTING (Bootstrap, Biological Tests)         │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ## 🗂️ Project Structure
 
 ```
 AuDHD_Correlation_Study/
-├── src/audhd_correlation/      # Main analysis package
-│   ├── data/                   # Data loaders and harmonization
-│   ├── preprocess/             # Preprocessing and normalization
-│   ├── integrate/              # Multi-omics integration
-│   ├── modeling/               # Clustering algorithms
-│   ├── validation/             # Validation metrics
-│   ├── biological/             # Pathway enrichment
-│   ├── viz/                    # Visualization
-│   └── reporting/              # Report generation
+├── src/audhd_correlation/           # Main analysis package (~7,950 lines)
+│   ├── data/                        # Data loaders and harmonization
+│   ├── preprocess/                  # Preprocessing and normalization
+│   ├── integrate/                   # Multi-omics integration
+│   │   ├── methods.py               # Standard integration (MOFA/PCA/CCA)
+│   │   └── extended_integration.py  # NEW: Hierarchical + time-aware (850 lines)
+│   ├── modeling/                    # Clustering algorithms
+│   │   ├── clustering.py            # Standard clustering (882 lines)
+│   │   └── extended_clustering.py   # NEW: Feature-aware + ensemble (850 lines)
+│   ├── features/                    # NEW: Feature extraction pipelines (~4,430 lines)
+│   │   ├── autonomic.py             # HRV, EDA, cardiovascular (380 lines)
+│   │   ├── circadian.py             # Cortisol, melatonin, actigraphy (420 lines)
+│   │   ├── salivary.py              # Stress, inflammation, microbiome (350 lines)
+│   │   ├── environmental.py         # Air/water quality, exposures (630 lines)
+│   │   ├── toxicants.py             # Heavy metals, organic pollutants (680 lines)
+│   │   ├── sensory_detailed.py      # Auditory, visual, tactile, gating (860 lines)
+│   │   ├── interoception.py         # Heartbeat tasks, questionnaires (380 lines)
+│   │   └── voice_analysis.py        # Prosodic, spectral, MFCC (730 lines)
+│   ├── validation/                  # Validation metrics
+│   ├── biological/                  # Pathway enrichment
+│   ├── viz/                         # Visualization
+│   └── reporting/                   # Report generation
 │
-├── scripts/                    # Data acquisition & monitoring
-│   ├── pipeline/               # Automated download system
-│   │   ├── download_manager.py     # Parallel downloads with retry
-│   │   ├── queue_processor.py      # Priority-based queue
-│   │   ├── validation_suite.py     # Checksum & format validation
-│   │   ├── update_checker.py       # Incremental updates
-│   │   └── README.md               # Complete documentation
-│   │
-│   ├── monitoring/             # Data release monitoring
-│   │   ├── update_scanner.py       # Monitor 11+ databases
-│   │   ├── literature_watcher.py   # Track publications
-│   │   ├── alert_system.py         # Email/Slack alerts
-│   │   └── README.md               # Monitoring guide
-│   │
-│   ├── documentation/          # Auto-generated docs
-│   │   ├── dataset_documenter.py   # Generate READMEs & dicts
-│   │   ├── provenance_tracker.py   # Data lineage tracking
-│   │   ├── catalog_builder.py      # Searchable catalog
-│   │   └── README.md               # Documentation system
-│   │
-│   ├── trials/                 # Clinical trials access
-│   ├── registries/             # Patient registries & biobanks
-│   ├── environmental/          # EPA/USGS data pullers
-│   └── integration/            # Master sample registry
+├── scripts/                         # Data acquisition & monitoring
+│   ├── downloaders/                 # Dataset downloaders (GEO, SRA, dbGaP)
+│   ├── papers/                      # Paper scraping scripts
+│   ├── trials/                      # Clinical trials access
+│   ├── registries/                  # Patient registries & biobanks
+│   └── monitoring/                  # Data release monitoring (manual mode)
 │
-├── data/                       # Data directory
-│   ├── raw/                    # Original datasets
-│   ├── interim/                # Intermediate files
-│   ├── processed/              # Final processed data
-│   ├── index/                  # Master sample registry
-│   ├── documentation/          # Auto-generated docs
-│   │   ├── dataset_summaries/      # README files
-│   │   ├── data_dictionaries/      # Variable metadata
-│   │   ├── quality_reports/        # QC dashboards (HTML)
-│   │   ├── usage_guides/           # Sample code
-│   │   └── provenance/             # Data lineage
-│   ├── catalogs/               # Dataset catalogs
-│   │   ├── master_catalog.json     # Searchable catalog
-│   │   ├── catalog.db              # SQLite database
-│   │   ├── citations.bib           # BibTeX citations
-│   │   └── access_tracker.md       # Access status
-│   └── monitoring/             # Monitoring outputs
-│       ├── detected_updates.json   # New releases
-│       └── new_publications.json   # New papers
+├── data/                            # Data directory (gitignored)
+│   ├── raw/                         # Original datasets (14.7 GB)
+│   ├── interim/                     # Intermediate files
+│   ├── processed/                   # Final processed data
+│   ├── papers/                      # Downloaded papers (278 papers)
+│   ├── catalogs/                    # Dataset catalogs
+│   │   ├── master_catalog.json
+│   │   ├── download_status.json
+│   │   └── access_tracker.md
+│   └── documentation/               # Auto-generated docs
 │
-├── configs/                    # Configuration files
-│   ├── download_config.yaml    # Download pipeline config
-│   ├── monitoring_config.yaml  # Monitoring config
-│   └── defaults.yaml           # Analysis defaults
+├── configs/                         # Configuration files
+│   ├── defaults.yaml                # Main config (376 feature definitions)
+│   ├── download_config.yaml
+│   └── monitoring_config.yaml
 │
-├── tests/                      # Comprehensive test suite (500+ tests)
-├── docs/                       # Sphinx documentation
-├── notebooks/                  # Jupyter tutorials
-└── outputs/                    # Analysis outputs
+├── docs/                            # Documentation
+│   ├── PROMPT_2_1_SUMMARY.md        # Autonomic, Circadian, Salivary
+│   ├── PROMPT_2_2_SUMMARY.md        # Environmental, Toxicants
+│   ├── PROMPT_2_3_SUMMARY.md        # Sensory, Interoception, Voice
+│   ├── PROMPT_3_1_SUMMARY.md        # Extended integration
+│   └── PROMPT_3_2_SUMMARY.md        # Enhanced clustering
+│
+├── tests/                           # Comprehensive test suite (500+ tests)
+├── notebooks/                       # Jupyter tutorials
+└── outputs/                         # Analysis outputs
 ```
 
-## 🔄 Data Acquisition Systems
+## 🆕 System Capabilities
 
-### 1. Automated Download Pipeline
+### Feature Extraction Pipelines (Prompts 2.1-2.3)
 
-Parallel downloads with retry logic, resume support, and validation:
+**9 Specialized Pipelines | 4,430 Lines of Code | 240 New Features**
 
-```bash
-# Features:
-# - 5 parallel workers (configurable)
-# - Exponential backoff retry (3 attempts)
-# - Resumable downloads via HTTP Range
-# - MD5/SHA256 checksum verification
-# - Priority queue (critical/high/normal/low)
-# - Progress tracking with tqdm
+1. **Autonomic Function (380 lines)**
+   - HRV: Time domain (SDNN, RMSSD, pNN50), Frequency (LF, HF, LF/HF), Nonlinear (SD1, SD2, SampEn, ApEn, DFA)
+   - EDA: Skin conductance level, response frequency/amplitude
+   - Cardiovascular: Baroreflex sensitivity, blood pressure variability, orthostatic response
 
-# Add to queue
-python scripts/pipeline/queue_processor.py \
-    --add-url https://example.com/data.tar.gz \
-    --name important_dataset \
-    --priority high
+2. **Circadian Rhythms (420 lines)**
+   - Cortisol: Awakening response (CAR), diurnal slope, evening cortisol
+   - Melatonin: DLMO (dim light melatonin onset), amplitude, phase
+   - Actigraphy: Interdaily stability, intradaily variability, relative amplitude
 
-# Process queue
-python scripts/pipeline/download_manager.py \
-    --config configs/download_config.yaml \
-    --parallel 5
+3. **Salivary Biomarkers (350 lines)**
+   - Stress hormones: Cortisol, testosterone, DHEA
+   - Inflammatory markers: CRP, IL-1β, IL-6, TNF-α
+   - Oral microbiome: Diversity, Streptococcus abundance
+
+4. **Environmental Exposures (630 lines)**
+   - Air quality: PM2.5, NO2, O3 (prenatal, early life, lifetime)
+   - Water quality: Nitrate, arsenic, fluoride
+   - Traffic & Green space: Proximity, density, NDVI
+   - Socioeconomic: Area deprivation index, neighborhood SES
+
+5. **Toxicant Biomarkers (680 lines)**
+   - Heavy metals: Pb, Hg, Cd, As (hair, blood, urine)
+   - Organic pollutants: BPA, phthalates, PFAS, pesticides
+   - Body burden indices: Toxic metal index, pollutant mixture index
+
+6. **Sensory Processing (860 lines)**
+   - Auditory: Pure tone audiometry, OAE, ABR, gap detection, P50 sensory gating
+   - Visual: Contrast sensitivity, motion coherence, visual search, working memory
+   - Tactile: Two-point discrimination, vibrotactile threshold, proprioception
+   - Multisensory: McGurk effect, temporal binding window, sound-induced flash
+
+7. **Interoception (380 lines)**
+   - Accuracy: Heartbeat counting (Schandry 1981), discrimination (d', criterion)
+   - Sensibility: MAIA-2 (8 subscales), Body Perception Questionnaire
+   - Awareness: Confidence-accuracy correlation (Garfinkel 2015 framework)
+
+8. **Voice & Speech (730 lines)**
+   - Prosodic: Pitch (F0), intensity, rhythm, speech rate, pauses
+   - Spectral: Formants (F1-F3), voice quality (jitter, shimmer, HNR, CPP)
+   - Temporal: VOT, segment durations, coarticulation
+   - MFCC: 13 coefficients + deltas for machine learning
+
+### Extended Integration (Prompt 3.1)
+
+**850 Lines of Code | Hierarchical 4-Level Structure**
+
+- **Time-Aware Adjustment**: Cosinor models standardize circadian features to common collection time
+- **Hierarchical Integration**: 4 levels (biological → environmental → cognitive/sensory → clinical)
+- **Feature Weighting**: Data-driven weights by proximity to phenotype (metabolomic 20%, genetic 15%, etc.)
+- **Multimodal Networks**: Gene-metabolite, metabolite-clinical, GxE, autonomic-symptom networks
+- **11 Modalities Integrated**: Genetic, metabolomic, microbiome, autonomic, circadian, salivary, environmental, toxicants, sensory, interoception, voice
+
+### Enhanced Clustering (Prompt 3.2)
+
+**850 Lines of Code | 5 Advanced Methods**
+
+- **Feature-Aware Distances**: Custom metrics for continuous, categorical, cyclical, compositional, binary data
+- **Multi-View Clustering**: Integrate complementary biological, physiological, environmental, cognitive views
+- **Temporal Clustering**: Dynamic Time Warping for longitudinal developmental trajectories
+- **Biologically-Informed**: Constrained clustering with family structure and pathway priors
+- **Ensemble Consensus**: Combine multiple methods (K-means, spectral, agglomerative, HDBSCAN) for robust subgroups
+- **Extended Validation**: Test autonomic, circadian, environmental, sensory, interoceptive differentiation across clusters
+
+## 📊 Data Summary
+
+### Downloaded Data (14.7 GB)
+
+| Source | Status | Size | Content |
+|--------|--------|------|---------|
+| **GEO Expression** | ✅ Complete | 2.57 GB | 8 datasets, 24 files |
+| **SRA Microbiome** | ✅ Complete | 12.15 GB | 72 samples |
+| **Papers** | ✅ Complete | - | 278 papers with supplements |
+| **Data Repositories** | ✅ Complete | 83 MB | 6 files from GitHub/Zenodo |
+| **GWAS** | ✅ Complete | 328 MB | 317 significant SNPs |
+
+### Feature Space
+
+| Category | Features | Pipelines |
+|----------|----------|-----------|
+| **Original Features** | 136 | Genetic, metabolomic, clinical, microbiome, imaging |
+| **Extended Features** | 240 | Autonomic, circadian, environmental, sensory, voice |
+| **Total Configured** | **376** | 11 modalities |
+
+## 🔬 Configuration
+
+Full configuration in `configs/defaults.yaml` with 376 feature definitions across 11 modalities.
+
+**Integration Configuration:**
+
+```yaml
+integrate:
+  method: hierarchical
+  weights:
+    genetic: 0.15
+    environmental: 0.08
+    toxicants: 0.07
+    microbiome: 0.08
+    metabolomic: 0.20     # Highest weight (most proximal)
+    autonomic: 0.12
+    circadian: 0.10
+    salivary: 0.05
+    sensory: 0.07
+    interoception: 0.06
+    voice: 0.05
+    clinical: 0.02        # Outcome, not predictor
+
+  hierarchical_levels:
+    level1_biological:
+      components: [genetic, metabolomic, microbiome, autonomic, circadian, salivary]
+      method: PCA
+      n_factors: 30
+    level2_environmental:
+      components: [environmental, toxicants]
+      method: PCA
+      n_factors: 15
+    level3_cognitive_sensory:
+      components: [sensory, interoception, voice]
+      method: PCA
+      n_factors: 15
+    level4_clinical:
+      components: [clinical]
+      method: None
+
+  time_adjustment:
+    enabled: true
+    standard_time: 9.0  # Standardize to 9 AM
 ```
 
-See [scripts/pipeline/README.md](scripts/pipeline/README.md) for details.
+**Clustering Configuration:**
 
-### 2. Data Release Monitoring
+```yaml
+cluster:
+  extended_methods:
+    feature_aware_distance:
+      enabled: true
+      feature_types:
+        continuous: [factor_, hrv_, metabolite_]
+        cyclical: [circadian_phase, melatonin_phase]
+        compositional: [microbiome_]
 
-Track 11+ repositories for new releases and updates:
+    multiview:
+      enabled: true
+      views:
+        biological: [genetic, metabolomic, microbiome]
+        physiological: [autonomic, circadian, salivary]
+        environmental: [environmental, toxicants]
+        cognitive_sensory: [sensory, interoception, voice]
 
-**Monitored Sources:**
-- **High Priority (hourly)**: SFARI Base, UK Biobank, ABCD Study
-- **Medium Priority (daily)**: NDA, dbGaP, GEO, ClinicalTrials.gov, MetaboLights
-- **Low Priority (weekly)**: ArrayExpress, PGC Website
-
-**Features:**
-- RSS feed monitoring
-- API endpoint version checking
-- Web scraping with content hashing
-- dbGaP study search
-- ClinicalTrials.gov results tracking
-
-```bash
-# One-time check
-python scripts/monitoring/update_scanner.py --check-all
-
-# Continuous monitoring
-python scripts/monitoring/update_scanner.py --daemon --interval 3600
-
-# Scheduled with cron (every 6 hours)
-0 */6 * * * cd /path/to/project && python scripts/monitoring/update_scanner.py --check-all
+    ensemble:
+      enabled: true
+      base_methods: [kmeans, spectral, agglomerative, feature_aware]
 ```
-
-See [scripts/monitoring/README.md](scripts/monitoring/README.md) for details.
-
-### 3. Literature Tracking
-
-Monitor scientific literature for dataset publications:
-
-**Sources:**
-- PubMed/PMC
-- bioRxiv/medRxiv
-- Nature Scientific Data
-- GigaScience
-
-**Features:**
-- Keyword-based search
-- Repository link extraction (GitHub, Zenodo, Figshare)
-- Accession number detection (GEO, SRA, dbGaP, EGA)
-- Relevance scoring
-
-```bash
-# Search for new publications
-python scripts/monitoring/literature_watcher.py --check-all
-
-# Custom query
-python scripts/monitoring/literature_watcher.py \
-    --query "autism ADHD genomics dataset" \
-    --days-back 30
-```
-
-### 4. Alert System
-
-Multi-channel notifications with priority filtering:
-
-**Notification Methods:**
-- Email (HTML digests)
-- Slack (webhooks)
-- Console output
-- JSON reports
-
-**Alert Types:**
-- Immediate: High-priority updates
-- Digest: Daily/weekly summaries
-- On-demand: Manual reports
-
-```bash
-# Send daily digest
-python scripts/monitoring/alert_system.py \
-    --send-digest \
-    --email user@example.com
-
-# Check for high-priority alerts
-python scripts/monitoring/alert_system.py --check-updates
-
-# Test alert system
-python scripts/monitoring/alert_system.py --test-alerts
-```
-
-### 5. Dataset Documentation
-
-Auto-generated documentation for all datasets:
-
-**Generated Files (per dataset):**
-- README.md: Access instructions and overview
-- data_dictionary.json: Variable metadata
-- quality_report.html: Interactive QC dashboard
-- examples.py: Sample usage code
-- provenance.json: Data lineage
-
-```bash
-# Generate docs for all datasets
-python scripts/documentation/generate_all_docs.py
-
-# Build searchable catalog
-python scripts/documentation/catalog_builder.py --build
-
-# Search catalog
-python scripts/documentation/catalog_builder.py --search "ADHD"
-python scripts/documentation/catalog_builder.py --data-type genomics
-```
-
-See [scripts/documentation/README.md](scripts/documentation/README.md) for details.
-
-### 6. Master Sample Registry
-
-SQLite database tracking sample availability across datasets:
-
-**Features:**
-- Cross-dataset ID mapping
-- Data availability matrix
-- Completeness scoring
-- Access status tracking
-- Interactive web dashboard
-
-```python
-from scripts.integration.master_indexer import MasterIndexer
-
-indexer = MasterIndexer('data/index/master_sample_registry.db')
-
-# Import dataset
-indexer.import_dataset(
-    dataset_name='PGC_ADHD',
-    data_df=df,
-    id_column='sample_id',
-    data_type='genomics'
-)
-
-# Query samples
-samples = indexer.find_samples_with_data(['genomics', 'clinical'])
-```
-
-## 📊 Available Datasets
-
-### Documented Datasets (4)
-
-Documentation available in `data/documentation/`:
-
-1. **PGC_ADHD_GWAS** (Genomics, Public, 55K samples)
-   - Quality Score: 98.5/100 (Excellent)
-   - GWAS summary statistics
-   - 10 variables, 8.5M SNPs
-
-2. **SPARK_phenotypes** (Clinical, Controlled, 50K samples)
-   - Quality Score: 88.5/100 (Good)
-   - Autism phenotype assessments
-   - 450 variables
-
-3. **ABCD_microbiome** (Microbiome, Controlled, 5K samples)
-   - Quality Score: 95.5/100 (Excellent)
-   - 16S rRNA sequencing
-   - 1,250 variables
-
-4. **EPA_AQS_neurotoxins** (Environmental, Public, 85K records)
-   - Quality Score: 90.0/100 (Excellent)
-   - Neurotoxic air pollutants
-   - 25 variables
-
-### Tracked Datasets (40+)
-
-Complete catalog in `data/catalogs/master_catalog.json`:
-
-- **Autism**: SPARK, SSC, AGRE, IAN, Autism BrainNet
-- **ADHD**: PGC ADHD, ADHD-200, iPSYCH
-- **Multi-modal**: UK Biobank, ABCD Study
-- **Genomics**: dbGaP studies, EGA datasets
-- **Metabolomics**: MetaboLights, Metabolomics Workbench
-- **Microbiome**: ABCD, SRA microbiome studies
-- **Clinical Trials**: ClinicalTrials.gov results
-- **Environmental**: EPA AQS, USGS water quality
-
-## 🧪 Analysis Pipeline
-
-### Supported Data Types
-
-| Modality | Format | Features |
-|----------|--------|----------|
-| **Genomic** | VCF v4.1/4.2 | SNP genotypes, quality filtering, MAF filtering |
-| **Clinical** | CSV | Phenotypes, demographics, diagnosis, severity scores |
-| **Metabolomic** | CSV/TSV/Excel | Metabolite abundances, log-transform, quantile normalization |
-| **Microbiome** | TSV/BIOM | Taxonomic abundances, CLR transform, prevalence filtering |
-
-### Integration Methods
-
-- **MOFA** (Multi-Omics Factor Analysis) - Identifies shared and modality-specific variation
-- **PCA** - Fast concatenated PCA for quick analysis
-- **CCA** - Canonical Correlation Analysis for two modalities
-- **NMF** - Non-negative Matrix Factorization for count data
-
-### Clustering Methods
-
-- **HDBSCAN** - Density-based, auto-determines k, handles noise points
-- **K-means** - Fast, fixed k, spherical clusters
-- **Hierarchical** - Dendrogram-based, multiple linkage methods
-- **Gaussian Mixture** - Probabilistic clustering with soft assignments
 
 ## 🧪 Testing
 
-Comprehensive test suite with 500+ tests:
+Comprehensive test suite with 500+ tests covering all components:
 
 ```bash
 # Run all tests
@@ -483,144 +497,88 @@ pytest
 pytest tests/unit/              # Unit tests
 pytest tests/integration/       # Integration tests
 pytest tests/statistical/       # Statistical tests
-pytest tests/benchmarks/        # Performance benchmarks
+pytest tests/features/          # NEW: Feature extraction tests
 
 # Run with coverage
 pytest --cov=src/audhd_correlation --cov-report=html
 ```
 
-## 📈 Example Results
+## 📝 User Action Items
 
-### Complete Workflow
+### Required for Data Access
 
-```python
-from audhd_correlation import Pipeline
+1. **Sign up for restricted-access databases:**
+   - NSRR (National Sleep Research Resource) - For polysomnography and sleep data
+   - PhysioNet - For physiological signal databases
+   - All of Us Research Program - For multi-modal health data
 
-# 1. Create pipeline
-pipeline = Pipeline(config_path="config.yaml")
+2. **When available:**
+   - Download NHANES data when CDC site recovers
+   - Optional: Get EPA AirNow API key for live air quality data
+   - Optional: Get NASA EarthData account for satellite green space data
 
-# 2. Load and preprocess data
-pipeline.build_features()
+### Optional Dependencies
 
-# 3. Integrate modalities
-integration_results = pipeline.integrate()
-
-# 4. Cluster samples
-clustering_results = pipeline.cluster(integration_results)
-
-# 5. Validate clusters
-validation_results = pipeline.validate(clustering_results)
-
-# 6. Interpret biologically
-interpretation_results = pipeline.interpret(
-    clustering_results,
-    validation_results
-)
-
-# 7. Generate comprehensive report
-pipeline.generate_report(
-    clustering_results,
-    output_path='report.html',
-    include_pdf=True
-)
+For voice analysis (recommended):
+```bash
+pip install praat-parselmouth librosa
 ```
 
-### Validation Metrics
-
-```python
-from audhd_correlation.validation import validate_clusters
-
-validation = validate_clusters(
-    integrated_data,
-    labels,
-    n_bootstrap=100
-)
-
-# Standardized metric naming: {metric}_{statistic}
-print(f"Silhouette: {validation.silhouette_mean:.3f}")
-print(f"Stability (ARI): {validation.ari_mean:.3f}")
-print(f"ARI 95% CI: {validation.ari_ci}")
-# Output:
-# Silhouette: 0.562
-# Stability (ARI): 0.738
-# ARI 95% CI: (0.701, 0.775)
+For temporal clustering (optional):
+```bash
+pip install tslearn
 ```
 
-## ⚙️ Configuration
+## 📈 Performance Metrics
 
-Configuration uses YAML format with Hydra for composability:
+**System Scale:**
+- ~7,950 lines of production code
+- 376 configured features across 11 modalities
+- 14.7 GB downloaded data (8 GEO datasets, 72 SRA samples, 278 papers)
+- 4 hierarchical integration levels
+- 5 advanced clustering methods
+- 500+ comprehensive tests
 
-```yaml
-# config.yaml
-data:
-  input_dir: "data/"
-  output_dir: "outputs/"
-
-processing:
-  modalities:
-    - genomic
-    - clinical
-    - metabolomic
-  impute_method: "knn"
-  scale_method: "standard"
-
-integration:
-  method: "mofa"
-  n_factors: 15
-
-clustering:
-  method: "hdbscan"
-  min_cluster_size: 20
-
-validation:
-  n_bootstrap: 100
-  compute_stability: true
-
-biological:
-  pathway_databases:
-    msigdb: "data/pathways/msigdb_hallmark.gmt"
-  gsea:
-    ranking_method: "log2fc"
-    fdr_method: "bh"
-    n_permutations: 1000
-```
+**Computational Performance:**
+- Extended integration: ~2 seconds (100 samples, 5 modalities)
+- Enhanced clustering: ~3 seconds (200 samples, 50 features)
+- Feature extraction: Modality-dependent (HRV: seconds, Voice: minutes)
 
 ## 🆕 Recent Updates (January 2025)
 
-### Data Acquisition Infrastructure
-- ✅ Automated download pipeline with parallel processing and retry logic
-- ✅ Monitoring system tracking 11+ databases for new releases
-- ✅ Literature watcher for PubMed, bioRxiv, Scientific Data
-- ✅ Multi-channel alert system (email, Slack, console)
-- ✅ Auto-generated documentation for all datasets
-- ✅ Master sample registry with SQLite database
-- ✅ Provenance tracking for complete data lineage
-- ✅ Citation management with BibTeX format
+### Major Feature Additions
 
-### Analysis Pipeline Improvements
-- Standardized validation metric naming (`{metric}_{statistic}`)
-- Production-ready biological analysis (removed hardcoded fallbacks)
-- Enhanced reproducibility with git SHA and metadata tracking
-- Improved error messages with actionable recommendations
+**Prompts 2.1-2.3: Feature Extraction (4,430 lines)**
+- ✅ Autonomic function pipeline (HRV, EDA, cardiovascular, respiratory)
+- ✅ Circadian rhythm analysis (cortisol, melatonin, actigraphy, temperature)
+- ✅ Salivary biomarker processing (hormones, inflammation, microbiome)
+- ✅ Environmental exposure linking (air, water, traffic, green space)
+- ✅ Toxicant biomarker analysis (heavy metals, organic pollutants, PFAS)
+- ✅ Sensory processing assessment (auditory, visual, tactile, multisensory, gating)
+- ✅ Interoception measurement (accuracy, sensibility, awareness)
+- ✅ Voice & speech acoustics (prosodic, spectral, temporal, pragmatic, MFCC)
 
-## 🔬 Data Requirements
+**Prompt 3.1: Extended Integration (850 lines)**
+- ✅ Hierarchical 4-level integration framework
+- ✅ Time-aware circadian feature adjustment using cosinor models
+- ✅ Feature importance weighting by proximity to phenotype
+- ✅ Multimodal network analysis (4 cross-modal networks)
+- ✅ 11-modality integration with preprocessing pipeline
 
-**Minimum Sample Size:**
-- Total: ≥ 50 samples (100+ recommended)
-- Per cluster: ≥ 20 samples
+**Prompt 3.2: Enhanced Clustering (850 lines)**
+- ✅ Feature-aware distance metrics (5 types: continuous, categorical, cyclical, compositional, binary)
+- ✅ Multi-view clustering across complementary data views
+- ✅ Temporal clustering with Dynamic Time Warping for trajectories
+- ✅ Biologically-informed clustering with family/pathway constraints
+- ✅ Ensemble consensus from multiple methods
+- ✅ Extended validation framework (autonomic, circadian, environmental, sensory tests)
 
-**Data Quality:**
-- Missing rate: < 30% per feature
-- Sample call rate: > 90%
-- At least 2 modalities (multi-omics preferred)
+### System Updates
 
-**File Formats:**
-- Genomic: VCF v4.1 or v4.2
-- Clinical: CSV with required columns (sample_id, age, sex, diagnosis)
-- Metabolomic: CSV/TSV/Excel
-- Microbiome: TSV or BIOM format
-
-See **[Data Dictionaries](docs/data_dictionaries/)** for complete specifications.
+- ✅ Configuration expanded to 376 feature definitions
+- ✅ Comprehensive documentation (5 detailed summary files)
+- ✅ Data acquisition complete (14.7 GB across 5 sources)
+- ✅ Automated monitoring paused (manual check mode)
 
 ## 🤝 Contributing
 
@@ -661,50 +619,41 @@ If you use this pipeline in your research, please cite:
 ```bibtex
 @software{vinaik2025audhd,
   author = {Vinaik, Rohan},
-  title = {AuDHD Correlation Study: Complete Multi-Omics Data Acquisition and Analysis System},
+  title = {AuDHD Correlation Study: Complete Multi-Modal Phenotyping and Analysis System},
   year = {2025},
   publisher = {GitHub},
   url = {https://github.com/rohanvinaik/AuDHD_Correlation_Study},
-  version = {1.0.0}
+  version = {2.0.0},
+  note = {Comprehensive system for multi-modal data acquisition, feature extraction (11 modalities),
+          hierarchical integration, and advanced clustering for AuDHD research}
 }
 ```
 
 ## 🙏 Acknowledgments
 
-### Analysis Pipeline
+### Analysis & Feature Extraction
 - **Testing Framework**: pytest, hypothesis, pytest-benchmark
-- **Documentation**: Sphinx, Read the Docs
 - **Multi-Omics Methods**: MOFA, scikit-learn, UMAP
 - **Statistical Analysis**: scipy, statsmodels, pingouin
-- **Visualization**: matplotlib, seaborn, plotly
+- **Signal Processing**: scipy.signal, neurokit2, hrv-analysis
+- **Voice Analysis**: Praat/parselmouth, librosa
+- **Temporal Analysis**: tslearn (Dynamic Time Warping)
 
 ### Data Acquisition
-- **Data Sources**: SFARI, UK Biobank, ABCD Study, NIH, PGC, EPA, USGS
+- **Data Sources**: SFARI, UK Biobank, ABCD Study, NIH, PGC, GEO, SRA, EPA, USGS
 - **Web Technologies**: requests, feedparser, BeautifulSoup
-- **APIs**: NCBI E-utilities, ClinicalTrials.gov API v2
-
-## 🎓 Learn More
-
-### Analysis Pipeline
-- **[Quick Start Guide](docs/quickstart.rst)** - Get started in 5 minutes
-- **[Complete Workflow Tutorial](notebooks/01_complete_workflow.ipynb)** - Jupyter notebook walkthrough
-- **[User Guides](docs/user_guide/)** - In-depth guides for each pipeline phase
-- **[API Reference](docs/api/)** - Complete API documentation
-
-### Data Acquisition
-- **[Download Pipeline](scripts/pipeline/README.md)** - Automated downloads
-- **[Monitoring System](scripts/monitoring/README.md)** - Track new releases
-- **[Documentation System](scripts/documentation/README.md)** - Auto-generated docs
-- **[Access Tracker](data/catalogs/access_tracker.md)** - Dataset access status
+- **APIs**: NCBI E-utilities, EPA AirNow, Census Geocoding
 
 ---
 
-**Status**: ✅ Production-Ready | **Version**: 1.0.0 | **Python**: 3.9+ | **Last Updated**: January 2025
+**Status**: ✅ Production-Ready | **Version**: 2.0.0 | **Python**: 3.9+ | **Last Updated**: January 2025
 
 **Complete System:**
-- ✅ Data Acquisition (Downloads, Monitoring, Documentation)
-- ✅ Analysis Pipeline (Integration, Clustering, Validation)
-- ✅ 2,500+ lines of tested code
-- ✅ 11+ data sources monitored
-- ✅ 40+ datasets documented
+- ✅ Data Acquisition (14.7 GB, 5 sources)
+- ✅ Feature Extraction (11 modalities, 376 features, 4,430 lines)
+- ✅ Extended Integration (hierarchical, time-aware, 850 lines)
+- ✅ Enhanced Clustering (feature-aware, ensemble, 850 lines)
+- ✅ Comprehensive Validation (extended multi-modal tests)
+- ✅ ~7,950 lines of tested production code
 - ✅ 500+ comprehensive tests
+- ✅ Complete documentation

@@ -185,6 +185,227 @@ features:
       - thalamocortical_connectivity
       - cerebellar_volume
 
+  # Prompt 2.1: Autonomic, Circadian, Salivary features
+  autonomic:
+    hrv_time_domain:
+      - SDNN
+      - RMSSD
+      - pNN50
+      - SDANN
+      - SDNN_index
+    hrv_frequency_domain:
+      - LF_power
+      - HF_power
+      - LF_HF_ratio
+      - VLF_power
+      - total_power
+    hrv_nonlinear:
+      - SD1
+      - SD2
+      - SD1_SD2_ratio
+      - sample_entropy
+      - approximate_entropy
+      - DFA_alpha1
+      - DFA_alpha2
+    eda:
+      - SCL_mean
+      - SCL_slope
+      - SCR_frequency
+      - SCR_amplitude
+      - SCR_recovery_time
+    cardiovascular:
+      - baroreflex_sensitivity
+      - blood_pressure_variability
+      - orthostatic_response
+      - pulse_transit_time
+    respiratory:
+      - respiratory_rate
+      - respiratory_sinus_arrhythmia
+      - breathing_pattern_variability
+
+  circadian:
+    cortisol:
+      - CAR_AUCg
+      - CAR_AUCi
+      - cortisol_awakening
+      - diurnal_slope
+      - evening_cortisol
+      - total_daily_output
+    melatonin:
+      - DLMO
+      - melatonin_amplitude
+      - melatonin_phase
+      - phase_angle_difference
+    actigraphy:
+      - interdaily_stability
+      - intradaily_variability
+      - relative_amplitude
+      - L5_activity
+      - M10_activity
+      - sleep_regularity_index
+    temperature:
+      - core_body_temperature_rhythm
+      - acrophase
+      - amplitude
+
+  salivary:
+    biomarkers:
+      - alpha_amylase
+      - secretory_IgA
+      - cortisol
+      - testosterone
+      - DHEA
+      - progesterone
+      - estradiol
+    inflammatory:
+      - CRP_saliva
+      - IL1b_saliva
+      - IL6_saliva
+      - TNFalpha_saliva
+    microbiome:
+      - oral_microbiome_diversity
+      - Streptococcus_abundance
+      - pH
+
+  # Prompt 2.2: Environmental & Toxicant features
+  environmental:
+    air_quality:
+      - PM25_pregnancy
+      - PM25_early_life
+      - PM25_lifetime
+      - PM10_exposure
+      - NO2_exposure
+      - O3_exposure
+      - SO2_exposure
+    water_quality:
+      - nitrate_exposure
+      - arsenic_exposure
+      - fluoride_level
+    traffic:
+      - road_proximity_m
+      - traffic_density
+      - noise_exposure_dB
+    green_space:
+      - NDVI_500m
+      - park_access
+      - tree_canopy_percent
+    built_environment:
+      - walkability_index
+      - food_desert_indicator
+      - industrial_proximity
+    socioeconomic:
+      - area_deprivation_index
+      - neighborhood_SES
+      - census_poverty_rate
+
+  toxicants:
+    heavy_metals_hair:
+      - Pb_lead
+      - Hg_mercury
+      - Cd_cadmium
+      - As_arsenic
+      - Al_aluminum
+    heavy_metals_blood:
+      - blood_lead
+      - blood_mercury
+      - blood_cadmium
+    essential_metals:
+      - Zn_zinc
+      - Cu_copper
+      - Se_selenium
+      - Fe_iron
+      - Mn_manganese
+    metal_ratios:
+      - Cu_Zn_ratio
+      - Ca_Mg_ratio
+      - Na_K_ratio
+      - Hg_Se_ratio
+    organic_pollutants:
+      - urinary_BPA
+      - urinary_BPS
+      - phthalate_DEHP
+      - phthalate_DBP
+      - phthalate_DEP
+    pfas:
+      - PFOA
+      - PFOS
+      - PFHxS
+      - PFNA
+    pesticides:
+      - chlorpyrifos_metabolites
+      - organophosphate_metabolites
+      - pyrethroid_metabolites
+    body_burden:
+      - toxic_metal_burden_index
+      - pollutant_mixture_index
+
+  # Prompt 2.3: Sensory, Interoception, Voice features
+  sensory:
+    auditory:
+      - PTA_left
+      - PTA_right
+      - gap_detection_threshold
+      - P50_gating_ratio
+      - ABR_wave_V_latency
+      - OAE_present
+    visual:
+      - contrast_sensitivity
+      - motion_coherence_threshold
+      - visual_search_slope
+      - visual_working_memory_k
+    tactile:
+      - two_point_discrimination
+      - vibrotactile_threshold
+      - proprioception_accuracy
+      - texture_discrimination
+    multisensory:
+      - mcgurk_fusion_rate
+      - temporal_binding_window
+      - sound_induced_flash_rate
+
+  interoception:
+    accuracy:
+      - heartbeat_counting_accuracy
+      - heartbeat_discrimination_d_prime
+    sensibility:
+      - MAIA2_noticing
+      - MAIA2_attention_regulation
+      - MAIA2_emotional_awareness
+      - MAIA2_self_regulation
+      - MAIA2_body_listening
+      - MAIA2_trusting
+      - BPQ_total
+    awareness:
+      - interoceptive_awareness
+      - confidence_accuracy_correlation
+
+  voice:
+    prosodic:
+      - pitch_mean_hz
+      - pitch_range_hz
+      - pitch_variability
+      - intensity_mean_db
+      - speech_rate_syll_per_sec
+      - articulation_rate
+      - pause_frequency
+    spectral:
+      - F1_mean_hz
+      - F2_mean_hz
+      - F3_mean_hz
+      - formant_dispersion
+      - jitter_local
+      - shimmer_local
+      - HNR_db
+      - CPP
+    temporal:
+      - VOT_ms
+      - vowel_duration
+      - coarticulation_index
+    pragmatic:
+      - turn_taking_gap
+      - prosodic_synchrony
+      - emotional_prosody_recognition
+
 # Preprocessing configuration
 preprocess:
   imputation: mice_delta
@@ -194,6 +415,14 @@ preprocess:
     metabolomic: robust
     clinical: standard
     microbiome: clr
+    autonomic: standard
+    circadian: standard
+    salivary: robust
+    environmental: quantile
+    toxicants: robust
+    sensory: standard
+    interoception: standard
+    voice: robust
   adjust_covariates:
     - age
     - sex
@@ -213,17 +442,55 @@ preprocess:
 
 # Integration configuration
 integrate:
-  method: stack
+  method: hierarchical
   weights:
-    genetic: 0.30
-    metabolomic: 0.40
-    clinical: 0.20
-    microbiome: 0.10
+    # Distal factors (genetic predisposition, environmental exposures)
+    genetic: 0.15
+    environmental: 0.08
+    toxicants: 0.07
+    # Intermediate factors (biological state, processing)
+    microbiome: 0.08
+    metabolomic: 0.20
+    # Proximal factors (physiological state, regulation)
+    autonomic: 0.12
+    circadian: 0.10
+    salivary: 0.05
+    # Phenotypic expression (sensory, cognitive)
+    sensory: 0.07
+    interoception: 0.06
+    voice: 0.05
+    # Outcome (direct phenotype)
+    clinical: 0.02
+  hierarchical_levels:
+    level1_biological:
+      components: [genetic, metabolomic, microbiome, autonomic, circadian, salivary]
+      method: PCA
+      n_factors: 30
+    level2_environmental:
+      components: [environmental, toxicants]
+      method: PCA
+      n_factors: 15
+    level3_cognitive_sensory:
+      components: [sensory, interoception, voice]
+      method: PCA
+      n_factors: 15
+    level4_clinical:
+      components: [clinical]
+      method: None
+      n_factors: null
   n_factors: 50
   split_by:
     - family_id
     - site
   test_size: 0.2
+  time_adjustment:
+    enabled: true
+    standard_time: 9.0  # Adjust circadian features to 9 AM
+    time_sensitive_features:
+      - cortisol
+      - melatonin
+      - core_body_temperature
+      - activity_level
 
 # Clustering configuration
 cluster:
