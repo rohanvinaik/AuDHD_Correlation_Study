@@ -1,0 +1,278 @@
+# Monitoring Configuration for AuDHD Correlation Study
+# Tracks data releases, version updates, and new publications
+
+# Alert recipients
+alert_recipients:
+  - principal.investigator@institution.edu
+  - data.manager@institution.edu
+
+test_email: test@example.com
+
+# Email configuration
+email:
+  enabled: false  # Set to true and configure SMTP
+  smtp_server: smtp.gmail.com
+  smtp_port: 587
+  username: your-email@gmail.com
+  password: your-app-password  # Use app-specific password
+  from_address: audhd-monitoring@institution.edu
+
+# Slack configuration
+slack:
+  enabled: false  # Set to true and add webhook
+  webhook_url: https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+  channels:
+    monitoring: '#data-monitoring'
+    urgent: '#urgent-alerts'
+
+# Data sources to monitor
+sources:
+
+  # SFARI Base (SPARK, SSC, etc.)
+  SFARI_Base:
+    type: rss
+    url: https://base.sfari.org/news/feed/
+    keywords:
+      - release
+      - data
+      - update
+      - SPARK
+      - Simons Simplex
+      - available
+    check_frequency: daily
+    priority: high
+
+  # UK Biobank
+  UK_Biobank:
+    type: webpage
+    url: https://www.ukbiobank.ac.uk/enable-your-research/latest-data-releases
+    selectors:
+      version: '.release-version'
+      date: '.release-date'
+      description: '.release-notes'
+    check_frequency: weekly
+    priority: high
+
+  # ABCD Study
+  ABCD_Study:
+    type: rss
+    url: https://abcdstudy.org/news-feed/
+    keywords:
+      - data release
+      - annual release
+      - curated release
+      - available
+    check_frequency: monthly
+    priority: high
+
+  # NIH NDA
+  NDA_News:
+    type: rss
+    url: https://nda.nih.gov/news/feed/
+    keywords:
+      - data
+      - release
+      - collection
+      - NDAR
+      - autism
+      - ADHD
+    check_frequency: weekly
+    priority: medium
+
+  # GEO (Gene Expression Omnibus)
+  GEO_Updates:
+    type: rss
+    url: https://www.ncbi.nlm.nih.gov/geo/browse/?view=series&sort=date&mode=rss
+    keywords:
+      - autism
+      - ADHD
+      - ASD
+      - attention deficit
+    check_frequency: weekly
+    priority: medium
+
+  # MetaboLights
+  MetaboLights:
+    type: rss
+    url: https://www.ebi.ac.uk/metabolights/ws/studies/filter
+    keywords:
+      - autism
+      - ADHD
+      - metabolomics
+    check_frequency: weekly
+    priority: medium
+
+  # ArrayExpress
+  ArrayExpress:
+    type: rss
+    url: https://www.ebi.ac.uk/biostudies/arrayexpress/studies?query=autism
+    keywords:
+      - autism
+      - ADHD
+      - transcriptomics
+    check_frequency: weekly
+    priority: low
+
+# dbGaP monitoring
+check_dbgap: true
+dbgap_search_terms:
+  - autism spectrum disorder
+  - ADHD
+  - attention deficit hyperactivity
+  - neurodevelopmental
+  - psychiatric genomics
+check_frequency: weekly
+
+# ClinicalTrials.gov monitoring
+check_clinical_trials: true
+clinical_trial_conditions:
+  - Autism Spectrum Disorder
+  - Autistic Disorder
+  - ADHD
+  - Attention Deficit Disorder
+check_frequency: weekly
+
+# Literature monitoring
+literature:
+  enabled: true
+  queries:
+    - autism ADHD dataset genomics
+    - autism spectrum disorder cohort
+    - ADHD genetics biobank
+    - neurodevelopmental disorders multi-omics
+  sources:
+    - PubMed
+    - bioRxiv
+    - medRxiv
+    - Scientific Data
+  check_frequency: daily
+  min_relevance: 0.5
+
+# Priority datasets to monitor
+priority_datasets:
+
+  - name: SPARK
+    source: SFARI Base
+    current_version: v4.0
+    check_version_updates: true
+    check_new_data: true
+    alert_on_update: immediate
+
+  - name: UK Biobank
+    source: UK Biobank
+    current_version: Release 2024
+    check_version_updates: true
+    check_new_data: true
+    alert_on_update: immediate
+
+  - name: ABCD Study
+    source: NDA
+    current_version: Release 5.1
+    check_version_updates: true
+    check_new_data: true
+    alert_on_update: immediate
+
+  - name: SSC (Simons Simplex Collection)
+    source: SFARI Base
+    current_version: v16
+    check_version_updates: true
+    check_new_data: false
+    alert_on_update: digest
+
+  - name: PGC (Psychiatric Genomics Consortium)
+    source: PGC Website
+    current_version: ADHD 2019
+    check_version_updates: true
+    check_new_data: true
+    alert_on_update: digest
+
+# Monitoring schedule
+schedule:
+  immediate_checks:  # High-priority, check frequently
+    - SFARI_Base
+    - UK_Biobank
+    - ABCD_Study
+    interval: 3600  # 1 hour
+
+  daily_checks:  # Medium-priority
+    - NDA_News
+    - GEO_Updates
+    - MetaboLights
+    - dbGaP
+    - ClinicalTrials
+    - Literature
+    interval: 86400  # 24 hours
+
+  weekly_checks:  # Low-priority
+    - ArrayExpress
+    interval: 604800  # 7 days
+
+# Digest settings
+digest:
+  enabled: true
+  frequency: daily  # daily, weekly
+  time: "09:00"  # Time to send (24-hour format)
+  include_low_priority: false
+  max_items: 20
+
+# Alert thresholds
+thresholds:
+  immediate_alert:
+    - priority: high
+    - action_required: true
+
+  digest_alert:
+    - priority: medium
+    - priority: low
+
+  min_relevance_score: 0.5  # For publications
+
+# Monitoring targets summary
+monitoring_summary:
+  total_sources: 11
+  high_priority: 3
+  medium_priority: 5
+  low_priority: 3
+
+  categories:
+    datasets: 7
+    literature: 4
+    clinical_trials: 1
+
+  expected_updates:
+    SFARI: quarterly
+    UK_Biobank: quarterly
+    ABCD: annual
+    dbGaP: continuous
+    GEO: continuous
+    ClinicalTrials: continuous
+
+# Data retention
+retention:
+  detected_updates: 365  # days
+  publications: 365  # days
+  alert_history: 90  # days
+  monitoring_logs: 30  # days
+
+# Logging
+logging:
+  level: INFO
+  file: logs/monitoring.log
+  rotate: daily
+  backup_count: 30
+
+# Performance
+performance:
+  max_concurrent_checks: 5
+  request_timeout: 30  # seconds
+  rate_limit_delay: 1  # seconds between requests
+  retry_attempts: 3
+  retry_delay: 5  # seconds
+
+# Output paths
+output:
+  updates: data/monitoring/detected_updates.json
+  publications: data/monitoring/new_publications.json
+  digests: data/monitoring/alerts/
+  logs: logs/monitoring.log
+  state: data/temp/monitoring_state.json
