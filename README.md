@@ -77,6 +77,7 @@ A comprehensive, production-ready system for discovering biologically distinct p
 ### Causal Analysis & Clinical Reporting (NEW)
 - **[Extended Causal Analysis](docs/EXTENDED_CAUSAL_ANALYSIS.md)** - Mediation, G×E, mixtures, critical periods, network discovery
 - **[Adaptive Weighting System](docs/ADAPTIVE_WEIGHTING.md)** - Literature-based weights with optimization
+- **[Iterative Refinement System](docs/ITERATIVE_REFINEMENT.md)** - Advanced multi-stage subtype discrimination with 6 enhancements
 
 ### Genetic & Multi-Omics Analysis (NEW)
 - **[Genetic Analysis System](docs/GENETIC_ANALYSIS_SYSTEM.md)** - BLAST/NCBI integration, literature mining, LLM synthesis
@@ -321,13 +322,15 @@ python scripts/download_tracker.py
 
 ```
 AuDHD_Correlation_Study/
-├── src/audhd_correlation/           # Main analysis package (~14,000 lines)
+├── src/audhd_correlation/           # Main analysis package (~15,500 lines)
 │   ├── data/                        # Data loaders and harmonization
 │   ├── preprocess/                  # Preprocessing and normalization
 │   ├── integrate/                   # Multi-omics integration
 │   │   ├── methods.py               # Standard integration (MOFA/PCA/CCA)
 │   │   ├── extended_integration.py  # Hierarchical + time-aware (850 lines)
-│   │   └── adaptive_weights.py      # NEW: Literature-based weights + optimization (850 lines)
+│   │   ├── adaptive_weights.py      # Literature-based weights + optimization (850 lines)
+│   │   ├── iterative_refinement.py  # NEW: Enhanced iterative refinement (1,078 lines)
+│   │   └── iterative_refinement_enhanced.py  # NEW: Advanced discriminative analysis (480 lines)
 │   ├── modeling/                    # Clustering algorithms
 │   │   ├── clustering.py            # Standard clustering (882 lines)
 │   │   └── extended_clustering.py   # Feature-aware + ensemble (850 lines)
@@ -722,9 +725,11 @@ pip install tslearn
 ### System Updates
 
 - ✅ Configuration expanded to 376 feature definitions with literature-based weights
-- ✅ Comprehensive documentation (10+ detailed guides)
+- ✅ Comprehensive documentation (11 detailed guides)
 - ✅ Data acquisition complete (14.7 GB across 5 sources)
 - ✅ Automated monitoring paused (manual check mode)
+- ✅ **Enhanced iterative refinement with 6 advanced discriminative analysis methods**
+- ✅ Total codebase: ~15,500 lines of production-ready analysis code
 
 ## 🤝 Contributing
 
