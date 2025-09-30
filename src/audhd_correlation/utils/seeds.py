@@ -26,3 +26,7 @@ def set_seed(seed: Optional[int] = None) -> None:
         torch.backends.cudnn.benchmark = False
     except ImportError:
         pass
+
+
+# Alias for compatibility
+set_global_seed = set_seed

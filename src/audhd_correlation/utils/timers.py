@@ -1,7 +1,7 @@
 """Timing utilities"""
 import time
 from contextlib import contextmanager
-from typing import Generator
+from typing import Generator, Any
 from rich.console import Console
 
 console = Console()

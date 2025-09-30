@@ -31,9 +31,17 @@ from sklearn.mixture import BayesianGaussianMixture
 from sklearn.manifold import TSNE
 from scipy.cluster.hierarchy import dendrogram, linkage
 from scipy.spatial.distance import pdist, squareform
-from scipy.stats import mode, dip
+from scipy.stats import mode
 from scipy.spatial import distance_matrix
 from scipy.sparse.csgraph import minimum_spanning_tree
+
+# dip test is in a separate package
+try:
+    from diptest import diptest as dip
+    DIP_AVAILABLE = True
+except ImportError:
+    DIP_AVAILABLE = False
+    dip = None
 
 try:
     import hdbscan

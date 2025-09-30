@@ -13,8 +13,20 @@ import argparse
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-# Import all analysis modules
-from scripts.analysis.baseline_deviation import BaselineDeviationFramework
+# Direct import of baseline deviation pipeline (bypass package __init__)
+import sys
+from pathlib import Path
+_src_path = Path(__file__).parent.parent / "src"
+if str(_src_path) not in sys.path:
+    sys.path.insert(0, str(_src_path))
+
+# Now import directly
+from audhd_correlation.pipelines.baseline_deviation_pipeline import (
+    run_baseline_deviation_pipeline,
+    BaselineDeviationResults
+)
+
+# Import all other analysis modules from scripts
 from scripts.analysis.advanced_networks import construct_gaussian_graphical_model
 from scripts.analysis.variance_qtls import analyze_variance_qtls
 from scripts.analysis.enhanced_mediation import baseline_deviation_mediation
@@ -62,7 +74,7 @@ class IntegratedAuDHDPipeline:
         self.results_dir.mkdir(parents=True, exist_ok=True)
 
         # Initialize all analyzers
-        self.baseline_deviation = BaselineDeviationFramework()
+        # Note: baseline_deviation uses functional API from src package
         self.singlecell = SingleCellAnalyzer()
         self.microbiome = MicrobiomeAnalyzer()
         self.neurophysiology = NeurophysiologyAnalyzer()
@@ -86,10 +98,29 @@ class IntegratedAuDHDPipeline:
         logger.info("=" * 80)
 
         try:
-            results = self.baseline_deviation.analyze(
-                data=data.get('phenotype_data'),
-                baseline_cols=data.get('baseline_cols', []),
-                outcome_cols=data.get('outcome_cols', [])
+            # Get data
+            phenotype_data = data.get('phenotype_data')
+            baseline_cols = data.get('baseline_cols', [])
+            outcome_cols = data.get('outcome_cols', [])
+
+            # Prepare integrated features matrix
+            all_cols = baseline_cols + outcome_cols
+            Z = phenotype_data[all_cols].values
+
+            # Identify control samples if diagnosis column exists
+            control_mask = None
+            if 'diagnosis' in phenotype_data.columns:
+                control_mask = phenotype_data['diagnosis'] == 'Control'
+
+            # Run baseline-deviation pipeline
+            results = run_baseline_deviation_pipeline(
+                Z=Z,
+                control_mask=control_mask.values if control_mask is not None else None,
+                config={
+                    'deviation_threshold': 0.95,
+                    'topology_alpha': 0.05,
+                    'min_cluster_size': 10
+                }
             )
 
             # Save results
@@ -99,11 +130,16 @@ class IntegratedAuDHDPipeline:
                 pickle.dump(results, f)
 
             logger.info(f"✓ Baseline-deviation analysis complete: {output_file}")
+            logger.info(f"  Identified {results.n_deviants} deviants ({results.prevalence:.1%})")
+            if hasattr(results, 'n_clusters'):
+                logger.info(f"  Found {results.n_clusters} clusters")
 
             return results
 
         except Exception as e:
             logger.error(f"✗ Baseline-deviation analysis failed: {e}")
+            import traceback
+            traceback.print_exc()
             return None
 
     def run_advanced_network_analysis(self, data):
@@ -119,7 +155,9 @@ class IntegratedAuDHDPipeline:
                 cv_folds=5
             )
 
-            logger.info(f"✓ GGM complete: {ggm_result.n_nodes} nodes, {ggm_result.n_edges} edges")
+            n_nodes = len(ggm_result.feature_names)
+            n_edges = ggm_result.graph.number_of_edges()
+            logger.info(f"✓ GGM complete: {n_nodes} nodes, {n_edges} edges")
 
             return ggm_result
 

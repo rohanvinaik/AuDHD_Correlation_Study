@@ -1,6 +1,7 @@
 """
 Main pipeline orchestration - thin, readable, delegates to modules
 """
+from typing import Optional, List
 from ..config import load_config as load_validated_config, AppConfig
 from ..utils.io import save_data, load_data
 from rich.console import Console
