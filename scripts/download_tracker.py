@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Real-time Download Tracker
-Monitors download progress and displays status
+Real-time Download Tracker with Progress Bars
+Monitors download progress and displays graphical status
 """
 
 import json
@@ -10,16 +10,64 @@ from pathlib import Path
 from datetime import datetime
 import subprocess
 import sys
+import os
+import re
+
+try:
+    from rich.console import Console
+    from rich.progress import Progress, BarColumn, TextColumn, TimeElapsedColumn, TaskProgressColumn
+    from rich.table import Table
+    from rich.live import Live
+    from rich.panel import Panel
+    from rich.layout import Layout
+    from rich.text import Text
+    RICH_AVAILABLE = True
+except ImportError:
+    RICH_AVAILABLE = False
+    print("Installing rich library for beautiful progress bars...")
+    subprocess.run([sys.executable, "-m", "pip", "install", "rich"], check=True)
+    from rich.console import Console
+    from rich.progress import Progress, BarColumn, TextColumn, TimeElapsedColumn, TaskProgressColumn
+    from rich.table import Table
+    from rich.live import Live
+    from rich.panel import Panel
+    from rich.layout import Layout
+    from rich.text import Text
 
 project_root = Path("/Users/rohanvinaik/AuDHD_Correlation_Study")
+console = Console()
 
-# ANSI color codes for terminal
-GREEN = '\033[92m'
-YELLOW = '\033[93m'
-RED = '\033[91m'
-BLUE = '\033[94m'
-BOLD = '\033[1m'
-RESET = '\033[0m'
+# All datasets we're tracking
+GEO_DATASETS = [
+    'GSE28521', 'GSE28475', 'GSE64018', 'GSE98793', 'GSE18123',
+    'GSE80655', 'GSE113834', 'GSE42133', 'GSE147314', 'GSE50759', 'GSE53162'
+]
+
+PAPER_QUERIES = [
+    "ADHD microbiome", "autism microbiome", "ADHD metabolomics", "autism metabolomics",
+    "ADHD gene expression", "autism transcriptome", "ADHD proteomics", "autism proteomics",
+    "maternal immune activation autism", "prenatal infection autism ADHD",
+    "preterm birth autism ADHD", "pregnancy complications neurodevelopment",
+    "maternal SSRI autism", "birth outcomes autism ADHD",
+    "maternal fever pregnancy autism", "gestational diabetes autism ADHD",
+    "valproate pregnancy autism", "gene environment interaction autism ADHD",
+    "G×E neurodevelopment", "critical period neurodevelopment autism",
+    "developmental window autism", "autism heterogeneity subtypes",
+    "ADHD subtypes clustering", "autism endophenotypes",
+    "multimodal integration autism", "multi-omics neurodevelopment",
+    "autonomic dysregulation autism ADHD", "heart rate variability autism",
+    "circadian rhythm autism ADHD", "melatonin autism sleep",
+    "cortisol autism ADHD stress", "sensory processing autism",
+    "interoception autism ADHD", "voice prosody autism",
+    "speech acoustics autism", "inflammatory markers autism ADHD",
+    "cytokines neurodevelopment", "oxidative stress autism",
+    "mitochondrial dysfunction autism", "epigenetics autism ADHD",
+    "DNA methylation neurodevelopment", "polygenic risk score autism ADHD",
+    "causal inference neurodevelopment", "mediation analysis autism",
+    "mixtures environmental autism", "multiple exposures neurodevelopment",
+    "air pollution autism ADHD", "pesticides neurodevelopment",
+    "heavy metals autism", "lead mercury autism ADHD", "phthalates neurodevelopment"
+]
 
 def get_file_size_mb(filepath):
     """Get file size in MB"""
@@ -28,272 +76,200 @@ def get_file_size_mb(filepath):
     except:
         return 0
 
-def parse_log_for_progress(log_file):
-    """Parse log file for progress information"""
-    if not log_file.exists():
-        return None
+def count_completed_queries():
+    """Count how many paper queries have been processed"""
+    paper_log = project_root / "logs/downloads/paper_scraping.log"
+    if not paper_log.exists():
+        return 0, 0, 0
 
     try:
-        with open(log_file) as f:
-            lines = f.readlines()
-
-        if not lines:
-            return None
-
-        # Get last few lines for recent activity
-        recent = lines[-10:]
-        last_line = lines[-1].strip() if lines else ""
-
-        return {
-            'last_activity': last_line,
-            'total_lines': len(lines)
-        }
-    except:
-        return None
-
-def check_data_status():
-    """Check status of all data sources"""
-
-    status = {
-        'timestamp': datetime.now().isoformat(),
-        'sources': {}
-    }
-
-    # 1. GEO Gene Expression Downloads
-    geo_dir = project_root / "data/raw/geo"
-    if geo_dir.exists():
-        n_files = len(list(geo_dir.glob("*.txt*"))) + len(list(geo_dir.glob("*.tar")))
-        total_size = sum(get_file_size_mb(f) for f in geo_dir.glob("*") if f.is_file())
-
-        # Check individual dataset logs
-        datasets_complete = []
-        for dataset in ['GSE28521', 'GSE28475', 'GSE64018', 'GSE98793', 'GSE18123',
-                       'GSE80655', 'GSE119605', 'GSE42133']:
-            log_file = project_root / f"logs/downloads/{dataset}.log"
-            if log_file.exists():
-                log_info = parse_log_for_progress(log_file)
-                if log_info and 'complete' in log_info['last_activity'].lower():
-                    datasets_complete.append(dataset)
-
-        status['sources']['GEO_Expression'] = {
-            'status': f'✓ Complete ({len(datasets_complete)}/8)' if len(datasets_complete) == 8 else f'⟳ Downloading ({len(datasets_complete)}/8)',
-            'datasets': ', '.join(datasets_complete[:3]) + ('...' if len(datasets_complete) > 3 else ''),
-            'files': n_files,
-            'size_mb': total_size
-        }
-    else:
-        status['sources']['GEO_Expression'] = {
-            'status': '○ Not started',
-            'files': 0,
-            'size_mb': 0
-        }
-
-    # 2. SRA Microbiome Downloads
-    microbiome_dir = project_root / "data/raw/sra"
-    if microbiome_dir.exists():
-        n_samples = len([d for d in microbiome_dir.iterdir() if d.is_dir() and d.name.startswith('SRR')])
-        total_size = sum(get_file_size_mb(f) for f in microbiome_dir.rglob("*") if f.is_file())
-
-        # Parse SRA log
-        sra_log = project_root / "logs/downloads/sra_download.log"
-        sra_info = parse_log_for_progress(sra_log)
-        eta = ""
-        if sra_info and 'ETA' in sra_info['last_activity']:
-            import re
-            eta_match = re.search(r'ETA: ([\d.]+)', sra_info['last_activity'])
-            if eta_match:
-                eta = f" ETA: {eta_match.group(1)} min"
-
-        status['sources']['SRA_Microbiome'] = {
-            'status': f'⟳ Downloading{eta}',
-            'samples': n_samples,
-            'size_mb': total_size
-        }
-    else:
-        status['sources']['SRA_Microbiome'] = {
-            'status': '○ Not started',
-            'samples': 0,
-            'size_mb': 0
-        }
-
-    # 3. Paper Scraping
-    paper_log = project_root / "logs/downloads/paper_scraping.log"
-    paper_info = parse_log_for_progress(paper_log)
-
-    if paper_info:
-        # Count papers processed
         with open(paper_log) as f:
             content = f.read()
-            processing_count = content.count('Processing:')
-            downloaded_count = content.count('Downloading PMC')
-            supplement_count = content.count('Downloaded supplement')
 
-        status['sources']['Paper_Scraping'] = {
-            'status': '⟳ Active' if 'Processing' in paper_info['last_activity'] else '✓ Complete',
-            'papers_processed': processing_count,
-            'papers_downloaded': downloaded_count,
-            'supplements': supplement_count,
-            'last': paper_info['last_activity'][:80] + '...' if len(paper_info['last_activity']) > 80 else paper_info['last_activity']
-        }
-    else:
-        status['sources']['Paper_Scraping'] = {
-            'status': '○ Not started'
-        }
+        # Count query completions
+        queries_complete = len(re.findall(r'Processing query:', content))
+        papers_downloaded = content.count('Downloading PMC')
+        supplements_downloaded = len(re.findall(r'Downloaded.*supplement', content))
 
-    # 4. Data Repository Extraction
-    extraction_log = project_root / "logs/downloads/data_extraction.log"
-    repos_dir = project_root / "data/papers/repositories"
+        return queries_complete, papers_downloaded, supplements_downloaded
+    except:
+        return 0, 0, 0
 
-    if extraction_log.exists():
-        extract_info = parse_log_for_progress(extraction_log)
+def count_geo_complete():
+    """Count completed GEO datasets"""
+    completed = []
+    for dataset in GEO_DATASETS:
+        log_file = project_root / f"logs/downloads/{dataset}.log"
+        if log_file.exists():
+            try:
+                with open(log_file) as f:
+                    content = f.read()
+                if 'download complete' in content.lower():
+                    completed.append(dataset)
+            except:
+                pass
+    return completed
 
-        # Count repositories found and downloaded
-        with open(extraction_log) as f:
-            content = f.read()
-            repos_found = content.count('Found repositories')
-            github_downloads = content.count('Downloaded ') - content.count('Downloaded supplement')
+def get_sra_progress():
+    """Get SRA download progress"""
+    sra_log = project_root / "logs/downloads/sra_download.log"
+    if not sra_log.exists():
+        return 0, 0
 
-        # Count actual files
-        repo_files = []
-        total_repo_size = 0
-        if repos_dir.exists():
-            repo_files = list(repos_dir.glob("*.zip"))
-            total_repo_size = sum(get_file_size_mb(f) for f in repo_files)
-
-        status['sources']['Data_Repositories'] = {
-            'status': '⟳ Extracting' if 'Processing' in extract_info['last_activity'] else '✓ Complete',
-            'repos_found': repos_found,
-            'files_downloaded': len(repo_files),
-            'size_mb': total_repo_size,
-            'last': extract_info['last_activity'][:80] + '...' if len(extract_info['last_activity']) > 80 else extract_info['last_activity']
-        }
-    else:
-        status['sources']['Data_Repositories'] = {
-            'status': '○ Not started'
-        }
-
-    # 5. GWAS Data (for reference)
-    adhd_gwas = project_root / "data/raw/genetics/adhd_eur_jun2017.gz"
-    status['sources']['GWAS_Data'] = {
-        'status': '✓ Complete' if adhd_gwas.exists() else '✗ Missing',
-        'size_mb': get_file_size_mb(adhd_gwas) if adhd_gwas.exists() else 0,
-        'significant_snps': '317 variants'
-    }
-
-    return status
-
-def display_status(status):
-    """Display status in terminal"""
-
-    # Clear screen
-    print("\033[2J\033[H")
-
-    # Header
-    print(f"{BOLD}{BLUE}{'='*80}{RESET}")
-    print(f"{BOLD}{BLUE}AuDHD Multi-Omics Data Download - LIVE TRACKER{RESET}")
-    print(f"{BOLD}{BLUE}{'='*80}{RESET}")
-    print(f"\nLast updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-
-    # Data sources with better formatting
-    for source, info in status['sources'].items():
-        source_name = source.replace('_', ' ')
-        print(f"{BOLD}{source_name}:{RESET}")
-
-        # Status with color
-        status_text = info.get('status', 'Unknown')
-        if '✓' in status_text:
-            color = GREEN
-        elif '⟳' in status_text:
-            color = YELLOW
-        elif '✗' in status_text:
-            color = RED
-        else:
-            color = RESET
-
-        print(f"  Status: {color}{status_text}{RESET}")
-
-        # Show last activity if available
-        if 'last' in info:
-            # Extract just the message part after timestamp
-            last_msg = info['last']
-            if ' - INFO - ' in last_msg:
-                last_msg = last_msg.split(' - INFO - ', 1)[1]
-            elif ' - WARNING - ' in last_msg:
-                last_msg = last_msg.split(' - WARNING - ', 1)[1]
-            print(f"  {BLUE}→{RESET} {last_msg}")
-
-        # Show key metrics
-        for key, value in info.items():
-            if key not in ['status', 'path', 'last', 'size_mb']:
-                key_display = key.replace('_', ' ').title()
-                print(f"  {key_display}: {value}")
-
-        # File size if available
-        if 'size_mb' in info and info['size_mb'] > 0:
-            size_gb = info['size_mb'] / 1024
-            if size_gb > 1:
-                print(f"  {BOLD}Size: {size_gb:.2f} GB{RESET}")
-            else:
-                print(f"  Size: {info['size_mb']:.1f} MB")
-
-        print()
-
-    # Summary with totals
-    ready_count = sum(1 for s in status['sources'].values() if '✓' in s.get('status', ''))
-    downloading_count = sum(1 for s in status['sources'].values() if '⟳' in s.get('status', ''))
-    total_count = len(status['sources'])
-
-    # Calculate total downloaded size
-    total_size_gb = sum(s.get('size_mb', 0) for s in status['sources'].values()) / 1024
-
-    print(f"{BOLD}{'='*80}{RESET}")
-    print(f"{BOLD}SUMMARY:{RESET}")
-    print(f"  {GREEN}✓ Complete: {ready_count}/{total_count}{RESET}")
-    print(f"  {YELLOW}⟳ Active: {downloading_count}/{total_count}{RESET}")
-    print(f"  {BOLD}Total Downloaded: {total_size_gb:.2f} GB{RESET}")
-
-    # Show active processes
     try:
-        result = subprocess.run(['ps', 'aux'], capture_output=True, text=True)
-        active_downloads = len([line for line in result.stdout.split('\n')
-                               if 'python' in line and any(x in line for x in ['download', 'scrape', 'extract'])])
-        print(f"  Active Download Processes: {active_downloads}")
+        with open(sra_log) as f:
+            content = f.read()
+
+        # Find progress lines
+        success_match = re.search(r'Successful: (\d+)/(\d+)', content)
+        if success_match:
+            return int(success_match.group(1)), int(success_match.group(2))
     except:
         pass
 
-    print(f"\n{BOLD}Next Steps:{RESET}")
-    if ready_count == total_count:
-        print(f"  {GREEN}✓ All downloads complete! Ready for analysis.{RESET}")
-        print(f"  → Run: python scripts/run_full_analysis.py")
+    return 0, 0
+
+def create_dashboard():
+    """Create rich dashboard layout"""
+
+    # Get current status
+    queries_done, papers, supplements = count_completed_queries()
+    geo_complete = count_geo_complete()
+    sra_done, sra_total = get_sra_progress()
+
+    # Calculate data sizes
+    geo_dir = project_root / "data/raw/geo"
+    sra_dir = project_root / "data/raw/sra"
+    papers_dir = project_root / "data/papers"
+    gwas_dir = project_root / "data/raw/gwas"
+
+    geo_size = sum(get_file_size_mb(f) for f in geo_dir.rglob("*") if f.is_file()) / 1024 if geo_dir.exists() else 0
+    sra_size = sum(get_file_size_mb(f) for f in sra_dir.rglob("*") if f.is_file()) / 1024 if sra_dir.exists() else 0
+    papers_size = sum(get_file_size_mb(f) for f in papers_dir.rglob("*") if f.is_file()) / 1024 if papers_dir.exists() else 0
+    gwas_size = sum(get_file_size_mb(f) for f in gwas_dir.rglob("*") if f.is_file()) / 1024 if gwas_dir.exists() else 0
+
+    total_size = geo_size + sra_size + papers_size + gwas_size
+
+    # Create progress table
+    table = Table(title="📊 AuDHD Multi-Omics Data Acquisition", title_style="bold magenta", show_header=True, header_style="bold cyan")
+    table.add_column("Source", style="cyan", width=25)
+    table.add_column("Progress", width=40)
+    table.add_column("Status", justify="center", width=15)
+    table.add_column("Size", justify="right", width=12)
+
+    # Paper Scraping
+    paper_progress = (queries_done / len(PAPER_QUERIES)) * 100 if PAPER_QUERIES else 0
+    paper_bar = "█" * int(paper_progress / 2.5) + "░" * (40 - int(paper_progress / 2.5))
+    paper_status = f"{queries_done}/{len(PAPER_QUERIES)} queries"
+    paper_color = "green" if queries_done == len(PAPER_QUERIES) else "yellow"
+    table.add_row(
+        "📄 Paper Scraping (50 queries)",
+        f"[{paper_color}]{paper_bar}[/{paper_color}] {paper_progress:.1f}%",
+        f"[bold]{papers} papers\n{supplements} supps",
+        f"{papers_size:.2f} GB"
+    )
+
+    # GEO Datasets
+    geo_progress = (len(geo_complete) / len(GEO_DATASETS)) * 100 if GEO_DATASETS else 0
+    geo_bar = "█" * int(geo_progress / 2.5) + "░" * (40 - int(geo_progress / 2.5))
+    geo_status = f"{len(geo_complete)}/{len(GEO_DATASETS)} complete"
+    geo_color = "green" if len(geo_complete) == len(GEO_DATASETS) else "yellow"
+    table.add_row(
+        "🧬 GEO Expression (11 sets)",
+        f"[{geo_color}]{geo_bar}[/{geo_color}] {geo_progress:.1f}%",
+        f"[bold]{geo_status}",
+        f"{geo_size:.2f} GB"
+    )
+
+    # SRA Microbiome
+    sra_progress = (sra_done / sra_total * 100) if sra_total > 0 else 0
+    sra_bar = "█" * int(sra_progress / 2.5) + "░" * (40 - int(sra_progress / 2.5))
+    sra_color = "green" if sra_done == sra_total else "yellow"
+    table.add_row(
+        "🦠 SRA Microbiome",
+        f"[{sra_color}]{sra_bar}[/{sra_color}] {sra_progress:.1f}%",
+        f"[bold]{sra_done}/{sra_total} studies",
+        f"{sra_size:.2f} GB"
+    )
+
+    # GWAS Catalog
+    gwas_files = len(list(gwas_dir.glob("*.tsv*"))) if gwas_dir.exists() else 0
+    gwas_status = "✓ Complete" if gwas_files >= 3 else "⟳ Downloading"
+    gwas_color = "green" if gwas_files >= 3 else "yellow"
+    gwas_progress = (gwas_files / 3) * 100
+    gwas_bar = "█" * int(gwas_progress / 2.5) + "░" * (40 - int(gwas_progress / 2.5))
+    table.add_row(
+        "🧬 GWAS Catalog (ASD/ADHD)",
+        f"[{gwas_color}]{gwas_bar}[/{gwas_color}] {gwas_progress:.1f}%",
+        f"[bold]{gwas_status}",
+        f"{gwas_size:.2f} GB"
+    )
+
+    # Create summary panel
+    total_items = len(PAPER_QUERIES) + len(GEO_DATASETS) + (sra_total if sra_total > 0 else 50) + 3
+    completed_items = queries_done + len(geo_complete) + sra_done + gwas_files
+    overall_progress = (completed_items / total_items) * 100 if total_items > 0 else 0
+
+    summary = Text()
+    summary.append("📦 Total Downloaded: ", style="bold")
+    summary.append(f"{total_size:.2f} GB\n", style="bold cyan")
+    summary.append("🎯 Overall Progress: ", style="bold")
+    summary.append(f"{overall_progress:.1f}%\n", style="bold yellow")
+    summary.append("📊 Items: ", style="bold")
+    summary.append(f"{completed_items}/{total_items} complete", style="bold green" if completed_items == total_items else "bold yellow")
+
+    summary_panel = Panel(summary, title="Summary", border_style="green")
+
+    # Recent activity
+    paper_log = project_root / "logs/downloads/paper_scraping.log"
+    recent_text = Text()
+    if paper_log.exists():
+        try:
+            with open(paper_log) as f:
+                lines = f.readlines()
+            if lines:
+                last_line = lines[-1].strip()
+                if ' - INFO - ' in last_line:
+                    msg = last_line.split(' - INFO - ', 1)[1]
+                    recent_text.append("📝 ", style="bold blue")
+                    recent_text.append(msg[:90] + "..." if len(msg) > 90 else msg, style="dim")
+                else:
+                    recent_text.append("Waiting for updates...", style="dim")
+        except:
+            recent_text.append("Initializing...", style="dim")
     else:
-        print(f"  Downloads in progress... {downloading_count} active")
-        print(f"  Monitor individual logs: tail -f logs/downloads/*.log")
+        recent_text.append("Starting downloads...", style="dim")
 
-    print(f"\n{BLUE}{'='*80}{RESET}")
-    print(f"Press Ctrl+C to exit | Refreshes every 5 seconds")
+    activity_panel = Panel(recent_text, title="Recent Activity", border_style="blue")
 
-def save_status_json(status):
-    """Save status to JSON file"""
-    status_file = project_root / "data/catalogs/download_status.json"
-    with open(status_file, 'w') as f:
-        json.dump(status, f, indent=2)
+    # Layout
+    layout = Layout()
+    layout.split(
+        Layout(table, name="main", ratio=3),
+        Layout(name="bottom", ratio=1)
+    )
+    layout["bottom"].split_row(
+        Layout(summary_panel, name="summary"),
+        Layout(activity_panel, name="activity")
+    )
+
+    return layout
 
 def main():
-    """Main tracker loop"""
+    """Main tracker with live updating"""
 
-    print(f"{BOLD}Starting download tracker...{RESET}")
-    print("This will update every 5 seconds. Press Ctrl+C to stop.\n")
+    console.print("[bold green]🚀 Starting AuDHD Data Acquisition Tracker[/bold green]")
+    console.print("[dim]Updates every 2 seconds | Press Ctrl+C to exit[/dim]\n")
 
     try:
-        while True:
-            status = check_data_status()
-            display_status(status)
-            save_status_json(status)
-            time.sleep(5)
+        with Live(create_dashboard(), refresh_per_second=0.5, console=console) as live:
+            while True:
+                time.sleep(2)
+                live.update(create_dashboard())
 
     except KeyboardInterrupt:
-        print(f"\n\n{GREEN}Tracker stopped.{RESET}")
-        print(f"Status saved to: data/catalogs/download_status.json")
+        console.print("\n\n[bold green]✓ Tracker stopped[/bold green]")
+        console.print("[dim]Status saved to: data/catalogs/download_status.json[/dim]")
         sys.exit(0)
 
 if __name__ == '__main__':
