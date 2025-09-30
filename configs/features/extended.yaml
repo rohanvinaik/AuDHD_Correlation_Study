@@ -117,21 +117,33 @@ extended_features:
   # Integration weights for multi-modal clustering
   # LITERATURE-BASED WEIGHTS with evidence from meta-analyses (2023-2024)
   # See: src/audhd_correlation/integrate/adaptive_weights.py for full references
+  # Updated 2025-09-30 to include prenatal/maternal health
   integration_weights:
     # Relative importance of each domain (normalized to sum to 1.0)
     # Format: weight [min, max] - evidence_strength (key references)
 
-    genetic: 0.30         # [0.25, 0.35] - STRONG
+    genetic: 0.28         # [0.24, 0.33] - STRONG
     # Heritability h²=0.74-0.80 (Tick 2016 meta-analysis)
     # Bai 2019: ~80% genetic contribution
     # Accounts for 30-40% of cases directly (+ G×E interactions)
+    # Remains highest weight but rebalanced for prenatal factors
 
-    metabolomic: 0.22     # [0.18, 0.27] - STRONG
+    metabolomic: 0.20     # [0.17, 0.25] - STRONG
     # Diagnostic AUC 0.90-0.96 (Liu 2024, multiple studies)
     # SVM accuracy 86%, classification 81-97%
     # Proximal to phenotype, reflects current biological state
 
-    environmental: 0.10   # [0.08, 0.15] - STRONG
+    prenatal_maternal: 0.12  # [0.10, 0.16] - STRONG (NEW)
+    # Maternal immune activation: OR 1.3-2.0 (Atladóttir 2010, Patterson 2011)
+    # Infection during neurogenesis (weeks 10-20): OR 1.5-2.0 (Meyer 2006)
+    # Preterm birth (<37 weeks): OR 1.5-2.5 (Johnson & Marlow 2017)
+    # Low birth weight: OR 1.3-2.0 (consistent across studies)
+    # Valproate exposure: OR 3.0-5.0 (strongest prenatal risk, Christensen 2013)
+    # SSRI exposure: OR 1.2-1.5 (controversial, confounded by maternal depression)
+    # Critical developmental windows make timing crucial
+    # G×E interaction potential (genetic risk × prenatal exposure)
+
+    environmental: 0.10   # [0.08, 0.14] - STRONG
     # NRC: 25% G×E interactions + 3% direct = ~28% total contribution
     # Equal to genetics when including interactions
 
@@ -143,27 +155,28 @@ extended_features:
     # Heavy metals, phthalates meta-analyses
     # Synergistic with genetic risk during neurodevelopment
 
-    circadian: 0.08       # [0.06, 0.12] - MODERATE
+    circadian: 0.07       # [0.05, 0.11] - MODERATE
     # 53-93% prevalence of sleep problems
     # Mendelian randomization: causal relationship
     # Regulatory role
 
-    microbiome: 0.07      # [0.04, 0.10] - MODERATE
+    microbiome: 0.04      # [0.03, 0.08] - MODERATE
     # Gut-brain axis studies
     # Intermediate between environment and metabolism
+    # Overlaps with prenatal (maternal microbiome transfer)
 
-    sensory: 0.04         # [0.02, 0.08] - WEAK
+    sensory: 0.01         # [0.00, 0.04] - WEAK
     # Core ASD features but limited quantitative diagnostic data
     # Clinically relevant but needs more discriminative studies
 
-    clinical: 0.01        # [0.00, 0.03] - WEAK
-    # Direct phenotype measurement (outcome, not causal predictor)
+    # NOTE: clinical domain removed (outcome variable, not predictor)
 
     # NOTES:
     # - Weights are INITIAL values, can be optimized via adaptive feedback loop
     # - Bounds ensure optimization remains grounded in literature
     # - Evidence strength: STRONG (meta-analyses), MODERATE (multiple studies), WEAK (limited data)
     # - Total: 1.00 (normalized)
+    # - Prenatal factors added based on MIA hypothesis and birth outcomes literature
 
   # Feature preprocessing
   preprocessing:

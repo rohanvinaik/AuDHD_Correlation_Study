@@ -41,52 +41,24 @@ class LiteratureBasedWeights:
     # Genetics: h² = 0.74-0.80, accounts for 30-40% of cases directly
     genetic: WeightConstraints = field(default_factory=lambda: WeightConstraints(
         domain='genetic',
-        initial_weight=0.30,
-        min_weight=0.25,
-        max_weight=0.35,
+        initial_weight=0.28,
+        min_weight=0.24,
+        max_weight=0.33,
         evidence_strength='strong',
         literature_references=[
             'Tick et al. 2016 (meta-analysis, h²=0.74)',
             'Bai et al. 2019 (~80% genetic contribution)',
             'Sandin et al. 2017 (ASD heritability 0.83)'
         ],
-        notes='High heritability but requires G×E interactions for full effect'
-    ))
-
-    # Environmental: ~25% via G×E, ~3% direct = ~28% total
-    environmental: WeightConstraints = field(default_factory=lambda: WeightConstraints(
-        domain='environmental',
-        initial_weight=0.10,
-        min_weight=0.08,
-        max_weight=0.15,
-        evidence_strength='strong',
-        literature_references=[
-            'NRC: 25% G×E + 3% direct environmental',
-            'Meta-analysis: equal contribution with genetics via interactions'
-        ],
-        notes='Critical for gene-environment interactions'
-    ))
-
-    # Toxicants: Subset of environmental, synergistic effects
-    toxicant: WeightConstraints = field(default_factory=lambda: WeightConstraints(
-        domain='toxicant',
-        initial_weight=0.08,
-        min_weight=0.05,
-        max_weight=0.12,
-        evidence_strength='moderate',
-        literature_references=[
-            'Heavy metals meta-analysis 2023',
-            'Synergistic with genetic risk'
-        ],
-        notes='Heavy metals, phthalates, air pollution'
+        notes='High heritability but requires G×E interactions for full effect; rebalanced for prenatal factors'
     ))
 
     # Metabolomics: AUC 0.90-0.96, very high discriminative power
     metabolomic: WeightConstraints = field(default_factory=lambda: WeightConstraints(
         domain='metabolomic',
-        initial_weight=0.22,
-        min_weight=0.18,
-        max_weight=0.27,
+        initial_weight=0.20,
+        min_weight=0.17,
+        max_weight=0.25,
         evidence_strength='strong',
         literature_references=[
             'Liu et al. 2024 (AUC 0.935-0.963)',
@@ -94,6 +66,38 @@ class LiteratureBasedWeights:
             'CAMP study: 53% sensitivity, 91% specificity'
         ],
         notes='Proximal to phenotype, reflects current biological state'
+    ))
+
+    # Prenatal/Maternal: Strong evidence for developmental impact
+    prenatal_maternal: WeightConstraints = field(default_factory=lambda: WeightConstraints(
+        domain='prenatal_maternal',
+        initial_weight=0.12,
+        min_weight=0.10,
+        max_weight=0.16,
+        evidence_strength='strong',
+        literature_references=[
+            'Atladóttir et al. 2010 (maternal infection: OR 1.3-2.0)',
+            'Patterson 2011 (MIA hypothesis: maternal immune activation)',
+            'Meyer 2006 (neurogenesis window weeks 10-20: OR 1.5-2.0)',
+            'Johnson & Marlow 2017 (preterm birth: OR 1.5-2.5)',
+            'Christensen 2013 (valproate exposure: OR 3.0-5.0)',
+            'Brown 2017 (SSRI exposure: OR 1.2-1.5, controversial)'
+        ],
+        notes='Critical developmental windows; MIA during neurogenesis shows strongest effect; G×E interaction potential'
+    ))
+
+    # Environmental: ~25% via G×E, ~3% direct = ~28% total
+    environmental: WeightConstraints = field(default_factory=lambda: WeightConstraints(
+        domain='environmental',
+        initial_weight=0.10,
+        min_weight=0.08,
+        max_weight=0.14,
+        evidence_strength='strong',
+        literature_references=[
+            'NRC: 25% G×E + 3% direct environmental',
+            'Meta-analysis: equal contribution with genetics via interactions'
+        ],
+        notes='Critical for gene-environment interactions'
     ))
 
     # Autonomic: AUC 0.736, moderate discriminative power
@@ -110,12 +114,26 @@ class LiteratureBasedWeights:
         notes='HRV, autonomic function; distinct patterns by subtype'
     ))
 
+    # Toxicants: Subset of environmental, synergistic effects
+    toxicant: WeightConstraints = field(default_factory=lambda: WeightConstraints(
+        domain='toxicant',
+        initial_weight=0.08,
+        min_weight=0.05,
+        max_weight=0.12,
+        evidence_strength='moderate',
+        literature_references=[
+            'Heavy metals meta-analysis 2023',
+            'Synergistic with genetic risk'
+        ],
+        notes='Heavy metals, phthalates, air pollution'
+    ))
+
     # Circadian: 53-93% prevalence, causal relationship
     circadian: WeightConstraints = field(default_factory=lambda: WeightConstraints(
         domain='circadian',
-        initial_weight=0.08,
-        min_weight=0.06,
-        max_weight=0.12,
+        initial_weight=0.07,
+        min_weight=0.05,
+        max_weight=0.11,
         evidence_strength='moderate',
         literature_references=[
             '53-93% sleep problems in ASD/ADHD',
@@ -128,23 +146,24 @@ class LiteratureBasedWeights:
     # Microbiome: Emerging, intermediate role
     microbiome: WeightConstraints = field(default_factory=lambda: WeightConstraints(
         domain='microbiome',
-        initial_weight=0.07,
-        min_weight=0.04,
-        max_weight=0.10,
+        initial_weight=0.04,
+        min_weight=0.03,
+        max_weight=0.08,
         evidence_strength='moderate',
         literature_references=[
             'Gut-brain axis studies',
-            'Intermediate biological role'
+            'Intermediate biological role',
+            'Maternal microbiome transfer during pregnancy'
         ],
-        notes='Gut-brain axis, intermediate between environment and metabolism'
+        notes='Gut-brain axis, intermediate between environment and metabolism; overlaps with prenatal'
     ))
 
     # Sensory/Interoception: Core features, less discriminative data
     sensory: WeightConstraints = field(default_factory=lambda: WeightConstraints(
         domain='sensory',
-        initial_weight=0.04,
-        min_weight=0.02,
-        max_weight=0.08,
+        initial_weight=0.01,
+        min_weight=0.00,
+        max_weight=0.04,
         evidence_strength='weak',
         literature_references=[
             'Core ASD features',
@@ -153,29 +172,20 @@ class LiteratureBasedWeights:
         notes='Clinically relevant but limited discriminative studies'
     ))
 
-    # Clinical: Outcome variable, not predictor
-    clinical: WeightConstraints = field(default_factory=lambda: WeightConstraints(
-        domain='clinical',
-        initial_weight=0.01,
-        min_weight=0.00,
-        max_weight=0.03,
-        evidence_strength='weak',
-        literature_references=[],
-        notes='Direct phenotype measurement, not causal predictor'
-    ))
+    # NOTE: clinical domain removed - outcome variable, not predictor
 
     def to_dict(self) -> Dict[str, WeightConstraints]:
         """Convert to dictionary keyed by domain name."""
         return {
             'genetic': self.genetic,
-            'environmental': self.environmental,
-            'toxicant': self.toxicant,
             'metabolomic': self.metabolomic,
+            'prenatal_maternal': self.prenatal_maternal,
+            'environmental': self.environmental,
             'autonomic': self.autonomic,
+            'toxicant': self.toxicant,
             'circadian': self.circadian,
             'microbiome': self.microbiome,
-            'sensory': self.sensory,
-            'clinical': self.clinical
+            'sensory': self.sensory
         }
 
     def get_initial_weights(self) -> Dict[str, float]:

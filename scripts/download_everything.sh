@@ -49,6 +49,12 @@ python scripts/scrape_papers.py \
     --query "autism metabolomics" \
     --query "ADHD gene expression" \
     --query "autism transcriptome" \
+    --query "maternal immune activation autism" \
+    --query "prenatal infection autism ADHD" \
+    --query "preterm birth autism ADHD" \
+    --query "pregnancy complications neurodevelopment" \
+    --query "maternal SSRI autism" \
+    --query "birth outcomes autism ADHD" \
     --max-papers 100 \
     --output data/papers/ \
     2>&1 | tee logs/downloads/paper_scraping.log &
@@ -111,6 +117,43 @@ python scripts/download_metabolights.py \
     2>&1 | tee logs/downloads/metabolights.log &
 
 # =============================================================================
+# PART 5: GWAS CATALOG - ASD/ADHD SNPs
+# =============================================================================
+log "PART 5: Downloading GWAS catalog for ASD/ADHD SNPs..."
+
+# Download GWAS catalog
+mkdir -p data/raw/gwas
+curl -o data/raw/gwas/gwas_catalog.tsv.gz \
+    "https://www.ebi.ac.uk/gwas/api/search/downloads/full" \
+    2>&1 | tee logs/downloads/gwas_catalog.log &
+
+# Also download trait-specific associations
+curl -o data/raw/gwas/gwas_asd.tsv \
+    "https://www.ebi.ac.uk/gwas/api/search/downloads?q=efo_trait:autism" \
+    2>&1 >> logs/downloads/gwas_catalog.log &
+
+curl -o data/raw/gwas/gwas_adhd.tsv \
+    "https://www.ebi.ac.uk/gwas/api/search/downloads?q=efo_trait:attention%20deficit%20hyperactivity%20disorder" \
+    2>&1 >> logs/downloads/gwas_catalog.log &
+
+# =============================================================================
+# PART 6: PRENATAL DATA SOURCES
+# =============================================================================
+log "PART 6: Setting up prenatal data source access..."
+
+# Note: SPARK and ABCD data require approved access
+# Creating placeholder directory structure
+mkdir -p data/raw/prenatal/{spark,abcd,ssc}
+
+# Download documentation and data dictionaries
+log "Downloading SPARK data dictionary..."
+curl -o data/raw/prenatal/spark/data_dictionary.pdf \
+    "https://www.sfari.org/wp-content/uploads/2024/01/SPARK_Data_Dictionary.pdf" \
+    2>&1 >> logs/downloads/prenatal_sources.log || true
+
+log "Prenatal data sources prepared. Manual download may be required for SPARK/ABCD data."
+
+# =============================================================================
 # WAIT FOR CRITICAL DOWNLOADS
 # =============================================================================
 log "Main downloads started. Waiting for completion..."
@@ -143,12 +186,24 @@ echo "==========================================================================
 SRA_SIZE=$(du -sh data/raw/sra 2>/dev/null | cut -f1 || echo "0")
 GEO_SIZE=$(du -sh data/raw/geo 2>/dev/null | cut -f1 || echo "0")
 PAPERS_SIZE=$(du -sh data/papers 2>/dev/null | cut -f1 || echo "0")
+GWAS_SIZE=$(du -sh data/raw/gwas 2>/dev/null | cut -f1 || echo "0")
 
 echo ""
 echo "Downloaded:"
 echo "  SRA Microbiome: $SRA_SIZE"
 echo "  GEO Expression: $GEO_SIZE"
 echo "  Papers + Supplements: $PAPERS_SIZE"
+echo "  GWAS Catalog (ASD/ADHD): $GWAS_SIZE"
+echo "  Prenatal data sources: prepared"
+echo ""
+echo "Paper topics downloaded:"
+echo "  - Microbiome (ADHD/Autism)"
+echo "  - Metabolomics"
+echo "  - Gene expression / Transcriptomics"
+echo "  - Maternal immune activation (MIA)"
+echo "  - Prenatal infections"
+echo "  - Pregnancy complications"
+echo "  - Birth outcomes"
 echo ""
 echo "Next steps:"
 echo "  1. Process raw data: python scripts/process_all_data.py"
