@@ -74,8 +74,13 @@ A comprehensive, production-ready system for discovering biologically distinct p
 - **[Prompt 3.1 Summary](docs/PROMPT_3_1_SUMMARY.md)** - Extended multi-modal integration system
 - **[Prompt 3.2 Summary](docs/PROMPT_3_2_SUMMARY.md)** - Enhanced clustering with extended features
 
-### Genetic Analysis Documentation (NEW)
+### Causal Analysis & Clinical Reporting (NEW)
+- **[Extended Causal Analysis](docs/EXTENDED_CAUSAL_ANALYSIS.md)** - Mediation, G×E, mixtures, critical periods, network discovery
+- **[Adaptive Weighting System](docs/ADAPTIVE_WEIGHTING.md)** - Literature-based weights with optimization
+
+### Genetic & Multi-Omics Analysis (NEW)
 - **[Genetic Analysis System](docs/GENETIC_ANALYSIS_SYSTEM.md)** - BLAST/NCBI integration, literature mining, LLM synthesis
+- **[Paper Scraping System](docs/PAPER_SCRAPING_SYSTEM.md)** - Ethical data lead extraction with citation tracking
 
 ### Data Acquisition Documentation
 - **[Pipeline README](scripts/pipeline/README.md)** - Automated download system
@@ -316,16 +321,17 @@ python scripts/download_tracker.py
 
 ```
 AuDHD_Correlation_Study/
-├── src/audhd_correlation/           # Main analysis package (~7,950 lines)
+├── src/audhd_correlation/           # Main analysis package (~14,000 lines)
 │   ├── data/                        # Data loaders and harmonization
 │   ├── preprocess/                  # Preprocessing and normalization
 │   ├── integrate/                   # Multi-omics integration
 │   │   ├── methods.py               # Standard integration (MOFA/PCA/CCA)
-│   │   └── extended_integration.py  # NEW: Hierarchical + time-aware (850 lines)
+│   │   ├── extended_integration.py  # Hierarchical + time-aware (850 lines)
+│   │   └── adaptive_weights.py      # NEW: Literature-based weights + optimization (850 lines)
 │   ├── modeling/                    # Clustering algorithms
 │   │   ├── clustering.py            # Standard clustering (882 lines)
-│   │   └── extended_clustering.py   # NEW: Feature-aware + ensemble (850 lines)
-│   ├── features/                    # NEW: Feature extraction pipelines (~4,430 lines)
+│   │   └── extended_clustering.py   # Feature-aware + ensemble (850 lines)
+│   ├── features/                    # Feature extraction pipelines (~4,430 lines)
 │   │   ├── autonomic.py             # HRV, EDA, cardiovascular (380 lines)
 │   │   ├── circadian.py             # Cortisol, melatonin, actigraphy (420 lines)
 │   │   ├── salivary.py              # Stress, inflammation, microbiome (350 lines)
@@ -334,10 +340,17 @@ AuDHD_Correlation_Study/
 │   │   ├── sensory_detailed.py      # Auditory, visual, tactile, gating (860 lines)
 │   │   ├── interoception.py         # Heartbeat tasks, questionnaires (380 lines)
 │   │   └── voice_analysis.py        # Prosodic, spectral, MFCC (730 lines)
+│   ├── causal/                      # NEW: Causal inference
+│   │   └── extended_causal.py       # Mediation, G×E, mixtures, networks (1,300 lines)
+│   ├── analysis/                    # NEW: Multi-omics analysis
+│   │   ├── genetic_lookup.py        # NCBI/PubMed integration (980 lines)
+│   │   ├── multiomics_lookup.py     # Transcriptomics/proteomics/metabolomics (650 lines)
+│   │   └── pipeline_integration.py  # GWAS/DEG/pathway automation (620 lines)
 │   ├── validation/                  # Validation metrics
 │   ├── biological/                  # Pathway enrichment
 │   ├── viz/                         # Visualization
 │   └── reporting/                   # Report generation
+│       └── extended_reporting.py    # NEW: Clinical reports + decision support (700 lines)
 │
 ├── scripts/                         # Data acquisition & monitoring
 │   ├── downloaders/                 # Dataset downloaders (GEO, SRA, dbGaP)
@@ -637,6 +650,53 @@ pip install tslearn
 - ✅ Ensemble consensus from multiple methods
 - ✅ Extended validation framework (autonomic, circadian, environmental, sensory tests)
 
+**Prompt 3.3: Extended Causal Analysis (1,300 lines)**
+- ✅ Mediation analysis (Baron & Kenny with bootstrap CI, 1000 iterations)
+- ✅ Gene-environment (G×E) interaction testing with permutation tests
+- ✅ Environmental mixture analysis (Weighted Quantile Sum regression)
+- ✅ Critical period identification (distributed lag models for developmental windows)
+- ✅ Causal network discovery (PC algorithm, correlation-based networks)
+- ✅ Extended DAG with autonomic, circadian, environmental, interoceptive pathways
+- ✅ Interactive visualization system (9-panel multi-modal cluster characterization)
+- ✅ Causal pathway diagrams with plotly
+
+**Prompt 3.4: Extended Clinical Reporting (1,400 lines)**
+- ✅ Comprehensive clinical report generator with multi-modal biomarker panels
+- ✅ 4 subtype patterns: Autonomic Dysregulation, Circadian Disruption, Environmental Burden, Sensory-Interoceptive
+- ✅ Risk stratification with extended biomarker indicators
+- ✅ Personalized intervention protocols by subtype with success metrics
+- ✅ Longitudinal monitoring plans (quarterly/annual assessments)
+- ✅ Clinical decision support with conditional assessment pathways
+- ✅ Recommended testing panels and specialist referral triggers
+- ✅ Extended feature configuration (300+ lines YAML with clinical cutoffs, evidence tiers)
+
+**Multi-Omics Enhancement (650 lines + catalogs)**
+- ✅ Transcriptomics client (GTEx 53-tissue expression, GEO datasets)
+- ✅ Proteomics client (UniProt annotations, Human Protein Atlas, PRIDE search)
+- ✅ Metabolomics client (HMDB pathways, Metabolomics Workbench)
+- ✅ Cross-omics analysis (gene → transcript → protein → metabolite)
+- ✅ Comprehensive multi-omics source catalog (20+ repositories)
+- ✅ Integration with genetic lookup system via shared caching
+
+**Paper Scraping System (1,400 lines)**
+- ✅ Comprehensive data lead extraction from scientific papers (PDF/HTML)
+- ✅ Pattern library for 20+ repository types (GEO, SRA, PRIDE, HMDB, OpenNeuro, etc.)
+- ✅ Text structuring and normalization (fixes soft hyphens, ligatures, line breaks)
+- ✅ API validation (NCBI, DataCite, GitHub) for verification
+- ✅ **MANDATORY citation tracking** - all extracted data properly attributed
+- ✅ Access classification (verified_public, restricted, request_only, dead_link)
+- ✅ Confidence scoring (section weight + context + validation)
+- ✅ 8-stage pipeline: Ingest → Structure → Extract → Normalize → Validate → Classify → Score → Cite
+
+**Literature-Based Adaptive Weighting (850 lines + docs)**
+- ✅ Evidence-based weights from 2023-2024 meta-analyses and diagnostic studies
+- ✅ Major weight updates: Genetics 0.15→0.30 (h²=0.74-0.80), Metabolomics 0.20→0.22 (AUC 0.90-0.96)
+- ✅ Constrained optimization respecting literature bounds (±20-50% based on evidence strength)
+- ✅ Adaptive feedback loop for iterative weight refinement
+- ✅ Multiple optimization metrics (silhouette, davies-bouldin, classification)
+- ✅ Full provenance with literature references (Tick 2016, Liu 2024, NRC report, etc.)
+- ✅ Export/import optimized weights (YAML/JSON)
+
 **Automated Genetic Analysis (1,600 lines)**
 - ✅ Genetic lookup system with NCBI/dbSNP/ClinVar integration (980 lines)
 - ✅ Pipeline integration for GWAS/DEG/pathway results (620 lines)
@@ -649,8 +709,8 @@ pip install tslearn
 
 ### System Updates
 
-- ✅ Configuration expanded to 376 feature definitions
-- ✅ Comprehensive documentation (6 detailed summary files)
+- ✅ Configuration expanded to 376 feature definitions with literature-based weights
+- ✅ Comprehensive documentation (10+ detailed guides)
 - ✅ Data acquisition complete (14.7 GB across 5 sources)
 - ✅ Automated monitoring paused (manual check mode)
 
