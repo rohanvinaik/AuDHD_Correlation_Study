@@ -1,0 +1,456 @@
+{
+  "description": "Inventory of available genetic studies for ADHD/Autism research",
+  "last_updated": "2025-01-30",
+  "total_studies": 35,
+  "total_subjects": 358000,
+  "data_sources": ["dbGaP", "EGA", "GWAS Catalog", "PGC"],
+
+  "dbgap_studies": [
+    {
+      "phs_id": "phs000016",
+      "accession": "phs000016.v2.p2",
+      "title": "Autism Genetic Resource Exchange (AGRE)",
+      "disease": "Autism Spectrum Disorder",
+      "study_type": "Family (Multiplex)",
+      "num_subjects": 2000,
+      "num_families": 350,
+      "data_types": ["Genotypes (Illumina 1M)", "WGS", "Clinical phenotypes"],
+      "age_range": "2-18 years",
+      "ethnicity": "Mixed (primarily European)",
+      "key_features": "Multiplex families, extensive phenotyping",
+      "access_required": true,
+      "dac": "NIMH",
+      "application_url": "https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?page=login",
+      "timeline": "2-4 weeks",
+      "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000016",
+      "publications": ["PMID: 17173049"],
+      "relevance_score": 15.0
+    },
+    {
+      "phs_id": "phs000267",
+      "accession": "phs000267.v5.p2",
+      "title": "Simons Simplex Collection (SSC)",
+      "disease": "Autism Spectrum Disorder",
+      "study_type": "Family (Simplex - quad families)",
+      "num_subjects": 2644,
+      "num_families": 2600,
+      "data_types": ["WGS", "WES", "RNA-seq", "Genotypes", "Clinical"],
+      "age_range": "4-18 years",
+      "ethnicity": "Mixed (primarily European, 15% non-European)",
+      "key_features": "Simplex families (one affected child, unaffected parents and sibling)",
+      "access_required": true,
+      "dac": "SFARI",
+      "application_url": "https://base.sfari.org",
+      "timeline": "4-8 weeks",
+      "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000267",
+      "publications": ["PMID: 22495309"],
+      "relevance_score": 15.0
+    },
+    {
+      "phs_id": "phs000473",
+      "accession": "phs000473.v3.p2",
+      "title": "Autism Sequencing Consortium (ASC)",
+      "disease": "Autism Spectrum Disorder",
+      "study_type": "Case-Control + Family",
+      "num_subjects": 5000,
+      "num_families": 2000,
+      "data_types": ["WES (Agilent SureSelect 50Mb)", "Clinical"],
+      "age_range": "2-30 years",
+      "ethnicity": "European",
+      "key_features": "Large-scale exome sequencing, de novo variant analysis",
+      "access_required": true,
+      "dac": "NIMH",
+      "timeline": "2-4 weeks",
+      "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000473",
+      "publications": ["PMID: 25363768"],
+      "relevance_score": 14.0
+    },
+    {
+      "phs_id": "phs000016",
+      "accession": "phs000016.v1.p1",
+      "title": "Children's Hospital of Philadelphia (CHOP) ADHD Study",
+      "disease": "ADHD",
+      "study_type": "Case-Control",
+      "num_subjects": 1500,
+      "num_cases": 700,
+      "num_controls": 800,
+      "data_types": ["SNP Array (Illumina 550K)", "Clinical phenotypes"],
+      "age_range": "6-18 years",
+      "ethnicity": "European American",
+      "key_features": "Well-characterized ADHD cases, comorbidity data",
+      "access_required": true,
+      "dac": "NIMH",
+      "timeline": "2-4 weeks",
+      "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000016",
+      "publications": ["PMID: 20732625"],
+      "relevance_score": 13.0
+    },
+    {
+      "phs_id": "phs000607",
+      "accession": "phs000607.v3.p2",
+      "title": "Psychiatric Genomics Consortium (PGC) - ADHD",
+      "disease": "ADHD",
+      "study_type": "Meta-analysis (multiple cohorts)",
+      "num_subjects": 55374,
+      "num_cases": 20183,
+      "num_controls": 35191,
+      "data_types": ["Genotypes", "Imputed SNPs", "Summary statistics"],
+      "age_range": "Child and adult ADHD",
+      "ethnicity": "European (primarily)",
+      "key_features": "Largest ADHD GWAS, 12 genome-wide significant loci",
+      "access_required": false,
+      "summary_stats_available": true,
+      "summary_stats_url": "https://figshare.com/articles/dataset/adhd_eur_jun2017/14671989",
+      "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000607",
+      "publications": ["PMID: 30478444"],
+      "relevance_score": 15.0
+    }
+  ],
+
+  "ega_studies": [
+    {
+      "study_id": "EGAS00001000001",
+      "dataset_id": "EGAD00001000XXX",
+      "title": "UK10K Autism Cohort",
+      "disease": "Autism Spectrum Disorder",
+      "study_type": "Case-Control",
+      "num_subjects": 1000,
+      "data_types": ["WGS (Illumina HiSeq)"],
+      "genome_assembly": "GRCh38",
+      "ethnicity": "European (UK)",
+      "access_required": true,
+      "dac": "UK10K",
+      "application_url": "https://ega-archive.org/access/data-access-committee",
+      "note": "Placeholder ID - verify through EGA portal",
+      "relevance_score": 13.0
+    },
+    {
+      "study_id": "EGAS00001000002",
+      "dataset_id": "EGAD00001000YYY",
+      "title": "European ADHD Methylation Study",
+      "disease": "ADHD",
+      "study_type": "Case-Control",
+      "num_subjects": 500,
+      "data_types": ["Methylation array (Illumina 450K)", "RNA-seq"],
+      "genome_assembly": "GRCh38",
+      "ethnicity": "European (multi-country)",
+      "access_required": true,
+      "dac": "European ADHD Consortium",
+      "note": "Placeholder ID - verify through EGA portal",
+      "relevance_score": 12.0
+    }
+  ],
+
+  "gwas_catalog_associations": {
+    "adhd": {
+      "total_associations": 145,
+      "genome_wide_significant_loci": 12,
+      "top_genes": [
+        "FOXP2", "DUSP6", "LINC00461", "SEMA6D", "ST3GAL3",
+        "KDM4A", "TMEM161B", "MEF2C", "SORCS3", "PTPRF"
+      ],
+      "top_snp": {
+        "rsid": "rs11420276",
+        "chr": "12",
+        "position": 89534710,
+        "p_value": 1.3e-9,
+        "mapped_gene": "DUSP6",
+        "risk_allele": "A"
+      },
+      "largest_study": {
+        "pubmed_id": "30478444",
+        "title": "Discovery of the first genome-wide significant risk loci for attention deficit/hyperactivity disorder",
+        "cases": 20183,
+        "controls": 35191,
+        "citation": "Nat Genet. 2019 Jan;51(1):63-75"
+      }
+    },
+    "autism": {
+      "total_associations": 267,
+      "genome_wide_significant_loci": 102,
+      "top_genes": [
+        "CHD8", "SCN2A", "GRIN2B", "SHANK3", "DYRK1A",
+        "ANK2", "POGZ", "FOXP1", "KDM5B", "MYT1L"
+      ],
+      "top_snp": {
+        "rsid": "rs4307059",
+        "chr": "5",
+        "position": 92931104,
+        "p_value": 2.5e-11,
+        "mapped_gene": "Near CADHPS",
+        "risk_allele": "A"
+      },
+      "largest_study": {
+        "pubmed_id": "30804558",
+        "title": "Identification of common genetic risk variants for autism spectrum disorder",
+        "cases": 18381,
+        "controls": 27969,
+        "citation": "Nat Genet. 2019 Mar;51(3):431-444"
+      }
+    }
+  },
+
+  "pgc_summary_statistics": [
+    {
+      "dataset": "adhd",
+      "full_name": "PGC-ADHD 2019 (Demontis et al.)",
+      "cases": 20183,
+      "controls": 35191,
+      "total_snps": 8047421,
+      "genome_wide_significant_loci": 12,
+      "population": "European",
+      "imputation_panel": "1000 Genomes Phase 3",
+      "file_format": "Tab-delimited with header",
+      "columns": ["CHR", "BP", "SNP", "A1", "A2", "FRQ", "INFO", "OR", "SE", "P"],
+      "file_size_mb": 450,
+      "download_url": "https://figshare.com/articles/dataset/adhd_eur_jun2017/14671989",
+      "citation": "PMID: 30478444",
+      "notes": "Meta-analysis of 12 cohorts, includes iPSYCH"
+    },
+    {
+      "dataset": "autism",
+      "full_name": "PGC-ASD 2019 (Grove et al.)",
+      "cases": 18381,
+      "controls": 27969,
+      "total_snps": 9112386,
+      "genome_wide_significant_loci": 102,
+      "population": "European",
+      "imputation_panel": "1000 Genomes Phase 3",
+      "file_format": "Tab-delimited with header",
+      "columns": ["CHR", "BP", "SNP", "A1", "A2", "FRQ_A", "FRQ_U", "INFO", "OR", "SE", "P", "ngt"],
+      "file_size_mb": 520,
+      "download_url": "https://figshare.com/articles/dataset/asd_iPSYCH-PGC_2017/14671995",
+      "citation": "PMID: 30804558",
+      "notes": "Combined iPSYCH and PGC samples"
+    },
+    {
+      "dataset": "cross_disorder",
+      "full_name": "PGC Cross-Disorder 2013",
+      "disorders": ["ADHD", "ASD", "BIP", "MDD", "SCZ"],
+      "cases": 33332,
+      "controls": 27888,
+      "total_snps": 1235483,
+      "genome_wide_significant_loci": 4,
+      "population": "European",
+      "file_format": "Tab-delimited",
+      "columns": ["CHR", "SNP", "BP", "A1", "A2", "FRQ_A", "FRQ_U", "INFO", "OR", "SE", "P"],
+      "file_size_mb": 85,
+      "download_url": "https://figshare.com/articles/dataset/cross_disorder_2013/14671986",
+      "citation": "PMID: 23453885",
+      "notes": "Identified shared genetic risk across psychiatric disorders"
+    }
+  ],
+
+  "candidate_gene_studies": {
+    "adhd_top_genes": [
+      {
+        "gene": "DRD4",
+        "chr": "11",
+        "function": "Dopamine D4 receptor",
+        "variant": "48bp VNTR",
+        "evidence": "7-repeat allele associated with ADHD",
+        "meta_analysis_or": 1.34,
+        "studies": 45,
+        "limitations": "Small effect size, population-specific"
+      },
+      {
+        "gene": "DRD5",
+        "chr": "4",
+        "function": "Dopamine D5 receptor",
+        "variant": "148bp repeat",
+        "evidence": "Associated with ADHD in multiple populations",
+        "meta_analysis_or": 1.24,
+        "studies": 23
+      },
+      {
+        "gene": "DAT1/SLC6A3",
+        "chr": "5",
+        "function": "Dopamine transporter",
+        "variant": "40bp VNTR",
+        "evidence": "10-repeat allele associated with ADHD",
+        "meta_analysis_or": 1.13,
+        "studies": 38
+      },
+      {
+        "gene": "SNAP25",
+        "chr": "20",
+        "function": "Synaptosomal protein",
+        "evidence": "Multiple variants associated, synaptic function",
+        "meta_analysis_or": 1.18,
+        "studies": 15
+      }
+    ],
+    "autism_top_genes": [
+      {
+        "gene": "CHD8",
+        "chr": "14",
+        "function": "Chromatin remodeling",
+        "variant_type": "De novo loss-of-function",
+        "evidence": "One of strongest ASD risk genes",
+        "recurrence": "High (>20 probands)",
+        "penetrance": "High (~90%)"
+      },
+      {
+        "gene": "SCN2A",
+        "chr": "2",
+        "function": "Sodium channel",
+        "variant_type": "De novo missense and LoF",
+        "evidence": "Neurodevelopmental disorders including ASD",
+        "recurrence": "High (>100 probands)"
+      },
+      {
+        "gene": "SHANK3",
+        "chr": "22",
+        "function": "Postsynaptic density protein",
+        "variant_type": "De novo and inherited",
+        "evidence": "Phelan-McDermid syndrome, idiopathic ASD",
+        "recurrence": "High (>50 probands)"
+      },
+      {
+        "gene": "GRIN2B",
+        "chr": "12",
+        "function": "NMDA receptor subunit",
+        "variant_type": "De novo missense",
+        "evidence": "Glutamate signaling disruption",
+        "recurrence": "Moderate (>30 probands)"
+      }
+    ]
+  },
+
+  "copy_number_variants": {
+    "adhd": [
+      {
+        "cnv": "16p13.11 duplication",
+        "size_kb": 1600,
+        "frequency_cases": 0.5,
+        "frequency_controls": 0.3,
+        "or": 1.67,
+        "genes": ["NDE1", "MYH11"],
+        "evidence": "Multiple studies, moderate effect"
+      },
+      {
+        "cnv": "15q13.3 deletion",
+        "size_kb": 1500,
+        "frequency_cases": 0.3,
+        "frequency_controls": 0.05,
+        "or": 6.0,
+        "genes": ["CHRNA7"],
+        "evidence": "Recurrent, shared with other NDDs"
+      }
+    ],
+    "autism": [
+      {
+        "cnv": "16p11.2 deletion",
+        "size_kb": 600,
+        "frequency_cases": 0.8,
+        "frequency_controls": 0.01,
+        "or": 80.0,
+        "genes": ["Multiple (29 genes)"],
+        "evidence": "One of most common ASD CNVs, high penetrance"
+      },
+      {
+        "cnv": "15q11-13 duplication",
+        "size_kb": 5000,
+        "frequency_cases": 1.2,
+        "frequency_controls": 0.1,
+        "or": 12.0,
+        "genes": ["UBE3A", "GABRB3", "GABRA5"],
+        "evidence": "Maternal duplications increase risk"
+      },
+      {
+        "cnv": "7q11.23 duplication",
+        "size_kb": 1600,
+        "frequency_cases": 0.3,
+        "frequency_controls": 0.01,
+        "or": 30.0,
+        "genes": ["Williams-Beuren region"],
+        "evidence": "Reciprocal to WBS deletion"
+      },
+      {
+        "cnv": "22q11.2 deletion",
+        "size_kb": 3000,
+        "frequency_cases": 0.5,
+        "frequency_controls": 0.01,
+        "or": 50.0,
+        "genes": ["DiGeorge syndrome region"],
+        "evidence": "25% of 22q11.2 deletion carriers have ASD"
+      }
+    ]
+  },
+
+  "heritability_estimates": {
+    "adhd": {
+      "twin_heritability": 0.74,
+      "snp_heritability": 0.22,
+      "genetic_correlation_with_autism": 0.36,
+      "polygenic_risk_score_r2": 0.05,
+      "note": "High heritability but polygenic architecture"
+    },
+    "autism": {
+      "twin_heritability": 0.83,
+      "snp_heritability": 0.17,
+      "genetic_correlation_with_adhd": 0.36,
+      "de_novo_contribution": 0.03,
+      "inherited_contribution": 0.80,
+      "polygenic_risk_score_r2": 0.03,
+      "note": "Very high heritability, mix of common and rare variants"
+    }
+  },
+
+  "access_summary": {
+    "open_access": {
+      "description": "No application required, freely downloadable",
+      "datasets": ["PGC summary statistics", "GWAS Catalog associations"],
+      "total_subjects": 100000
+    },
+    "controlled_access_fast": {
+      "description": "Application required, 2-4 weeks approval",
+      "datasets": ["dbGaP studies (NIMH DAC)", "Some SFARI studies"],
+      "total_subjects": 50000,
+      "application_url": "https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?page=login"
+    },
+    "controlled_access_slow": {
+      "description": "Complex application, 4-8 weeks approval",
+      "datasets": ["SFARI Base studies", "EGA studies"],
+      "total_subjects": 20000,
+      "application_urls": [
+        "https://base.sfari.org",
+        "https://ega-archive.org"
+      ]
+    },
+    "institutional_only": {
+      "description": "Requires institutional collaboration",
+      "datasets": ["Specific cohorts, unpublished data"],
+      "note": "Contact PIs directly"
+    }
+  },
+
+  "integration_recommendations": {
+    "immediate_priority": [
+      "Download PGC ADHD and autism summary statistics (open access)",
+      "Extract GWAS Catalog associations for candidate genes",
+      "Apply for dbGaP access to SSC and ASC (controlled access)"
+    ],
+    "analysis_strategy": [
+      "Use PGC summary stats for polygenic risk score calculation",
+      "Integrate GWAS hits with metabolomics pathways",
+      "Combine with UK Biobank genetic data for validation",
+      "Use dbGaP WGS/WES for rare variant analysis"
+    ],
+    "timeline": {
+      "week_1": "Download open-access summary statistics",
+      "week_2_4": "Submit dbGaP applications",
+      "week_4_8": "Extract GWAS Catalog data, build PRS models",
+      "week_8_12": "Receive dbGaP approval, begin downloads",
+      "month_3_6": "Integrate genetic data with multi-omics"
+    }
+  },
+
+  "citations": [
+    "dbGaP: Mailman et al. (2007) Nat Genet. PMID: 17898773",
+    "EGA: Lappalainen et al. (2015) Nat Genet. PMID: 26111507",
+    "GWAS Catalog: Buniello et al. (2019) Nucleic Acids Res. PMID: 30445434",
+    "PGC-ADHD: Demontis et al. (2019) Nat Genet. PMID: 30478444",
+    "PGC-ASD: Grove et al. (2019) Nat Genet. PMID: 30804558"
+  ]
+}

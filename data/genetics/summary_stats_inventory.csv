@@ -1,0 +1,22 @@
+dataset_id,trait,consortium,publication_year,first_author,pmid,cases,controls,total_snps,genome_wide_loci,population,imputation_panel,file_format,download_url,file_size_mb,openly_available,application_required,status
+pgc_adhd_2019,ADHD,PGC,2019,Demontis,30478444,20183,35191,8047421,12,European,1000G Phase 3,Tab-delimited,https://figshare.com/articles/dataset/adhd_eur_jun2017/14671989,450,TRUE,FALSE,Available
+pgc_asd_2019,Autism,PGC,2019,Grove,30804558,18381,27969,9112386,102,European,1000G Phase 3,Tab-delimited,https://figshare.com/articles/dataset/asd_iPSYCH-PGC_2017/14671995,520,TRUE,FALSE,Available
+pgc_cross_disorder_2013,Cross-Disorder,PGC,2013,Cross-Disorder Group,23453885,33332,27888,1235483,4,European,HapMap 3,Tab-delimited,https://figshare.com/articles/dataset/cross_disorder_2013/14671986,85,TRUE,FALSE,Available
+pgc_adhd_2018_child,ADHD (child),PGC,2018,Demontis,30478444,12645,84435,8047421,12,European,1000G Phase 3,Tab-delimited,https://figshare.com/articles/dataset/adhd_child_jun2017/14671992,420,TRUE,FALSE,Available
+spark_asd_2020,Autism,SPARK,2020,Zhou,33106633,42607,294000,10314098,NA,Mixed,TOPMed,VCF,https://base.sfari.org,2500,FALSE,TRUE,Application Required
+ssc_asd_2017,Autism,SSC,2017,Sanders,28191889,2644,1911,NA,NA,European,1000G Phase 3,VCF/PLINK,dbGaP phs000267,10000,FALSE,TRUE,Application Required
+agre_asd_2016,Autism,AGRE,2016,Geschwind,27668389,2000,NA,NA,NA,Mixed,Various,PLINK,dbGaP phs000016,5000,FALSE,TRUE,Application Required
+asc_asd_2014,Autism,ASC,2014,De Rubeis,25363768,3871,9937,NA,NA,European,NA,VCF,dbGaP phs000473,8000,FALSE,TRUE,Application Required
+chop_adhd_2010,ADHD,CHOP,2010,Hakonarson,20732625,1000,4100,550000,0,European American,HapMap,PLINK,dbGaP phs000016,150,FALSE,TRUE,Application Required
+iPSYCH_adhd_2018,ADHD,iPSYCH,2018,Demontis,30478444,19099,34194,8043318,12,Danish,1000G Phase 3,Included in PGC,Via PGC download,NA,TRUE,FALSE,Available (via PGC)
+iPSYCH_asd_2019,Autism,iPSYCH,2019,Grove,30804558,11923,18046,9163337,102,Danish,1000G Phase 3,Included in PGC,Via PGC download,NA,TRUE,FALSE,Available (via PGC)
+ukbiobank_adhd_proxy,ADHD (proxy),UKB,2018,Howard,30104761,NA,NA,9851867,NA,UK (European),UK10K/1000G,BGEN,Application required,50000,FALSE,TRUE,Application Required
+ukbiobank_asd_proxy,Autism (proxy),UKB,2018,Grove,30804558,NA,NA,9851867,NA,UK (European),UK10K/1000G,BGEN,Application required,50000,FALSE,TRUE,Application Required
+abcd_genotypes,Neurodevelopment,ABCD,2020,Barch,30595399,11800,NA,700000,NA,US (Mixed),TOPMed,PLINK,NDA application,3000,FALSE,TRUE,Application Required
+abcd_wgs_subset,Neurodevelopment,ABCD,2021,Casey,33568505,4000,NA,80000000,NA,US (Mixed),TOPMed,VCF/CRAM,NDA application,15000,FALSE,TRUE,Application Required
+gtex_brain,Expression (GTEx),GTEx,2020,GTEx Consortium,32913098,NA,NA,NA,NA,Mixed,NA,Expression matrices,https://gtexportal.org,Variable,TRUE,FALSE,Available
+psychencode_brain,Brain Expression,PsychENCODE,2018,Wang,30545857,NA,NA,NA,NA,Mixed,NA,RNA-seq/ChIP-seq,http://psychencode.org,Variable,TRUE,FALSE,Available
+commonmind_brain,Brain Expression,CMC,2018,Fromer,26700686,258,279,NA,NA,European,NA,RNA-seq,https://www.synapse.org,2000,TRUE,TRUE,Synapse Registration
+braineac_expression,Brain Expression,BRAINEAC,2011,Ramasamy,21738692,134,NA,NA,NA,European,NA,Expression arrays,http://braineac.org,500,TRUE,FALSE,Available
+encode_brain,Epigenomics,ENCODE,2020,ENCODE Consortium,32214244,NA,NA,NA,NA,Mixed,NA,ChIP-seq/DNase,https://www.encodeproject.org,Variable,TRUE,FALSE,Available
+roadmap_brain,Epigenomics,Roadmap,2015,Roadmap Consortium,25693563,NA,NA,NA,NA,Mixed,NA,ChIP-seq/WGBS,http://www.roadmapepigenomics.org,Variable,TRUE,FALSE,Available
