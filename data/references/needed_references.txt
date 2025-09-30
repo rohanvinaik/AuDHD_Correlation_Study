@@ -1,0 +1,23 @@
+# Reference Data Needed for Analysis
+
+## Gene Sets (for pathway enrichment)
+- MSigDB Hallmark gene sets
+- MSigDB C2 (curated pathways)
+- MSigDB C5 (GO terms)
+
+## Protein Interactions
+- STRING database
+- BioGRID interactions
+
+## Drug-Gene Interactions
+- DGIdb (druggable genome)
+- DrugBank
+
+## Gene Expression References
+- GTEx tissue expression
+- BrainSpan developmental expression
+
+Most available from:
+- https://www.gsea-msigdb.org/
+- https://string-db.org/
+- https://www.dgidb.org/

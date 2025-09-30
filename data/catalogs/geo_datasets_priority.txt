@@ -1,0 +1,21 @@
+# High Priority GEO Datasets for ADHD/Autism
+
+## Autism Brain Expression
+GSE28521 - Autism cerebral cortex (104 samples)
+GSE28475 - Autism temporal cortex (99 samples)
+GSE64018 - Autism brain regions (251 samples)
+GSE80655 - Autism prefrontal cortex (48 samples)
+
+## ADHD Blood Expression
+GSE98793 - ADHD blood transcriptome (120 samples)
+GSE119605 - ADHD peripheral blood (60 samples)
+
+## Autism Blood/Cells
+GSE18123 - Autism lymphoblastoid cells (170 samples)
+GSE42133 - Autism blood (146 samples)
+
+DOWNLOAD COMMAND:
+# These require R/Bioconductor GEOquery package
+# Or manual download from https://www.ncbi.nlm.nih.gov/geo/
+
+Total estimated: ~800-1000 samples across studies

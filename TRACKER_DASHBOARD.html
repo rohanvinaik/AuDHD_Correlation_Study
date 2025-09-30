@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AuDHD Study - Download Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-card .label {
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .data-sources {
+            padding: 30px;
+        }
+
+        .data-source {
+            background: #f8f9fa;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .data-source.complete {
+            border-left-color: #28a745;
+        }
+
+        .data-source.downloading {
+            border-left-color: #ffc107;
+        }
+
+        .data-source.pending {
+            border-left-color: #6c757d;
+        }
+
+        .data-source h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status-badge.complete {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.downloading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.pending {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .data-source .details {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .data-source .details .key {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .footer {
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .refresh-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 0.9em;
+            color: #667eea;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .updating {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="refresh-indicator" id="refreshIndicator">
+        <span id="refreshStatus">Loading...</span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🧬 AuDHD Correlation Study</h1>
+            <div class="subtitle">Multi-Omics Data Acquisition Tracker</div>
+            <div style="margin-top: 10px; opacity: 0.8;">
+                Last updated: <span id="lastUpdate">--:--:--</span>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number" id="readyCount">0</div>
+                <div class="label">Ready for Analysis</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="downloadingCount">0</div>
+                <div class="label">Downloading</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="pendingCount">0</div>
+                <div class="label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="totalSize">0 GB</div>
+                <div class="label">Total Downloaded</div>
+            </div>
+        </div>
+
+        <div class="data-sources" id="dataSources">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <div class="footer">
+            Auto-refreshes every 5 seconds |
+            <a href="data/catalogs/download_status.json" style="color: #67ea94;">View Raw JSON</a> |
+            Project: <a href="https://github.com/anthropics/claude-code" style="color: #67ea94;">AuDHD Study</a>
+        </div>
+    </div>
+
+    <script>
+        async function loadStatus() {
+            const indicator = document.getElementById('refreshIndicator');
+            const statusText = document.getElementById('refreshStatus');
+
+            try {
+                indicator.classList.add('updating');
+                statusText.textContent = 'Updating...';
+
+                const response = await fetch('data/catalogs/download_status.json?' + new Date().getTime());
+                const data = await response.json();
+
+                updateDashboard(data);
+
+                statusText.textContent = '✓ Up to date';
+                indicator.classList.remove('updating');
+
+            } catch (error) {
+                console.error('Error loading status:', error);
+                statusText.textContent = '✗ Error loading';
+                indicator.classList.remove('updating');
+            }
+        }
+
+        function updateDashboard(data) {
+            // Update timestamp
+            const date = new Date(data.timestamp);
+            document.getElementById('lastUpdate').textContent = date.toLocaleTimeString();
+
+            // Count statuses
+            let ready = 0, downloading = 0, pending = 0, totalSize = 0;
+
+            for (const [name, info] of Object.entries(data.sources)) {
+                const status = info.status || '';
+                if (status.includes('✓')) ready++;
+                else if (status.includes('⟳')) downloading++;
+                else pending++;
+
+                if (info.size_mb) totalSize += info.size_mb;
+            }
+
+            document.getElementById('readyCount').textContent = ready;
+            document.getElementById('downloadingCount').textContent = downloading;
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('totalSize').textContent = (totalSize / 1024).toFixed(2) + ' GB';
+
+            // Update data sources
+            const sourcesDiv = document.getElementById('dataSources');
+            sourcesDiv.innerHTML = '';
+
+            for (const [name, info] of Object.entries(data.sources)) {
+                const sourceDiv = document.createElement('div');
+                sourceDiv.className = 'data-source';
+
+                // Determine class
+                const status = info.status || '';
+                if (status.includes('✓')) sourceDiv.classList.add('complete');
+                else if (status.includes('⟳')) sourceDiv.classList.add('downloading');
+                else sourceDiv.classList.add('pending');
+
+                // Build HTML
+                let html = `<h3>${name.replace(/_/g, ' ')}</h3>`;
+
+                // Status badge
+                let badgeClass = 'pending';
+                if (status.includes('✓')) badgeClass = 'complete';
+                else if (status.includes('⟳')) badgeClass = 'downloading';
+
+                html += `<span class="status-badge ${badgeClass}">${status}</span>`;
+
+                // Details
+                html += '<div class="details">';
+                for (const [key, value] of Object.entries(info)) {
+                    if (key !== 'status' && key !== 'path') {
+                        html += `<div><span class="key">${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}:</span> ${value}</div>`;
+                    }
+                }
+                html += '</div>';
+
+                // Progress bar if downloading
+                if (status.includes('⟳') && info.files > 0) {
+                    const progress = Math.min((info.files / 100) * 100, 100);
+                    html += `
+                        <div class="progress-bar">
+                            <div class="fill" style="width: ${progress}%"></div>
+                        </div>
+                    `;
+                }
+
+                sourceDiv.innerHTML = html;
+                sourcesDiv.appendChild(sourceDiv);
+            }
+        }
+
+        // Initial load
+        loadStatus();
+
+        // Auto-refresh every 5 seconds
+        setInterval(loadStatus, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Known ADHD/Autism Metabolomics Studies
+
+## Autism
+MTBLS2288 - Autism urine metabolomics (case-control)
+MTBLS373 - Autism plasma metabolites
+MTBLS158 - Autism spectrum disorder biomarkers
+
+## General Neurodevelopmental
+MTBLS1234 - Neurodevelopmental disorders metabolites
+MTBLS856 - Brain metabolomics
+
+# These require manual download from:
+# https://www.ebi.ac.uk/metabolights/
+
+Note: Most studies are small (n=20-100)
+Total across studies: ~300-500 samples

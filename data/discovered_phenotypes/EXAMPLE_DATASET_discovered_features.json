@@ -1,0 +1,273 @@
+{
+  "dataset": "EXAMPLE_DATASET",
+  "mined_date": "2025-09-30T11:54:32.889961",
+  "total_variables": 10,
+  "categories": {
+    "autonomic": {
+      "count": 1,
+      "variables": [
+        {
+          "variable_name": "HEART_RATE_BASELINE",
+          "description": "Resting heart rate measured at baseline visit in bpm",
+          "label": "HR baseline",
+          "matched_terms": [
+            "heart rate"
+          ],
+          "matched_patterns": [
+            "HEART_RATE"
+          ],
+          "context_score": 0,
+          "relevance_score": 3
+        }
+      ]
+    },
+    "circadian": {
+      "count": 3,
+      "variables": [
+        {
+          "variable_name": "CORTISOL_PM",
+          "description": "Salivary cortisol collected in evening (before bedtime)",
+          "label": "Cort PM",
+          "matched_terms": [
+            "cortisol",
+            "salivary cortisol",
+            "bedtime"
+          ],
+          "matched_patterns": [
+            "CORTISOL_PM",
+            "evening"
+          ],
+          "context_score": 0,
+          "relevance_score": 8
+        },
+        {
+          "variable_name": "CORTISOL_AM",
+          "description": "Salivary cortisol collected in morning (30 min after waking)",
+          "label": "Cort AM",
+          "matched_terms": [
+            "cortisol",
+            "salivary cortisol"
+          ],
+          "matched_patterns": [
+            "CORTISOL_AM",
+            "morning"
+          ],
+          "context_score": 0,
+          "relevance_score": 6
+        },
+        {
+          "variable_name": "MERCURY_HAIR",
+          "description": "Mercury concentration in hair sample in ppm",
+          "label": "Hg hair",
+          "matched_terms": [],
+          "matched_patterns": [
+            "ample"
+          ],
+          "context_score": 0,
+          "relevance_score": 1
+        }
+      ]
+    },
+    "sensory": {
+      "count": 1,
+      "variables": [
+        {
+          "variable_name": "SENSORY_PROFILE_TACTILE",
+          "description": "Tactile sensitivity subscale from Sensory Processing Measure",
+          "label": "SPM tactile",
+          "matched_terms": [
+            "sensory processing",
+            "sensory profile",
+            "tactile",
+            "oral sensitivity",
+            "taste sensitivity",
+            "noise sensitivity"
+          ],
+          "matched_patterns": [
+            "SENSORY_PROFILE_TACTILE",
+            "TACTILE",
+            "Tactile",
+            "tactile"
+          ],
+          "context_score": 0,
+          "relevance_score": 16
+        }
+      ]
+    },
+    "interoception": {
+      "count": 3,
+      "variables": [
+        {
+          "variable_name": "BP_SYSTOLIC",
+          "description": "Systolic blood pressure standing position",
+          "label": "BP sys",
+          "matched_terms": [
+            "pressure pain"
+          ],
+          "matched_patterns": [],
+          "context_score": 0,
+          "relevance_score": 2
+        },
+        {
+          "variable_name": "SENSORY_PROFILE_TACTILE",
+          "description": "Tactile sensitivity subscale from Sensory Processing Measure",
+          "label": "SPM tactile",
+          "matched_terms": [
+            "pain sensitivity"
+          ],
+          "matched_patterns": [],
+          "context_score": 0,
+          "relevance_score": 2
+        },
+        {
+          "variable_name": "ABR_THRESHOLD",
+          "description": "Auditory brainstem response hearing threshold at 2000 Hz",
+          "label": "ABR 2kHz",
+          "matched_terms": [
+            "pain threshold"
+          ],
+          "matched_patterns": [],
+          "context_score": 0,
+          "relevance_score": 2
+        }
+      ]
+    },
+    "auditory_processing": {
+      "count": 1,
+      "variables": [
+        {
+          "variable_name": "ABR_THRESHOLD",
+          "description": "Auditory brainstem response hearing threshold at 2000 Hz",
+          "label": "ABR 2kHz",
+          "matched_terms": [
+            "ABR",
+            "auditory brainstem response",
+            "hearing test",
+            "hearing threshold"
+          ],
+          "matched_patterns": [
+            "ABR_THRESHOLD"
+          ],
+          "context_score": 1,
+          "relevance_score": 10
+        }
+      ]
+    },
+    "visual_processing": {
+      "count": 0,
+      "variables": []
+    },
+    "environmental_exposure": {
+      "count": 2,
+      "variables": [
+        {
+          "variable_name": "LEAD_BLOOD",
+          "description": "Blood lead concentration in ug/dL",
+          "label": "Pb blood",
+          "matched_terms": [
+            "lead",
+            "Pb blood",
+            "blood lead"
+          ],
+          "matched_patterns": [],
+          "context_score": 0,
+          "relevance_score": 6
+        },
+        {
+          "variable_name": "MERCURY_HAIR",
+          "description": "Mercury concentration in hair sample in ppm",
+          "label": "Hg hair",
+          "matched_terms": [
+            "mercury"
+          ],
+          "matched_patterns": [
+            "MERCURY_HAIR"
+          ],
+          "context_score": 0,
+          "relevance_score": 3
+        }
+      ]
+    },
+    "trace_minerals": {
+      "count": 5,
+      "variables": [
+        {
+          "variable_name": "ZINC_SERUM",
+          "description": "Serum zinc concentration in ug/dL",
+          "label": "Zn serum",
+          "matched_terms": [
+            "zinc",
+            "serum zinc"
+          ],
+          "matched_patterns": [
+            "ZINC",
+            "zinc",
+            "SERUM",
+            "Serum",
+            "serum"
+          ],
+          "context_score": 0,
+          "relevance_score": 9
+        },
+        {
+          "variable_name": "HEART_RATE_BASELINE",
+          "description": "Resting heart rate measured at baseline visit in bpm",
+          "label": "HR baseline",
+          "matched_terms": [],
+          "matched_patterns": [
+            "SELINE",
+            "seline",
+            "seline"
+          ],
+          "context_score": 0,
+          "relevance_score": 3
+        },
+        {
+          "variable_name": "SENSORY_PROFILE_TACTILE",
+          "description": "Tactile sensitivity subscale from Sensory Processing Measure",
+          "label": "SPM tactile",
+          "matched_terms": [],
+          "matched_patterns": [
+            "SENSORY_PROFILE_TACTILE",
+            "sensitivity",
+            "Sensory"
+          ],
+          "context_score": 0,
+          "relevance_score": 3
+        },
+        {
+          "variable_name": "MERCURY_HAIR",
+          "description": "Mercury concentration in hair sample in ppm",
+          "label": "Hg hair",
+          "matched_terms": [],
+          "matched_patterns": [
+            "CURY_HAIR",
+            "cury"
+          ],
+          "context_score": 0,
+          "relevance_score": 2
+        },
+        {
+          "variable_name": "VISUAL_ACUITY",
+          "description": "Visual acuity Snellen chart distance corrected",
+          "label": "VA distance",
+          "matched_terms": [],
+          "matched_patterns": [
+            "CUITY",
+            "cuity"
+          ],
+          "context_score": 0,
+          "relevance_score": 2
+        }
+      ]
+    },
+    "inflammatory_markers": {
+      "count": 0,
+      "variables": []
+    },
+    "metabolic_calculated": {
+      "count": 0,
+      "variables": []
+    }
+  }
+}

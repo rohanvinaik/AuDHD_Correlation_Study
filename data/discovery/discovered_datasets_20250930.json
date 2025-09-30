@@ -1,0 +1,432 @@
+[
+  {
+    "dataset_name": "CAP Sleep Database",
+    "source": "PhysioNet",
+    "url": "https://physionet.org/content/capslpdb/",
+    "available_features": {
+      "autonomic": [
+        "PSG",
+        "sleep_architecture"
+      ],
+      "circadian": [],
+      "sensory": [],
+      "environmental": [],
+      "proteomics": [],
+      "other": []
+    },
+    "n_participants": 108,
+    "sample_overlap": {
+      "SPARK": 0,
+      "SSC": 0,
+      "ABCD": 0
+    },
+    "access_requirements": "Public - PhysioNet credentialing",
+    "data_format": "WFDB, EDF",
+    "api_available": false,
+    "linked_studies": [],
+    "quality_score": 7,
+    "notes": "Sleep disorders - check for developmental"
+  },
+  {
+    "dataset_name": "PTB Diagnostic ECG Database",
+    "source": "PhysioNet",
+    "url": "https://physionet.org/content/ptbdb/",
+    "available_features": {
+      "autonomic": [
+        "ECG",
+        "HRV"
+      ],
+      "circadian": [],
+      "sensory": [],
+      "environmental": [],
+      "proteomics": [],
+      "other": []
+    },
+    "n_participants": 290,
+    "sample_overlap": {
+      "SPARK": 0,
+      "SSC": 0,
+      "ABCD": 0
+    },
+    "access_requirements": "Public - PhysioNet credentialing",
+    "data_format": "WFDB, EDF",
+    "api_available": false,
+    "linked_studies": [],
+    "quality_score": 7,
+    "notes": "HRV analysis possible"
+  },
+  {
+    "dataset_name": "MIT-BIH Arrhythmia Database",
+    "source": "PhysioNet",
+    "url": "https://physionet.org/content/mitdb/",
+    "available_features": {
+      "autonomic": [
+        "ECG",
+        "HRV"
+      ],
+      "circadian": [],
+      "sensory": [],
+      "environmental": [],
+      "proteomics": [],
+      "other": []
+    },
+    "n_participants": 47,
+    "sample_overlap": {
+      "SPARK": 0,
+      "SSC": 0,
+      "ABCD": 0
+    },
+    "access_requirements": "Public - PhysioNet credentialing",
+    "data_format": "WFDB, EDF",
+    "api_available": false,
+    "linked_studies": [],
+    "quality_score": 7,
+    "notes": "Classic HRV reference"
+  },
+  {
+    "dataset_name": "Childhood Adenotonsillectomy Trial (CHAT)",
+    "source": "NSRR",
+    "url": "https://sleepdata.org/datasets/chat",
+    "available_features": {
+      "autonomic": [
+        "HRV from ECG"
+      ],
+      "circadian": [
+        "PSG",
+        "actigraphy",
+        "neurobehavioral"
+      ],
+      "sensory": [],
+      "environmental": [],
+      "proteomics": [],
+      "other": []
+    },
+    "n_participants": 1244,
+    "age_range": "5-9 years",
+    "sample_overlap": {
+      "SPARK": "Unknown",
+      "SSC": "Unknown",
+      "ABCD": "Unknown"
+    },
+    "access_requirements": "Data use agreement",
+    "data_format": "EDF, annotations",
+    "api_available": false,
+    "linked_studies": [],
+    "quality_score": 8,
+    "notes": "Likely has ADHD overlap - check"
+  },
+  {
+    "dataset_name": "Cleveland Family Study",
+    "source": "NSRR",
+    "url": "https://sleepdata.org/datasets/cfs",
+    "available_features": {
+      "autonomic": [
+        "HRV from ECG"
+      ],
+      "circadian": [
+        "PSG",
+        "sleep questionnaires"
+      ],
+      "sensory": [],
+      "environmental": [],
+      "proteomics": [],
+      "other": []
+    },
+    "n_participants": 2284,
+    "age_range": "All ages, family-based",
+    "sample_overlap": {
+      "SPARK": "Unknown",
+      "SSC": "Unknown",
+      "ABCD": "Unknown"
+    },
+    "access_requirements": "Data use agreement",
+    "data_format": "EDF, annotations",
+    "api_available": false,
+    "linked_studies": [],
+    "quality_score": 8,
+    "notes": "Family-based - genetic correlation possible"
+  },
+  {
+    "dataset_name": "NHANES Heavy Metals",
+    "source": "NHANES",
+    "url": "https://wwwn.cdc.gov/nchs/nhanes/",
+    "available_features": {
+      "autonomic": [],
+      "circadian": [],
+      "sensory": [],
+      "environmental": [
+        "Lead",
+        "Mercury",
+        "Cadmium",
+        "Manganese"
+      ],
+      "proteomics": [],
+      "other": []
+    },
+    "n_participants": "~10,000 per cycle, ~200,000 total",
+    "age_range": "All ages",
+    "sample_overlap": {
+      "SPARK": "Low",
+      "SSC": "Low",
+      "ABCD": "Possible via linkage"
+    },
+    "access_requirements": "Public",
+    "data_format": "SAS, CSV, R",
+    "api_available": true,
+    "linked_studies": [
+      "Multiple ADHD/ASD environmental studies use NHANES"
+    ],
+    "quality_score": 9,
+    "notes": "Gold standard for Heavy Metals, representative US sample"
+  },
+  {
+    "dataset_name": "NHANES Pesticides",
+    "source": "NHANES",
+    "url": "https://wwwn.cdc.gov/nchs/nhanes/",
+    "available_features": {
+      "autonomic": [],
+      "circadian": [],
+      "sensory": [],
+      "environmental": [
+        "Organophosphates",
+        "Pyrethroids",
+        "Herbicides"
+      ],
+      "proteomics": [],
+      "other": []
+    },
+    "n_participants": "~10,000 per cycle, ~200,000 total",
+    "age_range": "All ages",
+    "sample_overlap": {
+      "SPARK": "Low",
+      "SSC": "Low",
+      "ABCD": "Possible via linkage"
+    },
+    "access_requirements": "Public",
+    "data_format": "SAS, CSV, R",
+    "api_available": true,
+    "linked_studies": [
+      "Multiple ADHD/ASD environmental studies use NHANES"
+    ],
+    "quality_score": 9,
+    "notes": "Gold standard for Pesticides, representative US sample"
+  },
+  {
+    "dataset_name": "NHANES Phthalates & Plasticizers",
+    "source": "NHANES",
+    "url": "https://wwwn.cdc.gov/nchs/nhanes/",
+    "available_features": {
+      "autonomic": [],
+      "circadian": [],
+      "sensory": [],
+      "environmental": [
+        "DEHP",
+        "DBP",
+        "BPA",
+        "BPS"
+      ],
+      "proteomics": [],
+      "other": []
+    },
+    "n_participants": "~10,000 per cycle, ~200,000 total",
+    "age_range": "All ages",
+    "sample_overlap": {
+      "SPARK": "Low",
+      "SSC": "Low",
+      "ABCD": "Possible via linkage"
+    },
+    "access_requirements": "Public",
+    "data_format": "SAS, CSV, R",
+    "api_available": true,
+    "linked_studies": [
+      "Multiple ADHD/ASD environmental studies use NHANES"
+    ],
+    "quality_score": 9,
+    "notes": "Gold standard for Phthalates & Plasticizers, representative US sample"
+  },
+  {
+    "dataset_name": "NHANES Persistent Organic Pollutants",
+    "source": "NHANES",
+    "url": "https://wwwn.cdc.gov/nchs/nhanes/",
+    "available_features": {
+      "autonomic": [],
+      "circadian": [],
+      "sensory": [],
+      "environmental": [
+        "PCBs",
+        "PBDEs",
+        "Dioxins"
+      ],
+      "proteomics": [],
+      "other": []
+    },
+    "n_participants": "~10,000 per cycle, ~200,000 total",
+    "age_range": "All ages",
+    "sample_overlap": {
+      "SPARK": "Low",
+      "SSC": "Low",
+      "ABCD": "Possible via linkage"
+    },
+    "access_requirements": "Public",
+    "data_format": "SAS, CSV, R",
+    "api_available": true,
+    "linked_studies": [
+      "Multiple ADHD/ASD environmental studies use NHANES"
+    ],
+    "quality_score": 9,
+    "notes": "Gold standard for Persistent Organic Pollutants, representative US sample"
+  },
+  {
+    "dataset_name": "UK Biobank Extended Phenotyping",
+    "source": "UK Biobank",
+    "url": "https://biobank.ndph.ox.ac.uk/showcase/",
+    "available_features": {
+      "autonomic": [
+        "Heart rate from wearables",
+        "BP variability"
+      ],
+      "circadian": [
+        "Accelerometry (7-day)",
+        "Chronotype"
+      ],
+      "sensory": [
+        "Hearing test",
+        "Visual acuity",
+        "Reaction time"
+      ],
+      "environmental": [
+        "Via questionnaire and models"
+      ],
+      "proteomics": [
+        "Olink (~3000 proteins in subset)"
+      ],
+      "other": [
+        "Retinal imaging (67k)",
+        "Voice recordings"
+      ]
+    },
+    "n_participants": 502000,
+    "age_range": "40-69 years at baseline",
+    "sample_overlap": {
+      "SPARK": 0,
+      "SSC": 0,
+      "ABCD": 0
+    },
+    "access_requirements": "Application + fee (~$5000 typical)",
+    "data_format": "Encrypted bulk download",
+    "api_available": false,
+    "linked_studies": [
+      "Adult ADHD genetics (Demontis et al.)",
+      "ASD in adults (Grove et al.)",
+      "Sensory sensitivity GWAS"
+    ],
+    "quality_score": 10,
+    "notes": "Largest proteomics cohort, excellent for adult phenotypes, Limited child/adolescent",
+    "specific_fields": {
+      "proteomics": "Field 30900 (Olink panel)",
+      "retinal": "Category 151 (Eye measures)",
+      "actigraphy": "Field 90001-90004",
+      "voice": "Field 20251"
+    }
+  },
+  {
+    "dataset_name": "ABCD Study - Extended Phenotyping",
+    "source": "ABCD Study",
+    "url": "https://abcdstudy.org",
+    "available_features": {
+      "autonomic": [
+        "Unknown - need to check"
+      ],
+      "circadian": [
+        "Sleep disturbance scale",
+        "Fitbit data (subset)"
+      ],
+      "sensory": [
+        "Sensory profile questionnaire"
+      ],
+      "environmental": [
+        "Residential exposures (GIS-linked)",
+        "Lead (GIS estimates)",
+        "Air pollution",
+        "Neighborhood factors"
+      ],
+      "proteomics": [
+        "Unknown"
+      ],
+      "other": [
+        "Extensive neuroimaging",
+        "Cognitive battery"
+      ]
+    },
+    "n_participants": 11878,
+    "age_range": "9-10 at baseline, now 13-14",
+    "adhd_n": "~2000 with ADHD",
+    "asd_n": "~200 with ASD",
+    "sample_overlap": {
+      "SPARK": "Check via genetics",
+      "SSC": "Unlikely",
+      "ABCD": "Self"
+    },
+    "access_requirements": "NDA access + ABCD study approval",
+    "data_format": "NDA format (CSV, imaging)",
+    "api_available": false,
+    "linked_studies": [
+      "ABCD is source of multiple ADHD studies",
+      "Environmental exposure papers"
+    ],
+    "quality_score": 9,
+    "notes": "Largest longitudinal child cohort in US, Fitbit data in subset only",
+    "action_items": [
+      "Request access to data dictionary",
+      "Search for: \"heart rate\", \"actigraphy\", \"cortisol\"",
+      "Check ancillary studies for extended phenotyping"
+    ]
+  },
+  {
+    "dataset_name": "All of Us Research Program",
+    "source": "All of Us",
+    "url": "https://www.researchallofus.org",
+    "available_features": {
+      "autonomic": [
+        "Fitbit HR, HRV (subset with wearables)"
+      ],
+      "circadian": [
+        "Fitbit sleep (subset)",
+        "Activity patterns"
+      ],
+      "sensory": [
+        "Via surveys"
+      ],
+      "environmental": [
+        "Residential history",
+        "Occupational",
+        "Survey-based"
+      ],
+      "proteomics": [
+        "Planned"
+      ],
+      "other": [
+        "EHR data",
+        "Genomics"
+      ]
+    },
+    "n_participants": 413000,
+    "age_range": "All ages",
+    "adhd_n": "Self-reported ~15,000",
+    "asd_n": "Self-reported ~3,000",
+    "sample_overlap": {
+      "SPARK": "Possible overlap",
+      "SSC": "Unknown",
+      "ABCD": "No"
+    },
+    "access_requirements": "Researcher Workbench account",
+    "data_format": "OMOP, FHIR via Workbench",
+    "api_available": true,
+    "linked_studies": [
+      "Growing number of ASD/ADHD studies"
+    ],
+    "quality_score": 8,
+    "notes": "Wearable data in ~25% of participants, Diverse population, EHR quality varies",
+    "wearable_subset": 100000
+  }
+]

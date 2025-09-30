@@ -1,0 +1,17 @@
+dataset,category,variable_name,description,relevance_score,matched_terms
+EXAMPLE_DATASET,autonomic,HEART_RATE_BASELINE,Resting heart rate measured at baseline visit in bpm,3,heart rate
+EXAMPLE_DATASET,circadian,CORTISOL_PM,Salivary cortisol collected in evening (before bedtime),8,cortisol; salivary cortisol; bedtime
+EXAMPLE_DATASET,circadian,CORTISOL_AM,Salivary cortisol collected in morning (30 min after waking),6,cortisol; salivary cortisol
+EXAMPLE_DATASET,circadian,MERCURY_HAIR,Mercury concentration in hair sample in ppm,1,
+EXAMPLE_DATASET,sensory,SENSORY_PROFILE_TACTILE,Tactile sensitivity subscale from Sensory Processing Measure,16,sensory processing; sensory profile; tactile
+EXAMPLE_DATASET,interoception,BP_SYSTOLIC,Systolic blood pressure standing position,2,pressure pain
+EXAMPLE_DATASET,interoception,SENSORY_PROFILE_TACTILE,Tactile sensitivity subscale from Sensory Processing Measure,2,pain sensitivity
+EXAMPLE_DATASET,interoception,ABR_THRESHOLD,Auditory brainstem response hearing threshold at 2000 Hz,2,pain threshold
+EXAMPLE_DATASET,auditory_processing,ABR_THRESHOLD,Auditory brainstem response hearing threshold at 2000 Hz,10,ABR; auditory brainstem response; hearing test
+EXAMPLE_DATASET,environmental_exposure,LEAD_BLOOD,Blood lead concentration in ug/dL,6,lead; Pb blood; blood lead
+EXAMPLE_DATASET,environmental_exposure,MERCURY_HAIR,Mercury concentration in hair sample in ppm,3,mercury
+EXAMPLE_DATASET,trace_minerals,ZINC_SERUM,Serum zinc concentration in ug/dL,9,zinc; serum zinc
+EXAMPLE_DATASET,trace_minerals,HEART_RATE_BASELINE,Resting heart rate measured at baseline visit in bpm,3,
+EXAMPLE_DATASET,trace_minerals,SENSORY_PROFILE_TACTILE,Tactile sensitivity subscale from Sensory Processing Measure,3,
+EXAMPLE_DATASET,trace_minerals,MERCURY_HAIR,Mercury concentration in hair sample in ppm,2,
+EXAMPLE_DATASET,trace_minerals,VISUAL_ACUITY,Visual acuity Snellen chart distance corrected,2,
