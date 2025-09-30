@@ -9,12 +9,12 @@ A comprehensive, production-ready pipeline for discovering biologically distinct
 
 ## 🎯 Key Features
 
-- **Multi-Omics Integration**: Genomic (VCF), clinical, metabolomic, and microbiome data
+- **Multi-Omics Integration**: Genomic (VCF), clinical, metabolomic, and microbiome data with MOFA/PCA/CCA
 - **Advanced Clustering**: HDBSCAN, K-means, hierarchical clustering with automatic parameter selection
-- **Statistical Validation**: Bootstrap stability, silhouette analysis, permutation tests
-- **Biological Interpretation**: Pathway enrichment, cluster signatures, network analysis
-- **Production-Ready**: Comprehensive testing, CI/CD, Docker support, extensive documentation
-- **Reproducible**: Hydra configuration, checkpointing, version control, audit logging
+- **Statistical Validation**: Bootstrap stability, cross-validation, permutation tests with standardized metrics
+- **Biological Interpretation**: GSEA pathway enrichment with configurable methods, gene ID normalization, drug target prediction
+- **Production-Ready**: Comprehensive testing (500+ tests), CI/CD, explicit error handling, no hardcoded fallbacks
+- **Reproducible**: Hydra configuration, checkpointing, version control, audit logging with git SHA tracking
 
 ## 📚 Documentation
 
@@ -67,8 +67,19 @@ from audhd_correlation import Pipeline
 pipeline = Pipeline(config_path="config.yaml")
 results = pipeline.run()
 
-# Generate report
-pipeline.generate_report(results, output_path="report.html")
+# Generate report with metadata
+pipeline.generate_report(
+    results,
+    output_path="report.html",
+    include_pdf=True  # Optional PDF export
+)
+
+# Or run stages individually
+pipeline.build_features()
+integration_results = pipeline.integrate()
+clustering_results = pipeline.cluster(integration_results)
+validation_results = pipeline.validate(clustering_results)
+interpretation_results = pipeline.interpret(clustering_results, validation_results)
 ```
 
 **Sample Data:**
@@ -215,27 +226,57 @@ validation = validate_clusters(
     n_bootstrap=100
 )
 
-print(f"Silhouette: {validation['silhouette']:.3f}")
-print(f"Stability (ARI): {validation['stability_ari']:.3f}")
+# Standardized metric naming: {metric}_{statistic}
+print(f"Silhouette: {validation.silhouette_mean:.3f}")
+print(f"Stability (ARI): {validation.ari_mean:.3f}")
+print(f"ARI 95% CI: {validation.ari_ci}")
 # Output:
 # Silhouette: 0.562
 # Stability (ARI): 0.738
+# ARI 95% CI: (0.701, 0.775)
 ```
 
-### Cluster Characterization
+### Biological Interpretation
 
 ```python
-from audhd_correlation.biological import compute_cluster_signatures
-
-signatures = compute_cluster_signatures(
-    preprocessed_data,
-    labels,
-    method='limma'
+from audhd_correlation.biological import (
+    load_gene_sets,
+    run_gsea,
+    generate_enrichment_table,
+    GeneIDMapper
 )
 
-# Top differentiating features per cluster
-for cluster_id, features in signatures.items():
-    print(f"Cluster {cluster_id}: {len(features)} signatures")
+# Load pathway database (requires explicit path - no fallbacks!)
+gene_sets = load_gene_sets(
+    "data/pathways/msigdb_hallmark.gmt",  # Download from MSigDB
+    min_size=15,
+    max_size=500
+)
+
+# Gene ID normalization for consistency
+mapper = GeneIDMapper.from_file("data/gene_mappings.tsv")
+normalized_genes = mapper.normalize_genes(expression_data.columns.tolist())
+
+# Run GSEA with configurable methods
+gsea_results = run_gsea(
+    expression_data,
+    cluster_labels,
+    gene_sets,
+    cluster_id=1,
+    ranking_method="log2fc",  # Options: log2fc, signal_to_noise, t_stat
+    fdr_method="bh",  # Options: bh, bonferroni, none
+    n_permutations=1000
+)
+
+# Generate enrichment table for all clusters
+enrichment_table = generate_enrichment_table(
+    expression_data,
+    cluster_labels,
+    gene_sets,
+    include_leading_edge=True  # Include driving genes
+)
+
+print(enrichment_table[["pathway_id", "cluster_1_NES", "cluster_1_FDR", "cluster_1_leading_edge"]])
 ```
 
 ## ⚙️ Configuration
@@ -270,9 +311,65 @@ clustering:
 validation:
   n_bootstrap: 100
   compute_stability: true
+
+biological:
+  # Pathway databases (explicit paths required - no fallbacks!)
+  pathway_databases:
+    msigdb: "data/pathways/msigdb_hallmark.gmt"
+    go: "data/pathways/go_biological_process.gpad"
+    kegg: "data/pathways/kegg_pathways.gmt"
+
+  # Gene mapping
+  gene_mapping_file: "data/gene_mappings.tsv"
+
+  # GSEA configuration
+  gsea:
+    ranking_method: "log2fc"  # log2fc, signal_to_noise, t_stat
+    fdr_method: "bh"  # bh, bonferroni, none
+    n_permutations: 1000
+    min_pathway_size: 15
+    max_pathway_size: 500
+
+report:
+  include_metadata: true  # Git SHA, timestamps, config snapshot
+  include_pdf: false
+  include_supplementary: true
 ```
 
 See **[Configuration Reference](docs/configuration.rst)** for all options.
+
+## 🆕 Recent Improvements (v0.1.0)
+
+**Standardized Validation Metrics:**
+- All validation metrics use consistent `{metric}_{statistic}` naming (e.g., `ari_mean`, not `mean_ari`)
+- Updated `StabilityResult`, `CrossValidationResult` dataclasses with standard field names
+- Added `to_dict()` and `to_html()` methods to `ValidationReport` for serialization
+- See `docs/validation_metric_names.md` for complete naming convention
+
+**Production-Ready Biological Analysis:**
+- ❌ Removed all hardcoded pathway fallbacks (70+ lines of dangerous examples)
+- ✅ Pathway databases now require explicit file paths with clear error messages
+- ✅ Added `GeneIDMapper` for gene ID normalization (HGNC/Ensembl/Entrez/UniProt)
+- ✅ Added `PathwayDatabase` loader supporting GMT, GPAD, TSV, CSV formats
+- ✅ Configurable GSEA ranking methods: `log2fc`, `signal_to_noise`, `t_stat`
+- ✅ Configurable FDR correction: `bh` (Benjamini-Hochberg), `bonferroni`, `none`
+- ✅ New `generate_enrichment_table()` function with leading-edge gene analysis
+
+**Enhanced Reporting:**
+- Added `Pipeline` class facade matching README examples
+- Added `ReportMetadata` tracking git SHA, timestamps, Python version, package versions
+- Reports include config snapshots for full reproducibility
+- Added `to_html()` methods for all result classes
+
+**Better Error Messages:**
+- Improved file format errors with helpful recommendations
+- Clear pathway database download instructions when files missing
+- Specific suggestions for unsupported formats (e.g., Excel → CSV conversion)
+
+**Breaking Changes:**
+- `load_gene_sets()` now requires explicit `database_path` parameter (no fallbacks)
+- `StabilityResult` field names changed: `mean_ari` → `ari_mean`, `std_ari` → `ari_std`, etc.
+- `CrossValidationResult` field names changed similarly
 
 ## 🐳 Docker Support
 
@@ -392,4 +489,10 @@ If you use this pipeline in your research, please cite:
 
 ---
 
-**Status**: ✅ Production-Ready | **Version**: 0.1.0 | **Python**: 3.9+ | **Last Updated**: 2024
+**Status**: ✅ Production-Ready | **Version**: 0.1.0 | **Python**: 3.9+ | **Last Updated**: January 2025
+
+**Recent Changes:**
+- Standardized validation metric naming convention
+- Production-ready biological analysis (removed hardcoded fallbacks)
+- Enhanced reproducibility with git SHA and metadata tracking
+- Improved error messages with actionable recommendations
