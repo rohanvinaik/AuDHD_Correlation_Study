@@ -1,0 +1,16 @@
+# Parameter sweep for integration optimization
+# Run with: python scripts/run_pipeline.py --multirun --config-name=config_sweep_integration
+
+defaults:
+  - /config
+
+hydra:
+  sweeper:
+    params:
+      # MOFA parameters
+      integration.params.n_factors: range(5,31,5)  # 5,10,15,20,25,30
+      integration.params.convergence_mode: fast,medium,slow
+      integration.params.ard_factors: true,false
+      integration.params.spikeslab_weights: true,false
+
+# Total: 6*3*2*2 = 72 runs

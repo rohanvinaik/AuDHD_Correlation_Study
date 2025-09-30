@@ -1,0 +1,20 @@
+# Parameter sweep for preprocessing optimization
+# Tests different preprocessing strategies
+
+defaults:
+  - /config
+
+hydra:
+  sweeper:
+    params:
+      # Imputation methods
+      preprocessing.imputation.method: mean,median,knn,iterative
+
+      # Batch correction methods
+      preprocessing.batch_params.method: combat,limma,none
+      preprocessing.batch_params.parametric: true,false
+
+      # Scaling methods
+      preprocessing.scaling_method: standard,minmax,robust
+
+# Total: 4*3*2*3 = 72 runs

@@ -1,0 +1,56 @@
+# Optuna-based optimization for clustering
+# Uses Bayesian optimization for smarter parameter search
+# Requires: pip install hydra-optuna-sweeper
+
+defaults:
+  - /config
+  - override hydra/sweeper: optuna
+
+hydra:
+  sweeper:
+    _target_: hydra_plugins.hydra_optuna_sweeper.optuna_sweeper.OptunaSweeper
+
+    # Optimization settings
+    direction: maximize  # Maximize silhouette score
+    n_trials: 100
+    n_jobs: 4
+
+    # Sampler
+    sampler:
+      _target_: optuna.samplers.TPESampler
+      seed: 42
+
+    # Search space
+    params:
+      # HDBSCAN parameters
+      clustering.params.min_cluster_size:
+        type: int
+        low: 10
+        high: 50
+        step: 5
+
+      clustering.params.min_samples:
+        type: int
+        low: 3
+        high: 25
+
+      clustering.params.cluster_selection_epsilon:
+        type: float
+        low: 0.0
+        high: 0.2
+        step: 0.01
+
+      # UMAP parameters
+      clustering.params.umap_n_neighbors:
+        type: int
+        low: 5
+        high: 50
+
+      clustering.params.umap_min_dist:
+        type: float
+        low: 0.0
+        high: 0.99
+
+      clustering.params.umap_metric:
+        type: categorical
+        choices: [euclidean, manhattan, cosine]

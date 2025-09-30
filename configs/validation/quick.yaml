@@ -1,0 +1,36 @@
+# Quick validation (for testing)
+# @package _global_.validation
+
+compute_stability: false
+n_bootstrap: 10
+
+internal:
+  metrics: ["silhouette"]
+  compute_per_cluster: false
+
+stability:
+  subsample_fraction: 0.8
+  noise_levels: [0.05]
+  feature_subsample_fraction: 0.8
+  n_permutations: 10
+
+external:
+  enabled: false
+  external_cohort_path: null
+  projection_method: "umap"
+  compute_replication: false
+
+cross_cohort:
+  enabled: false
+  cohorts: []
+  test_heterogeneity: false
+
+ancestry_stratified:
+  enabled: false
+  ancestry_column: null
+  test_stratification: false
+
+prospective:
+  enabled: false
+  outcome_columns: []
+  prediction_type: "binary"

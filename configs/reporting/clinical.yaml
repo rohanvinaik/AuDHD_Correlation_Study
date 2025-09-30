@@ -1,0 +1,21 @@
+# Clinical report configuration
+# @package _global_.reporting
+
+generate_supplementary: false
+generate_pdf: true
+
+main_report:
+  template: "clinical"
+  include_methods: false
+  include_qc_summary: false
+  include_validation_metrics: false
+  include_pathway_results: true
+  include_statistical_tests: false
+  include_treatment_recommendations: true
+  include_risk_stratification: true
+
+supplementary:
+  include_full_results: false
+  include_raw_data: false
+  include_code: false
+  include_parameter_tables: false

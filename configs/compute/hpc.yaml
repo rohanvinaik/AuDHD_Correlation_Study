@@ -1,0 +1,28 @@
+# HPC cluster configuration
+# @package _global_.compute
+
+resources:
+  max_memory_gb: 256
+  max_cpus: 64
+  use_gpu: false
+  nodes: 1
+
+# Parallelization
+parallelization:
+  n_jobs: 32
+  backend: "multiprocessing"
+  prefer: "processes"
+  distributed: false
+
+# Caching
+cache:
+  enabled: true
+  cache_dir: "/scratch/${oc.env:USER}/.cache"
+  max_size_gb: 100
+
+# SLURM settings
+slurm:
+  partition: "general"
+  time_limit: "24:00:00"
+  mail_type: "END,FAIL"
+  mail_user: "${oc.env:USER}@institution.edu"

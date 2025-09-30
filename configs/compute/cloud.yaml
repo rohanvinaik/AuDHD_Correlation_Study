@@ -1,0 +1,28 @@
+# Cloud compute configuration (AWS/GCP/Azure)
+# @package _global_.compute
+
+resources:
+  max_memory_gb: 128
+  max_cpus: 32
+  use_gpu: false
+  instance_type: "m5.8xlarge"  # AWS example
+
+# Parallelization
+parallelization:
+  n_jobs: 16
+  backend: "loky"
+  prefer: "processes"
+  distributed: false
+
+# Caching
+cache:
+  enabled: true
+  cache_dir: "/tmp/.cache"
+  max_size_gb: 50
+
+# Cloud provider settings
+cloud:
+  provider: "aws"  # aws, gcp, azure
+  region: "us-east-1"
+  spot_instances: false
+  auto_scaling: false

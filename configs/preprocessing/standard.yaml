@@ -1,0 +1,52 @@
+# Standard preprocessing configuration
+# @package _global_.preprocessing
+
+# Missing data imputation
+impute: true
+imputation:
+  method: "knn"
+  n_neighbors: 5
+  weights: "distance"
+
+# Batch effect correction
+batch_correction: true
+batch_col: "site"
+batch_params:
+  method: "combat"
+  covariates: ["age", "sex"]
+  parametric: true
+
+# Covariate adjustment
+adjust_covariates: true
+covariates: ["age", "sex", "bmi"]
+adjustment_params:
+  method: "linear"
+  standardize: true
+
+# Feature scaling
+scale: true
+scaling_method: "standard"  # standard, minmax, robust
+
+# Quality control thresholds
+qc:
+  genomic:
+    min_call_rate: 0.95
+    min_maf: 0.01
+    hwe_threshold: 1e-6
+    remove_related: true
+    kinship_threshold: 0.0884  # 3rd degree relatives
+
+  clinical:
+    missing_threshold: 0.3
+    outlier_method: "iqr"
+    outlier_threshold: 3.0
+
+  metabolomic:
+    cv_threshold: 0.3
+    missing_threshold: 0.2
+    detect_batch_effects: true
+
+  microbiome:
+    min_reads: 1000
+    min_prevalence: 0.1
+    filter_contaminants: true

@@ -42,6 +42,39 @@ from .dashboard import (
     run_dashboard,
 )
 
+# Pipeline wrapper functions
+def plot_embedding(embedding, clusters, output_path=None, **kwargs):
+    """Wrapper for embedding plot"""
+    return create_embedding_plot(
+        embedding=embedding,
+        labels=clusters,
+        save_path=output_path,
+        **kwargs
+    )
+
+def plot_heatmaps(data_dict, clusters, output_dir=None, **kwargs):
+    """Wrapper for heatmap plots"""
+    paths = []
+    for modality, data in data_dict.items():
+        path = create_biomarker_heatmap(
+            data=data,
+            labels=clusters,
+            save_path=output_dir / f'{modality}_heatmap.png' if output_dir else None,
+            **kwargs
+        )
+        if path:
+            paths.append(path)
+    return paths
+
+def plot_cluster_comparison(data_dict, clusters, output_path=None, **kwargs):
+    """Wrapper for cluster comparison"""
+    return create_cluster_comparison(
+        data=data_dict,
+        labels=clusters,
+        save_path=output_path,
+        **kwargs
+    )
+
 __all__ = [
     # Embedding plots
     'create_embedding_plot',
@@ -70,4 +103,8 @@ __all__ = [
     # Dashboard
     'create_dashboard',
     'run_dashboard',
+    # Pipeline wrappers
+    'plot_embedding',
+    'plot_heatmaps',
+    'plot_cluster_comparison',
 ]

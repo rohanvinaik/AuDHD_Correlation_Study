@@ -41,6 +41,37 @@ from .html_generator import (
     HTMLConfig,
 )
 
+# Pipeline wrapper functions
+def generate_comprehensive_report(
+    clustering_results,
+    validation_results,
+    biological_results,
+    visualization_results,
+    output_path=None,
+    **kwargs
+):
+    """Wrapper for comprehensive report generation"""
+    generator = ReportGenerator(config=ReportConfig(**kwargs))
+
+    # Compile all results
+    results = {
+        'clustering': clustering_results,
+        'validation': validation_results,
+        'biological': biological_results,
+        'visualizations': visualization_results,
+    }
+
+    # Generate report
+    report = generator.generate(results)
+
+    if output_path:
+        return generate_html_report(
+            report=report,
+            output_path=output_path,
+        )
+
+    return report
+
 __all__ = [
     # Main generator
     'ReportGenerator',
@@ -67,4 +98,6 @@ __all__ = [
     'PDFConfig',
     'generate_html_report',
     'HTMLConfig',
+    # Pipeline wrappers
+    'generate_comprehensive_report',
 ]

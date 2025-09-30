@@ -1,0 +1,32 @@
+# Standard visualization configuration
+# @package _global_.visualization
+
+# Heatmaps
+create_heatmaps: true
+heatmap_params:
+  n_top_features: 50
+  clustering_method: "ward"
+  cmap: "RdBu_r"
+  figsize: [12, 10]
+
+# Cluster comparison
+cluster_comparison: true
+comparison_params:
+  test_method: "kruskal"
+  correction_method: "fdr_bh"
+  alpha: 0.05
+
+# Embedding plots
+embedding_params:
+  point_size: 50
+  alpha: 0.7
+  colormap: "tab10"
+  figsize: [10, 8]
+
+# Interactive dashboard
+create_dashboard: true
+dashboard_params:
+  include_clinical: true
+  include_pathways: true
+  port: 8050
+  debug: false

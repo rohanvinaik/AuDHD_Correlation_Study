@@ -1,0 +1,22 @@
+# Parameter sweep for clustering optimization
+# Run with: python scripts/run_pipeline.py --multirun --config-name=config_sweep
+
+# Override base config
+defaults:
+  - /config
+
+# Sweep parameters
+hydra:
+  sweeper:
+    params:
+      # HDBSCAN parameters
+      clustering.params.min_cluster_size: 15,20,25,30,35,40
+      clustering.params.min_samples: 5,10,15,20
+      clustering.params.cluster_selection_epsilon: 0.0,0.05,0.1
+
+      # UMAP parameters
+      clustering.params.umap_n_neighbors: 10,15,20,30
+      clustering.params.umap_min_dist: 0.0,0.1,0.2,0.5
+
+# Total combinations: 6*4*3 * 4*4 = 1152 runs
+# Can use Optuna plugin for smarter search

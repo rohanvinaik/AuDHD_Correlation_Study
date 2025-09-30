@@ -1,0 +1,9 @@
+# Sphinx documentation dependencies
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.2.0
+sphinx-copybutton>=0.5.0
+sphinx-autodoc-typehints>=1.23.0
+myst-parser>=1.0.0
+nbsphinx>=0.9.0
+ipython>=8.0.0
+pandoc>=2.0.0

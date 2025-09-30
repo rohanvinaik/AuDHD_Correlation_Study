@@ -1,0 +1,20 @@
+# K-means clustering configuration (for comparison)
+# @package _global_.clustering
+
+method: "kmeans"
+
+compute_topology: false
+
+params:
+  # K-means parameters
+  n_clusters: 5
+  n_init: 50
+  max_iter: 300
+  random_state: 42
+
+  # Embedding for visualization
+  embedding_method: "umap"
+  umap_n_neighbors: 15
+  umap_min_dist: 0.1
+  umap_n_components: 2
+  umap_metric: "euclidean"

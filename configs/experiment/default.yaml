@@ -1,0 +1,9 @@
+# Default experiment configuration
+# @package _global_.experiment
+
+name: "audhd_baseline"
+description: "Baseline analysis with standard parameters"
+tags: ["baseline", "standard"]
+
+# Dataset-specific overrides (none for default)
+dataset_overrides: {}

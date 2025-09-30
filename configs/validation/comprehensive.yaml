@@ -1,0 +1,43 @@
+# Comprehensive validation configuration
+# @package _global_.validation
+
+# Stability analysis
+compute_stability: true
+n_bootstrap: 100
+
+# Internal validation
+internal:
+  metrics: ["silhouette", "calinski_harabasz", "davies_bouldin"]
+  compute_per_cluster: true
+
+# Stability testing
+stability:
+  subsample_fraction: 0.8
+  noise_levels: [0.01, 0.05, 0.1]
+  feature_subsample_fraction: 0.8
+  n_permutations: 100
+
+# External validation (if available)
+external:
+  enabled: false
+  external_cohort_path: null
+  projection_method: "umap"
+  compute_replication: true
+
+# Cross-cohort validation
+cross_cohort:
+  enabled: false
+  cohorts: []
+  test_heterogeneity: true
+
+# Ancestry-stratified validation
+ancestry_stratified:
+  enabled: false
+  ancestry_column: "ancestry"
+  test_stratification: true
+
+# Prospective validation
+prospective:
+  enabled: false
+  outcome_columns: []
+  prediction_type: "binary"  # binary, continuous, survival

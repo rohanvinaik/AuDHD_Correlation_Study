@@ -1,0 +1,32 @@
+# MOFA integration configuration
+# @package _global_.integration
+
+method: "mofa"
+
+params:
+  # Number of latent factors
+  n_factors: 15
+
+  # Convergence settings
+  convergence_mode: "fast"  # fast, medium, slow
+  max_iter: 1000
+  tolerance: 0.01
+  drop_factor_threshold: 0.02
+
+  # Sparsity priors
+  ard_factors: true      # Automatic relevance determination on factors
+  ard_weights: true      # ARD on weights
+  spikeslab_factors: false
+  spikeslab_weights: true
+
+  # Model options
+  likelihoods:
+    genomic: "gaussian"
+    clinical: "gaussian"
+    metabolomic: "gaussian"
+    microbiome: "gaussian"
+
+  # Training options
+  save_interrupted: true
+  save_data: false
+  verbose: false

@@ -1,0 +1,28 @@
+# Publication-quality visualization
+# @package _global_.visualization
+
+create_heatmaps: true
+heatmap_params:
+  n_top_features: 100
+  clustering_method: "ward"
+  cmap: "RdBu_r"
+  figsize: [16, 14]
+  dpi: 300
+  format: "pdf"
+
+cluster_comparison: true
+comparison_params:
+  test_method: "kruskal"
+  correction_method: "fdr_bh"
+  alpha: 0.05
+
+embedding_params:
+  point_size: 80
+  alpha: 0.8
+  colormap: "Set2"
+  figsize: [12, 10]
+  dpi: 300
+  format: "pdf"
+
+create_dashboard: false  # Not needed for publication
+dashboard_params: {}

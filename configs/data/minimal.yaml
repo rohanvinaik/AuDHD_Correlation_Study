@@ -1,0 +1,40 @@
+# Minimal data configuration (clinical + genomic only)
+# @package _global_.data
+
+genomic:
+  enabled: true
+  path: "./data/genomic"
+  params:
+    file_format: "vcf"
+    variant_type: "snp"
+    quality_threshold: 30
+    maf_threshold: 0.05  # Higher threshold for minimal
+    ld_pruning:
+      enabled: true
+      window_size: 50
+      step_size: 5
+      r2_threshold: 0.8  # More stringent pruning
+
+clinical:
+  enabled: true
+  path: "./data/clinical"
+  params:
+    phenotype_file: "phenotypes.csv"
+    covariate_file: "covariates.csv"
+    required_columns: ["subject_id", "age", "sex", "diagnosis"]
+
+metabolomic:
+  enabled: false
+  path: null
+  params: {}
+
+microbiome:
+  enabled: false
+  path: null
+  params: {}
+
+harmonization:
+  method: "combat"
+  batch_key: "site"
+  preserve_variables: ["age", "sex", "diagnosis"]
+  parametric: true

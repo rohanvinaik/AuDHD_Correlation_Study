@@ -1,0 +1,11 @@
+# Simple PCA integration (fast, for testing)
+# @package _global_.integration
+
+method: "pca"
+
+params:
+  n_components: 50
+  whiten: false
+  svd_solver: "auto"
+  concatenate: true  # Simply concatenate modalities
+  scale_modalities: true

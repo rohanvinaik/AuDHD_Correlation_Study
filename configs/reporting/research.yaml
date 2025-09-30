@@ -1,0 +1,19 @@
+# Research report configuration
+# @package _global_.reporting
+
+generate_supplementary: true
+generate_pdf: false
+
+main_report:
+  template: "research"
+  include_methods: true
+  include_qc_summary: true
+  include_validation_metrics: true
+  include_pathway_results: true
+  include_statistical_tests: true
+
+supplementary:
+  include_full_results: true
+  include_raw_data: false
+  include_code: true
+  include_parameter_tables: true

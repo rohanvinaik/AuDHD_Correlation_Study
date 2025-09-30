@@ -1,0 +1,19 @@
+# Local compute configuration
+# @package _global_.compute
+
+resources:
+  max_memory_gb: 32
+  max_cpus: 8
+  use_gpu: false
+
+# Parallelization
+parallelization:
+  n_jobs: 4
+  backend: "loky"  # loky, threading, multiprocessing
+  prefer: "processes"
+
+# Caching
+cache:
+  enabled: true
+  cache_dir: "./.cache"
+  max_size_gb: 10

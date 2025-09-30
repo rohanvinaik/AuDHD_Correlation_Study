@@ -1,0 +1,217 @@
+# Pipeline Configuration
+# Main configuration for the AuDHD correlation study pipeline
+
+# Pipeline settings
+pipeline:
+  name: "audhd_correlation_pipeline"
+  version: "1.0.0"
+  checkpoint_dir: "./checkpoints"
+  audit_dir: "./audit_logs"
+  output_dir: "./outputs"
+  log_dir: "./logs"
+  continue_on_error: false
+  dry_run: false
+  resume: false
+
+# Resource configuration
+resources:
+  max_memory_gb: 32
+  max_cpus: 8
+
+# Data loading configuration
+data:
+  # Genomic data
+  genomic:
+    enabled: true
+    path: "./data/genomic"
+    params:
+      file_format: "vcf"
+      variant_type: "snp"
+      quality_threshold: 30
+      maf_threshold: 0.01
+
+  # Clinical data
+  clinical:
+    enabled: true
+    path: "./data/clinical"
+    params:
+      phenotype_file: "phenotypes.csv"
+      covariate_file: "covariates.csv"
+
+  # Metabolomic data
+  metabolomic:
+    enabled: true
+    path: "./data/metabolomic"
+    params:
+      normalization: "log"
+      missing_threshold: 0.2
+
+  # Microbiome data
+  microbiome:
+    enabled: true
+    path: "./data/microbiome"
+    params:
+      taxonomy_level: "genus"
+      relative_abundance: true
+
+  # Harmonization settings
+  harmonization:
+    method: "combat"
+    batch_key: "site"
+    preserve_variables: ["age", "sex", "diagnosis"]
+
+# Preprocessing configuration
+preprocessing:
+  impute: true
+  imputation:
+    method: "knn"
+    n_neighbors: 5
+
+  batch_correction: true
+  batch_col: "site"
+  batch_params:
+    method: "combat"
+    covariates: ["age", "sex"]
+
+  adjust_covariates: true
+  covariates: ["age", "sex", "bmi"]
+  adjustment_params:
+    method: "linear"
+
+  scale: true
+  scaling_method: "standard"
+
+# Quality control configuration
+qc:
+  genomic:
+    min_call_rate: 0.95
+    min_maf: 0.01
+    hwe_threshold: 1e-6
+    remove_related: true
+    kinship_threshold: 0.0884
+
+  clinical:
+    missing_threshold: 0.3
+    outlier_method: "iqr"
+    outlier_threshold: 3.0
+
+  metabolomic:
+    cv_threshold: 0.3
+    missing_threshold: 0.2
+    detect_batch_effects: true
+
+  microbiome:
+    min_reads: 1000
+    min_prevalence: 0.1
+    filter_contaminants: true
+
+# Integration configuration
+integration:
+  method: "mofa"
+  params:
+    n_factors: 15
+    convergence_mode: "fast"
+    ard_factors: true
+    ard_weights: true
+    spikeslab_factors: false
+    spikeslab_weights: true
+
+# Clustering configuration
+clustering:
+  method: "hdbscan"
+  compute_topology: true
+  params:
+    min_cluster_size: 30
+    min_samples: 10
+    cluster_selection_epsilon: 0.0
+    cluster_selection_method: "eom"
+    metric: "euclidean"
+    # UMAP embedding parameters
+    umap_n_neighbors: 15
+    umap_min_dist: 0.1
+    umap_n_components: 2
+
+# Validation configuration
+validation:
+  compute_stability: true
+  n_bootstrap: 100
+
+  internal:
+    metrics: ["silhouette", "calinski_harabasz", "davies_bouldin"]
+
+  stability:
+    subsample_fraction: 0.8
+    noise_levels: [0.01, 0.05, 0.1]
+
+  external:
+    enabled: false
+    external_cohort_path: null
+    projection_method: "umap"
+
+# Biological analysis configuration
+biological:
+  run_gsea: true
+  gsea_params:
+    gene_set_database: "GO_Biological_Process_2021"
+    min_genes: 15
+    max_genes: 500
+    permutations: 1000
+
+  build_networks: false
+  network_params:
+    correlation_threshold: 0.7
+    fdr_threshold: 0.05
+
+  identify_targets: false
+  target_params:
+    druggability_score_threshold: 0.5
+    include_approved_drugs: true
+
+# Visualization configuration
+visualization:
+  create_heatmaps: true
+  heatmap_params:
+    n_top_features: 50
+    clustering_method: "ward"
+    cmap: "RdBu_r"
+
+  cluster_comparison: true
+  comparison_params:
+    test_method: "kruskal"
+    correction_method: "fdr_bh"
+
+  embedding_params:
+    point_size: 50
+    alpha: 0.7
+    colormap: "tab10"
+
+  create_dashboard: true
+  dashboard_params:
+    include_clinical: true
+    include_pathways: true
+
+# Reporting configuration
+reporting:
+  generate_supplementary: true
+  generate_pdf: false
+
+  main_report:
+    include_methods: true
+    include_qc_summary: true
+    include_validation_metrics: true
+    include_pathway_results: true
+
+  supplementary:
+    include_full_results: true
+    include_raw_data: false
+    include_code: false
+
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "./logs/pipeline.log"
+  console: true
+
+# Random seed for reproducibility
+seed: 42

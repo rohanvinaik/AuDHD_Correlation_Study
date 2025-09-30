@@ -1,0 +1,27 @@
+# HDBSCAN clustering configuration
+# @package _global_.clustering
+
+method: "hdbscan"
+
+# Topological analysis
+compute_topology: true
+
+params:
+  # Core HDBSCAN parameters
+  min_cluster_size: 30
+  min_samples: 10
+  cluster_selection_epsilon: 0.0
+  cluster_selection_method: "eom"  # eom or leaf
+  metric: "euclidean"
+  alpha: 1.0
+
+  # UMAP embedding parameters
+  embedding_method: "umap"
+  umap_n_neighbors: 15
+  umap_min_dist: 0.1
+  umap_n_components: 2
+  umap_metric: "euclidean"
+
+  # Additional options
+  allow_single_cluster: false
+  prediction_data: true  # For soft clustering

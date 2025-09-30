@@ -1,0 +1,30 @@
+# Full biological analysis configuration
+# @package _global_.biological
+
+# Pathway enrichment analysis
+run_gsea: true
+gsea_params:
+  gene_set_database: "GO_Biological_Process_2021"
+  min_genes: 15
+  max_genes: 500
+  permutations: 1000
+  ranking_method: "signal_to_noise"
+
+# Network analysis
+build_networks: true
+network_params:
+  correlation_threshold: 0.7
+  fdr_threshold: 0.05
+  network_type: "ppi"  # ppi, metabolic, regulatory
+
+# Drug target identification
+identify_targets: true
+target_params:
+  druggability_score_threshold: 0.5
+  include_approved_drugs: true
+  include_clinical_trials: true
+  therapeutic_areas: ["psychiatry", "neurology"]
+
+# Additional analyses
+run_tissue_enrichment: true
+run_cell_type_deconvolution: false

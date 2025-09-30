@@ -1,0 +1,40 @@
+# Minimal preprocessing (for testing/quick runs)
+# @package _global_.preprocessing
+
+impute: true
+imputation:
+  method: "mean"  # Faster than knn
+
+batch_correction: false
+batch_col: null
+batch_params: {}
+
+adjust_covariates: false
+covariates: []
+adjustment_params: {}
+
+scale: true
+scaling_method: "standard"
+
+qc:
+  genomic:
+    min_call_rate: 0.9  # More lenient
+    min_maf: 0.05
+    hwe_threshold: 1e-5
+    remove_related: false
+    kinship_threshold: 0.0884
+
+  clinical:
+    missing_threshold: 0.5
+    outlier_method: "iqr"
+    outlier_threshold: 5.0  # More lenient
+
+  metabolomic:
+    cv_threshold: 0.5
+    missing_threshold: 0.3
+    detect_batch_effects: false
+
+  microbiome:
+    min_reads: 500
+    min_prevalence: 0.05
+    filter_contaminants: false

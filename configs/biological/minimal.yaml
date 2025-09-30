@@ -1,0 +1,19 @@
+# Minimal biological analysis (GSEA only)
+# @package _global_.biological
+
+run_gsea: true
+gsea_params:
+  gene_set_database: "GO_Biological_Process_2021"
+  min_genes: 15
+  max_genes: 500
+  permutations: 100  # Fewer for speed
+  ranking_method: "signal_to_noise"
+
+build_networks: false
+network_params: {}
+
+identify_targets: false
+target_params: {}
+
+run_tissue_enrichment: false
+run_cell_type_deconvolution: false

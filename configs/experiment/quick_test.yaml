@@ -1,0 +1,29 @@
+# Quick test experiment (fast parameters for development)
+# @package _global_.experiment
+
+name: "quick_test"
+description: "Fast configuration for testing pipeline"
+tags: ["test", "development"]
+
+# Override with faster/smaller parameters
+dataset_overrides:
+  data:
+    genomic:
+      params:
+        maf_threshold: 0.1  # More aggressive filtering
+
+  integration:
+    params:
+      n_factors: 5  # Fewer factors
+      max_iter: 100  # Fewer iterations
+
+  clustering:
+    params:
+      min_cluster_size: 10  # Smaller clusters allowed
+
+  validation:
+    n_bootstrap: 10  # Minimal validation
+
+  biological:
+    gsea_params:
+      permutations: 100  # Fewer permutations

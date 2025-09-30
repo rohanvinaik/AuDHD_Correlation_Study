@@ -1,0 +1,46 @@
+# Main configuration file with defaults
+# Uses Hydra config composition
+
+defaults:
+  - data: base
+  - preprocessing: standard
+  - integration: mofa
+  - clustering: hdbscan
+  - validation: comprehensive
+  - biological: full
+  - visualization: standard
+  - reporting: research
+  - compute: local
+  - experiment: default
+  - _self_
+
+# Pipeline metadata
+pipeline:
+  name: "audhd_correlation_pipeline"
+  version: "1.0.0"
+  description: "Multi-omics analysis of AuDHD correlation"
+
+  # Execution settings
+  checkpoint_dir: "${hydra:runtime.output_dir}/checkpoints"
+  audit_dir: "${hydra:runtime.output_dir}/audit"
+  output_dir: "${hydra:runtime.output_dir}/results"
+  log_dir: "${hydra:runtime.output_dir}/logs"
+
+  # Control flags
+  dry_run: false
+  resume: false
+  continue_on_error: false
+  verbose: false
+
+# Random seed for reproducibility
+seed: 42
+
+# Hydra configuration
+hydra:
+  run:
+    dir: outputs/${pipeline.name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: multirun/${pipeline.name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+  job:
+    chdir: false
