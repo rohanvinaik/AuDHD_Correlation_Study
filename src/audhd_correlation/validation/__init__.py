@@ -44,6 +44,12 @@ from .cross_validation import (
     CrossValidationResult,
 )
 
+from .report import (
+    generate_validation_report,
+    save_report,
+    ValidationReport,
+)
+
 __all__ = [
     # Metrics
     'compute_internal_metrics',
@@ -73,4 +79,8 @@ __all__ = [
     'temporal_validation',
     'batch_effect_validation',
     'CrossValidationResult',
+    # Report
+    'generate_validation_report',
+    'save_report',
+    'ValidationReport',
 ]
