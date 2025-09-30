@@ -1,0 +1,50 @@
+queue_manager:
+  priority_levels:
+  - critical
+  - high
+  - normal
+  - low
+  retry_policy:
+    max_attempts: 3
+    backoff: exponential
+    backoff_multiplier: 2.0
+  parallel_downloads: 5
+  timeout: 300
+storage:
+  raw_data: data/raw/
+  processed: data/processed/
+  temp: data/temp/
+  archive: data/archive/
+validation:
+  checksum:
+  - md5
+  - sha256
+  format_check: true
+  completeness: true
+  verify_after_download: true
+monitoring:
+  progress_tracking: true
+  error_logging: true
+  notification_email: false
+  log_file: logs/download_manager.log
+  history_file: logs/download_history.json
+datasets:
+- name: PGC_ADHD_GWAS
+  url: https://example.com/pgc_adhd_2019.tar.gz
+  priority: high
+  data_type: genomics
+  checksum: abc123def456
+  checksum_type: sha256
+  description: PGC ADHD GWAS summary statistics
+- name: SPARK_phenotypes
+  url: https://example.com/spark_phenotypes.csv.gz
+  priority: high
+  data_type: clinical
+  checksum: 789ghi012jkl
+  checksum_type: sha256
+  description: SPARK clinical phenotype data
+- name: SRA_microbiome
+  url: https://example.com/sra_microbiome_metadata.csv
+  priority: normal
+  data_type: microbiome
+  description: SRA microbiome study metadata
