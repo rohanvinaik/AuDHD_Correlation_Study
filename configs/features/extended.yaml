@@ -1,0 +1,333 @@
+# Extended Feature Configuration
+# Multi-modal biomarker priorities and integration weights
+
+extended_features:
+  # Priority 1: High-impact, validated biomarkers with immediate clinical utility
+  priority_1:
+    autonomic:
+      - HRV_time_domain:
+          features: [SDNN, RMSSD, pNN50]
+          units: milliseconds
+          acquisition: 5-minute recording minimum, 24-hour optimal
+          clinical_cutoffs:
+            SDNN:
+              high_risk: < 20
+              moderate_risk: 20-40
+              normal: > 40
+            RMSSD:
+              high_risk: < 15
+              moderate_risk: 15-30
+              normal: > 30
+
+      - HRV_frequency_domain:
+          features: [LF_power, HF_power, LF_HF_ratio]
+          units: ms^2
+          acquisition: 5-minute recording, controlled breathing
+          clinical_interpretation:
+            LF_HF_ratio:
+              sympathetic_dominance: > 2.5
+              balanced: 1.0-2.5
+              parasympathetic_dominance: < 1.0
+
+    circadian:
+      - cortisol_rhythm:
+          features: [awakening_response, diurnal_slope, evening_level]
+          units: μg/dL
+          acquisition: 4-point salivary (awakening, +30min, afternoon, bedtime)
+          clinical_pattern:
+            normal_awakening_response: 50-100%  # increase
+            flat_slope_threshold: < 0.3  # μg/dL per hour
+
+      - melatonin_DLMO:
+          features: [dim_light_melatonin_onset]
+          units: clock_time
+          acquisition: hourly saliva samples under dim light (<10 lux)
+          clinical_cutoffs:
+            normal: 20:00-22:00
+            delayed: > 22:00
+            advanced: < 20:00
+            notes: "Time relative to habitual bedtime also critical"
+
+    interoception:
+      - interoceptive_accuracy:
+          features: [heartbeat_perception, confidence_ratings]
+          units: proportion_correct
+          acquisition: heartbeat tracking task (Schandry method)
+          clinical_interpretation:
+            poor: < 0.5
+            moderate: 0.5-0.7
+            good: > 0.7
+
+  # Priority 2: Well-validated biomarkers, may require specialized testing
+  priority_2:
+    environmental:
+      - hair_heavy_metals:
+          analytes: [lead, mercury, arsenic, cadmium, aluminum]
+          units: μg/g
+          acquisition: hair sample 3cm from scalp
+          reference_ranges:
+            lead:
+              concerning: > 1.0
+              high: > 5.0
+            mercury:
+              concerning: > 1.0
+              high: > 3.0
+          notes: "Reflects chronic exposure over ~3 months"
+
+      - urinary_phthalates:
+          analytes: [MBP, MEHP, MEHHP, MEOHP, MEP]
+          units: μg/L (creatinine-adjusted)
+          acquisition: first morning urine
+          interpretation: "Compare to NHANES reference percentiles"
+
+    inflammatory:
+      - salivary_cytokines:
+          analytes: [IL-6, TNF-alpha, IL-1beta, CRP]
+          units: pg/mL
+          acquisition: morning saliva, fasting preferred
+          clinical_significance: "Elevated in autonomic/inflammatory subtypes"
+
+    sensory:
+      - sensory_thresholds:
+          modalities: [tactile, auditory, visual, olfactory]
+          methods: [detection, discrimination, tolerance]
+          acquisition: standardized sensory profiling (SP-2, AASP)
+          interpretation: "Definite difference scores indicate clinical significance"
+
+  # Priority 3: Emerging biomarkers, research-grade but promising
+  priority_3:
+    speech_acoustics:
+      - voice_acoustics:
+          features: [pitch_variability, speech_rate, pause_patterns]
+          acquisition: spontaneous speech sample analysis
+          notes: "May differentiate ASD/ADHD patterns"
+
+    imaging:
+      - retinal_imaging:
+          features: [vascular_patterns, retinal_nerve_fiber_layer]
+          acquisition: OCT imaging
+          notes: "Window into neurovascular health"
+
+    molecular:
+      - cell_free_DNA:
+          features: [methylation_patterns, mitochondrial_ratio]
+          acquisition: plasma sample
+          notes: "Emerging biomarker for systemic dysregulation"
+
+  # Integration weights for multi-modal clustering
+  integration_weights:
+    # Relative importance of each domain in clustering (must sum to 1.0)
+    standard_omics: 0.55  # Genetics (0.25) + Metabolomics (0.15) + Clinical (0.15)
+    autonomic: 0.15       # HRV and autonomic function
+    circadian: 0.10       # Sleep-wake, melatonin, cortisol rhythms
+    environmental: 0.10   # Toxicant burden, exposures
+    sensory: 0.10         # Interoception, sensory processing
+
+  # Feature preprocessing
+  preprocessing:
+    autonomic:
+      HRV_SDNN:
+        transform: log
+        standardize: true
+        handle_outliers: winsorize  # 1st and 99th percentiles
+      HRV_RMSSD:
+        transform: log
+        standardize: true
+        handle_outliers: winsorize
+
+    circadian:
+      melatonin_DLMO:
+        transform: none
+        circular: true  # Handle as circular time (24-hour clock)
+        reference_point: habitual_bedtime  # Express relative to sleep schedule
+
+    environmental:
+      heavy_metals:
+        transform: log
+        standardize: true
+        handle_missing: median_impute
+        detection_limits: handle_as_half_DL
+
+    sensory:
+      interoceptive_accuracy:
+        transform: none  # Already 0-1 proportion
+        handle_missing: exclude  # Task-based, missing = not done
+
+  # Subtype-specific feature importance
+  subtype_signatures:
+    autonomic_dysregulation:
+      key_features:
+        - HRV_SDNN: low
+        - HRV_LF_HF_ratio: high
+        - cortisol_awakening_response: blunted
+        - interoceptive_accuracy: low
+      required_features: [HRV_SDNN]  # Must have for classification
+
+    circadian_disruption:
+      key_features:
+        - melatonin_DLMO: delayed
+        - cortisol_diurnal_slope: flat
+        - sleep_onset_latency: prolonged
+        - actigraphy_rhythm_amplitude: low
+      required_features: [melatonin_DLMO, sleep_timing]
+
+    environmental_burden:
+      key_features:
+        - lead_level: elevated
+        - multiple_toxicants: high_percentile
+        - inflammatory_markers: elevated
+      required_features: [at_least_two_toxicants]
+
+    sensory_interoceptive_dysfunction:
+      key_features:
+        - interoceptive_accuracy: low
+        - sensory_profile: extreme_scores
+        - emotional_dysregulation: high
+      required_features: [interoceptive_accuracy, sensory_profile]
+
+# Clinical decision thresholds
+clinical_thresholds:
+  urgent_attention:
+    - HRV_SDNN < 15 ms
+    - lead_level > 10 μg/dL
+    - severe_dysautonomia_symptoms + HRV abnormalities
+
+  specialist_referral:
+    autonomic:
+      triggers:
+        - HRV_SDNN < 20 ms
+        - orthostatic_symptoms + tachycardia > 30 bpm increase
+      refer_to: [cardiology, autonomic_disorders_clinic]
+
+    circadian:
+      triggers:
+        - DLMO > 11pm with functional impairment
+        - irregular_sleep_wake_syndrome
+      refer_to: [sleep_medicine, behavioral_sleep_medicine]
+
+    environmental:
+      triggers:
+        - lead_level > 5 μg/dL
+        - multiple_exposures > 90th percentile
+      refer_to: [environmental_medicine, toxicology]
+
+    sensory:
+      triggers:
+        - sensory_profile definite_difference
+        - interoceptive_accuracy < 0.4
+      refer_to: [occupational_therapy, developmental_pediatrics]
+
+# Monitoring and follow-up
+monitoring_protocols:
+  autonomic_subtype:
+    baseline:
+      - 24h_holter
+      - tilt_table_test
+      - diurnal_cortisol
+    quarterly:
+      - HRV_5min_recording
+      - orthostatic_vitals
+      - symptom_questionnaire
+    annual:
+      - repeat_24h_holter
+      - inflammatory_panel
+
+  circadian_subtype:
+    baseline:
+      - 2week_actigraphy
+      - DLMO_assessment
+      - sleep_study_if_indicated
+    monthly:
+      - sleep_diary
+      - chronotype_questionnaire
+    annual:
+      - repeat_actigraphy
+      - repeat_DLMO
+
+  environmental_subtype:
+    baseline:
+      - comprehensive_toxicant_panel
+      - nutrient_minerals
+      - home_assessment
+    quarterly:
+      - symptom_monitoring
+      - exposure_questionnaire
+    biannual:
+      - hair_metals
+      - urine_organics
+
+  sensory_subtype:
+    baseline:
+      - comprehensive_OT_eval
+      - interoceptive_battery
+      - sensory_gating_EEG_if_available
+    quarterly:
+      - sensory_profile
+      - interoceptive_awareness_scale
+    annual:
+      - repeat_comprehensive_eval
+
+# Data quality requirements
+quality_control:
+  minimum_requirements:
+    HRV_recording:
+      duration: 5 minutes
+      artifact_threshold: < 5%
+      respiratory_rate: controlled or recorded
+
+    DLMO_assessment:
+      light_level: < 10 lux verified
+      sample_frequency: hourly for 6+ hours
+      threshold_method: hockey_stick or 3pg/mL
+
+    environmental_testing:
+      laboratory: CLIA_certified
+      sample_collection: standardized_protocol
+      quality_assurance: proficiency_testing_documented
+
+    sensory_assessment:
+      administrator: trained_professional
+      environment: standardized
+      scoring: validated_instrument
+
+# Integration with main pipeline
+pipeline_integration:
+  feature_selection:
+    method: recursive_feature_elimination
+    cross_validation: 5_fold
+    preserve_domains: true  # Keep representation from each domain
+
+  clustering:
+    algorithm: consensus_clustering
+    distance_metric: weighted_euclidean  # Use integration_weights
+    optimal_k_method: gap_statistic
+    stability_assessment: bootstrap_1000
+
+  validation:
+    internal: silhouette_score, davies_bouldin_index
+    external: clinical_outcomes_association
+    biological: biomarker_panel_discrimination
+
+  reporting:
+    include_extended_features: true
+    subtype_biomarker_profiles: true
+    clinical_decision_support: true
+    personalized_monitoring_plan: true
+
+# Cost-effectiveness considerations
+resource_optimization:
+  screening_tier:
+    cost_per_participant: ~$200
+    features: [HRV_5min, morning_cortisol, sleep_questionnaire, basic_sensory_profile]
+    time_required: 2 hours
+
+  comprehensive_tier:
+    cost_per_participant: ~$2000-5000
+    features: [24h_holter, DLMO, tilt_table, environmental_panel, full_OT_eval]
+    time_required: 1 week (with scheduling)
+    indication: high_risk_screening or subtype_specific
+
+  research_tier:
+    cost_per_participant: ~$10000+
+    features: [all_priority_3, longitudinal_tracking, multimodal_imaging]
+    indication: research_cohorts only

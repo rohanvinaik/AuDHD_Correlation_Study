@@ -41,6 +41,14 @@ from .html_generator import (
     HTMLConfig,
 )
 
+from .extended_reporting import (
+    generate_extended_clinical_report,
+    create_clinical_decision_support_extended,
+    ExtendedClinicalReport,
+    ExtendedSubtypeProfile,
+    ClinicalDecisionPath,
+)
+
 # Pipeline wrapper functions
 def generate_comprehensive_report(
     clustering_results,
@@ -98,6 +106,12 @@ __all__ = [
     'PDFConfig',
     'generate_html_report',
     'HTMLConfig',
+    # Extended reporting with multi-modal biomarkers
+    'generate_extended_clinical_report',
+    'create_clinical_decision_support_extended',
+    'ExtendedClinicalReport',
+    'ExtendedSubtypeProfile',
+    'ClinicalDecisionPath',
     # Pipeline wrappers
     'generate_comprehensive_report',
 ]
