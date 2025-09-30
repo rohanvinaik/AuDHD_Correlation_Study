@@ -27,6 +27,10 @@ from scripts.analysis.environmental.exposures_database import EnvironmentalExpos
 from scripts.analysis.federated.federated_learning import FederatedAnalyzer
 from scripts.analysis.gnn.graph_neural_networks import GNNAnalyzer
 from scripts.analysis.uncertainty.uncertainty_quantification import UncertaintyQuantifier
+from scripts.analysis.singlecell.sc_eqtl_mr import SingleCellEQTLMR
+from scripts.analysis.brain_gradients.gradient_validation import BrainGradientValidator
+from scripts.analysis.herv.herv_signatures import HERVAnalyzer
+from scripts.analysis.spatial.perturbation_validation import SpatialPerturbationValidator
 
 logger = logging.getLogger(__name__)
 
@@ -68,8 +72,12 @@ class IntegratedAuDHDPipeline:
         self.federated = FederatedAnalyzer()
         self.gnn = GNNAnalyzer()
         self.uncertainty = UncertaintyQuantifier()
+        self.sc_eqtl_mr = SingleCellEQTLMR()
+        self.gradient_validator = BrainGradientValidator()
+        self.herv_analyzer = HERVAnalyzer()
+        self.spatial_validator = SpatialPerturbationValidator()
 
-        logger.info("Initialized IntegratedAuDHDPipeline")
+        logger.info("Initialized IntegratedAuDHDPipeline with 20 analysis modules")
 
     def run_baseline_deviation_analysis(self, data):
         """Run baseline-deviation framework"""
