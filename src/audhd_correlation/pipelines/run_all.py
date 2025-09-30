@@ -6,14 +6,14 @@ from typing import Optional, List
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
+from ..config import load_config as load_validated_config, AppConfig
+
 console = Console()
 
 
-def load_config(cfg_path: str) -> dict:
-    """Load Hydra configuration"""
-    # TODO: Implement Hydra config loading
-    console.print(f"[dim]Loading config from {cfg_path}[/dim]")
-    return {"placeholder": "config"}
+def load_config(cfg_path: str) -> AppConfig:
+    """Load and validate configuration"""
+    return load_validated_config(cfg_path)
 
 
 def download(cfg: str) -> None:
