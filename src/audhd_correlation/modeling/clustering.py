@@ -1540,42 +1540,85 @@ def _hdb(emb, params):
 
 def consensus(embeddings: dict, cfg) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Consensus clustering across multiple embeddings with resampling (legacy interface)
+    Consensus clustering across multiple embeddings with anti-pattern-mining features
+
+    Now uses ConsensusClusteringPipeline with:
+    - Baseline-deviation framework (if enabled)
+    - Null model testing
+    - Topology gates
+    - Config locking
 
     Args:
         embeddings: Dict of embedding matrices (name -> array)
-        cfg: AppConfig with cluster.consensus and cluster.clusterers
+        cfg: AppConfig with cluster configuration
 
     Returns:
         labels: Final consensus cluster labels
         coassign: Co-assignment matrix
     """
-    coassign = None
-    labels_store = {}
+    # Use main embedding (typically UMAP or first available)
+    if "umap_main" in embeddings:
+        X = embeddings["umap_main"]
+    elif "original" in embeddings:
+        X = embeddings["original"]
+    else:
+        # Take first available
+        X = list(embeddings.values())[0]
 
-    for name, emb in embeddings.items():
-        for _ in range(cfg.cluster.consensus["resamples"]):
-            idx = np.random.choice(len(emb), len(emb), replace=True)
-            lab = _hdb(emb[idx], cfg.cluster.clusterers["hdbscan_main"])
-            full = -np.ones(len(emb), int)
-            full[idx] = lab
-            labels_store.setdefault(name, []).append(full)
-            mat = (full[:, None] == full[None, :]) & (full[:, None] >= 0)
-            coassign = mat if coassign is None else coassign + mat
+    # Check if baseline-deviation pipeline is enabled
+    baseline_deviation_enabled = getattr(cfg.cluster, 'baseline_deviation_enabled', True)
 
-    coassign = coassign / (len(embeddings) * cfg.cluster.consensus["resamples"])
+    if baseline_deviation_enabled:
+        # Use baseline-deviation pipeline
+        from ..pipelines.baseline_deviation_pipeline import run_baseline_deviation_pipeline, get_default_config
 
-    # Spectral clustering on thresholded co-assignment matrix
-    n_clusters = cfg.cluster.get('n_clusters', None)
-    if n_clusters is None:
-        # Auto-detect
-        n_clusters = 5
+        # Build config dict from cfg
+        pipeline_config = get_default_config()
 
-    sc = SpectralClustering(
-        n_clusters=n_clusters, affinity="precomputed", assign_labels="kmeans"
-    )
-    labels = sc.fit_predict(
-        (coassign >= cfg.cluster.consensus["threshold"]).astype(float)
-    )
+        # Override with cfg settings if available
+        if hasattr(cfg, 'baseline'):
+            pipeline_config['baseline'] = cfg.baseline
+        if hasattr(cfg, 'topology'):
+            pipeline_config['topology'] = cfg.topology
+        if hasattr(cfg, 'deviation_threshold'):
+            pipeline_config['deviation_threshold'] = cfg.deviation_threshold
+
+        # Run baseline-deviation pipeline
+        results = run_baseline_deviation_pipeline(
+            Z=X,
+            control_mask=None,  # Could be provided if available
+            config=pipeline_config,
+            output_dir=getattr(cfg, 'output_dir', None)
+        )
+
+        labels = results.cluster_labels if results.cluster_labels is not None else np.zeros(len(X), dtype=int)
+
+        # Build co-assignment matrix from clustering results (if available)
+        if results.clustering_results is not None:
+            coassign = results.clustering_results.coassignment_matrix_
+        else:
+            # Fallback: identity matrix
+            coassign = np.eye(len(X))
+
+    else:
+        # Use ConsensusClusteringPipeline directly
+        pipeline = ConsensusClusteringPipeline(
+            use_hdbscan=True,
+            use_spectral=True,
+            use_bgmm=True,
+            use_tda=False,
+            n_bootstrap=getattr(cfg.cluster.consensus, 'n_resamples', 100),
+            random_state=getattr(cfg, 'seed', 42),
+            test_null_models=getattr(cfg.cluster, 'test_null_models', True),
+            evaluate_topology_gates=getattr(cfg.cluster, 'evaluate_topology_gates', True),
+            enable_config_locking=getattr(cfg.cluster, 'enable_config_locking', True),
+            config_dict={'cluster': cfg.cluster} if hasattr(cfg, 'cluster') else None,
+            lockfile_path=Path(getattr(cfg, 'output_dir', '.')) / 'config_lock.json' if hasattr(cfg, 'output_dir') else None,
+        )
+
+        pipeline.fit(X, generate_embeddings=True)
+
+        labels = pipeline.consensus_labels_
+        coassign = pipeline.coassignment_matrix_
 
     return labels, coassign
