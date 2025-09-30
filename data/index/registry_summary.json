@@ -1,0 +1,34 @@
+{
+  "generated_date": "2025-09-30",
+  "total_samples": 8,
+  "by_diagnosis": {
+    "ASD": 4,
+    "ADHD": 3,
+    "Control": 1
+  },
+  "by_completeness": {
+    "complete (100%)": 1,
+    "high (>80%)": 3,
+    "medium (50-80%)": 3,
+    "low (<50%)": 1
+  },
+  "data_availability": {
+    "genomics": 8,
+    "metabolomics": 5,
+    "microbiome": 5,
+    "clinical": 8,
+    "imaging": 3,
+    "environmental": 6
+  },
+  "multi_omics": {
+    "all_6_types": 1,
+    "5_types": 3,
+    "4_types": 2,
+    "3_types": 2
+  },
+  "by_access": {
+    "available": 6,
+    "restricted": 1,
+    "pending": 1
+  }
+}

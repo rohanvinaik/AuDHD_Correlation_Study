@@ -1,0 +1,9 @@
+master_id,sample_id,primary_diagnosis,has_genomics,has_metabolomics,has_microbiome,has_clinical,has_imaging,has_environmental,completeness_score,access_status
+MASTER_asd001,SPARK_001,ASD,1,1,1,1,0,1,0.83,available
+MASTER_asd002,SPARK_002,ASD,1,0,1,1,0,0,0.5,available
+MASTER_adhd001,PGC_001,ADHD,1,1,0,1,1,1,0.83,available
+MASTER_adhd002,ABCD_001,ADHD,1,0,1,1,1,1,0.83,available
+MASTER_asd003,SSC_001,ASD,1,1,1,1,0,0,0.67,restricted
+MASTER_control001,UKB_001,Control,1,1,1,1,1,1,1.0,available
+MASTER_adhd003,iPSYCH_001,ADHD,1,0,0,1,0,1,0.5,pending
+MASTER_asd004,AGRE_001,ASD,1,1,0,1,0,1,0.67,available

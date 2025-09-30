@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuDHD Data Explorer - Master Sample Registry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .bar-chart {
+            margin-top: 20px;
+        }
+
+        .bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .bar-label {
+            width: 150px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .bar-value {
+            flex: 1;
+            height: 30px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 5px;
+            position: relative;
+            margin: 0 10px;
+        }
+
+        .bar-count {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .filter-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧬 AuDHD Data Explorer</h1>
+            <p>Master Sample Registry - Cross-Dataset Sample Tracking and Data Availability</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Samples</h3>
+                <div class="value">8</div>
+                <div class="label">Across all datasets</div>
+            </div>
+            <div class="stat-card">
+                <h3>ASD Samples</h3>
+                <div class="value">4</div>
+                <div class="label">50% of total</div>
+            </div>
+            <div class="stat-card">
+                <h3>ADHD Samples</h3>
+                <div class="value">3</div>
+                <div class="label">37.5% of total</div>
+            </div>
+            <div class="stat-card">
+                <h3>Avg Completeness</h3>
+                <div class="value">70%</div>
+                <div class="label">Mean data availability</div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Diagnosis</label>
+                <select id="diagnosis-filter">
+                    <option value="all">All Diagnoses</option>
+                    <option value="ASD">ASD</option>
+                    <option value="ADHD">ADHD</option>
+                    <option value="Control">Control</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Data Type</label>
+                <select id="datatype-filter">
+                    <option value="all">All Data Types</option>
+                    <option value="genomics">Genomics</option>
+                    <option value="metabolomics">Metabolomics</option>
+                    <option value="microbiome">Microbiome</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Completeness</label>
+                <select id="completeness-filter">
+                    <option value="all">All Samples</option>
+                    <option value="high">High (>80%)</option>
+                    <option value="medium">Medium (50-80%)</option>
+                    <option value="low">Low (<50%)</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button class="btn" onclick="applyFilters()">Apply Filters</button>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Data Availability by Type -->
+            <div class="card">
+                <h2>Data Availability by Type</h2>
+                <div class="bar-chart">
+                    <div class="bar">
+                        <div class="bar-label">Genomics</div>
+                        <div class="bar-value" style="width: 100%;">
+                            <span class="bar-count">8 samples</span>
+                        </div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-label">Clinical</div>
+                        <div class="bar-value" style="width: 100%;">
+                            <span class="bar-count">8 samples</span>
+                        </div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-label">Environmental</div>
+                        <div class="bar-value" style="width: 75%;">
+                            <span class="bar-count">6 samples</span>
+                        </div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-label">Metabolomics</div>
+                        <div class="bar-value" style="width: 62.5%;">
+                            <span class="bar-count">5 samples</span>
+                        </div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-label">Microbiome</div>
+                        <div class="bar-value" style="width: 62.5%;">
+                            <span class="bar-count">5 samples</span>
+                        </div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-label">Imaging</div>
+                        <div class="bar-value" style="width: 37.5%;">
+                            <span class="bar-count">3 samples</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi-omics Coverage -->
+            <div class="card">
+                <h2>Multi-omics Coverage</h2>
+                <div class="bar-chart">
+                    <div class="bar">
+                        <div class="bar-label">All 6 data types</div>
+                        <div class="bar-value" style="width: 12.5%;">
+                            <span class="bar-count">1</span>
+                        </div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-label">5 data types</div>
+                        <div class="bar-value" style="width: 37.5%;">
+                            <span class="bar-count">3</span>
+                        </div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-label">4 data types</div>
+                        <div class="bar-value" style="width: 25%;">
+                            <span class="bar-count">2</span>
+                        </div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-label">3 data types</div>
+                        <div class="bar-value" style="width: 25%;">
+                            <span class="bar-count">2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sample Table -->
+        <div class="card full-width">
+            <h2>Sample Registry</h2>
+            <div class="table-container">
+                <table id="sample-table">
+                    <thead>
+                        <tr>
+                            <th>Master ID</th>
+                            <th>Sample ID</th>
+                            <th>Diagnosis</th>
+                            <th>Genomics</th>
+                            <th>Metabolomics</th>
+                            <th>Microbiome</th>
+                            <th>Clinical</th>
+                            <th>Imaging</th>
+                            <th>Environmental</th>
+                            <th>Completeness</th>
+                            <th>Access</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MASTER_asd001</td>
+                            <td>SPARK_001</td>
+                            <td><span class="badge badge-info">ASD</span></td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 83%;"></div>
+                                </div>
+                                83%
+                            </td>
+                            <td><span class="badge badge-success">Available</span></td>
+                        </tr>
+                        <tr>
+                            <td>MASTER_asd002</td>
+                            <td>SPARK_002</td>
+                            <td><span class="badge badge-info">ASD</span></td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 50%;"></div>
+                                </div>
+                                50%
+                            </td>
+                            <td><span class="badge badge-success">Available</span></td>
+                        </tr>
+                        <tr>
+                            <td>MASTER_adhd001</td>
+                            <td>PGC_001</td>
+                            <td><span class="badge badge-info">ADHD</span></td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 83%;"></div>
+                                </div>
+                                83%
+                            </td>
+                            <td><span class="badge badge-success">Available</span></td>
+                        </tr>
+                        <tr>
+                            <td>MASTER_adhd002</td>
+                            <td>ABCD_001</td>
+                            <td><span class="badge badge-info">ADHD</span></td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 83%;"></div>
+                                </div>
+                                83%
+                            </td>
+                            <td><span class="badge badge-success">Available</span></td>
+                        </tr>
+                        <tr>
+                            <td>MASTER_asd003</td>
+                            <td>SSC_001</td>
+                            <td><span class="badge badge-info">ASD</span></td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 67%;"></div>
+                                </div>
+                                67%
+                            </td>
+                            <td><span class="badge badge-danger">Restricted</span></td>
+                        </tr>
+                        <tr>
+                            <td>MASTER_control001</td>
+                            <td>UKB_001</td>
+                            <td><span class="badge badge-success">Control</span></td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 100%;"></div>
+                                </div>
+                                100%
+                            </td>
+                            <td><span class="badge badge-success">Available</span></td>
+                        </tr>
+                        <tr>
+                            <td>MASTER_adhd003</td>
+                            <td>iPSYCH_001</td>
+                            <td><span class="badge badge-info">ADHD</span></td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 50%;"></div>
+                                </div>
+                                50%
+                            </td>
+                            <td><span class="badge badge-warning">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>MASTER_asd004</td>
+                            <td>AGRE_001</td>
+                            <td><span class="badge badge-info">ASD</span></td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 67%;"></div>
+                                </div>
+                                67%
+                            </td>
+                            <td><span class="badge badge-success">Available</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function applyFilters() {
+            const diagnosis = document.getElementById('diagnosis-filter').value;
+            const datatype = document.getElementById('datatype-filter').value;
+            const completeness = document.getElementById('completeness-filter').value;
+
+            alert('Filters applied! (Demo mode - filters would be applied to actual data)');
+            console.log('Filters:', { diagnosis, datatype, completeness });
+        }
+    </script>
+</body>
+</html>
