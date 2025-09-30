@@ -1,0 +1,6 @@
+site_id,site_name,latitude,longitude,lead_mgl,mercury_mgl,arsenic_mgl,manganese_mgl,nitrate_mgl,phosphorus_mgl,lead_exceeds_mcl,nitrate_exceeds_mcl,data_year,sample_count
+USGS-11074000,Santa Ana River at Riverside,33.9806,-117.3961,0.002,0.0001,0.003,0.08,3.2,0.15,False,False,2020,24
+USGS-11075650,San Gabriel River at Whittier,33.9786,-118.0328,0.003,0.0002,0.004,0.12,4.5,0.22,False,False,2020,18
+USGS-11101250,LA River at Sepulveda,34.1689,-118.4689,0.001,0.0001,0.002,0.06,2.8,0.12,False,False,2020,36
+USGS-11103010,LA River at Downey,33.9403,-118.1331,0.002,0.0001,0.003,0.09,3.9,0.18,False,False,2020,24
+USGS-11108500,Arroyo Seco at Pasadena,34.1478,-118.1731,0.001,0.0001,0.002,0.05,2.1,0.09,False,False,2020,12

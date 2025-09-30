@@ -1,0 +1,6 @@
+census_tract,county,state,latitude,longitude,pm25_ugm3,pm10_ugm3,ozone_ppm,no2_ppm,benzene_ugm3,toluene_ugm3,lead_ngm3,aqi_days_unhealthy,pm25_exceeds_standard,data_year,nearest_monitor_km
+06037001101,Los Angeles,CA,34.0522,-118.2437,12.3,28.4,0.065,0.018,0.52,2.1,8.2,12,False,2020,1.2
+06037001102,Los Angeles,CA,34.0534,-118.2445,11.8,27.1,0.063,0.017,0.48,1.9,7.5,8,False,2020,1.5
+06037001201,Los Angeles,CA,34.0478,-118.2398,13.5,30.2,0.068,0.02,0.58,2.4,9.1,15,True,2020,0.8
+06037002301,Los Angeles,CA,34.0601,-118.2512,10.9,25.8,0.061,0.015,0.41,1.7,6.8,5,False,2020,2.1
+06037002302,Los Angeles,CA,34.0589,-118.2489,11.2,26.5,0.062,0.016,0.45,1.8,7.2,7,False,2020,1.9

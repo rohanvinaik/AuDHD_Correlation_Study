@@ -1,0 +1,124 @@
+{
+  "generated_date": "2025-09-30",
+  "description": "Environmental exposure matrices for geospatial linkage to ADHD/autism research",
+  "matrices": {
+    "air_quality_exposure_matrix": {
+      "level": "census_tract",
+      "pollutants": [
+        "PM2.5",
+        "PM10",
+        "Ozone",
+        "NO2",
+        "Benzene",
+        "Toluene",
+        "Lead"
+      ],
+      "metrics": [
+        "Annual means",
+        "AQI exceedance days",
+        "Standard exceedances"
+      ],
+      "source": "EPA Air Quality System (AQS)",
+      "year": 2020
+    },
+    "water_quality_exposure_matrix": {
+      "level": "monitoring_site",
+      "contaminants": [
+        "Lead",
+        "Mercury",
+        "Arsenic",
+        "Manganese",
+        "Nitrate",
+        "Phosphorus"
+      ],
+      "metrics": [
+        "Annual means",
+        "MCL exceedances"
+      ],
+      "source": "USGS National Water Information System (NWIS)",
+      "year": 2020
+    },
+    "tri_facilities_exposure_matrix": {
+      "level": "facility",
+      "chemicals": [
+        "Lead",
+        "Mercury",
+        "Benzene",
+        "Toluene"
+      ],
+      "metrics": [
+        "Air releases (lbs/year)",
+        "Total releases",
+        "Distance to residential"
+      ],
+      "source": "EPA Toxics Release Inventory (TRI)",
+      "year": 2020
+    },
+    "exposure_matrices": {
+      "level": "census_tract",
+      "integrated_data": [
+        "Air quality",
+        "Water quality",
+        "TRI proximity",
+        "Traffic",
+        "Socioeconomic"
+      ],
+      "metrics": [
+        "Pollutant concentrations",
+        "Facility counts/proximity",
+        "Environmental justice indicators"
+      ],
+      "sources": [
+        "EPA AQS",
+        "USGS NWIS",
+        "EPA TRI",
+        "Census ACS",
+        "EPA EJSCREEN"
+      ],
+      "year": 2020
+    }
+  },
+  "usage": {
+    "linkage_key": "census_tract_geoid",
+    "coordinate_matching": "Use latitude/longitude for proximity-based linkage",
+    "privacy_note": "Coordinates can be fuzzed for participant privacy",
+    "integration": "Join participant data to exposure matrices using census tract or nearest site"
+  },
+  "data_sources": {
+    "EPA_AQS": "https://aqs.epa.gov/api",
+    "EPA_TRI": "https://www.epa.gov/toxics-release-inventory-tri-program",
+    "EPA_EJSCREEN": "https://www.epa.gov/ejscreen",
+    "USGS_NWIS": "https://waterdata.usgs.gov/nwis",
+    "Census_ACS": "https://www.census.gov/programs-surveys/acs",
+    "Census_Geocoder": "https://geocoding.geo.census.gov/geocoder"
+  },
+  "neurotoxic_pollutants_monitored": {
+    "air": [
+      "PM2.5",
+      "PM10",
+      "Ozone",
+      "NO2",
+      "Benzene",
+      "Toluene",
+      "Lead",
+      "Mercury",
+      "Manganese"
+    ],
+    "water": [
+      "Lead",
+      "Mercury",
+      "Arsenic",
+      "Manganese",
+      "Nitrate",
+      "Pesticides"
+    ],
+    "industrial": [
+      "Lead",
+      "Mercury",
+      "Benzene",
+      "Toluene",
+      "Formaldehyde",
+      "PCBs"
+    ]
+  }
+}
