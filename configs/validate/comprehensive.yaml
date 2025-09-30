@@ -1,0 +1,111 @@
+# Validation configuration
+
+# Internal validation
+internal:
+  enabled: true
+  metrics:
+    - silhouette
+    - davies_bouldin
+    - calinski_harabasz
+  bootstrap:
+    enabled: true
+    n_iterations: 100
+
+# External validation
+external:
+  enabled: true
+  holdout_datasets:
+    - ABCD
+    - UKB_validation
+  leave_site_out: true
+  cross_ancestry: true
+
+# Biological validation
+biological:
+  enabled: true
+  test_hypotheses:
+    metabolites:
+      - serotonin
+      - dopamine
+      - GABA
+      - kynurenine
+    genetic_burden:
+      - rare_variant_burden
+      - CNV_burden
+    clinical_severity:
+      - total_severity_score
+  pathway_enrichment:
+    enabled: true
+    databases:
+      - KEGG_2021_Human
+      - GO_Biological_Process_2021
+      - WikiPathway_2021_Human
+      - Reactome_2022
+
+# Clinical validation
+clinical:
+  enabled: true
+  outcomes:
+    - medication_response
+    - comorbidity_risk
+    - treatment_trajectory
+    - school_outcomes
+    - quality_of_life
+  prediction:
+    enabled: true
+    models:
+      - random_forest
+      - logistic_regression
+    cv_folds: 5
+
+# Sensitivity analyses
+sensitivity:
+  enabled: true
+  analyses:
+    # Medication effects
+    medication_washout:
+      enabled: true
+      paired_contrasts: true
+    # Fasting effects
+    fasting_stratified:
+      enabled: true
+    # Circadian effects
+    time_of_day:
+      enabled: true
+    # MNAR missingness
+    mnar_sensitivity:
+      enabled: true
+      method: pattern_mixture
+    # E-value for unmeasured confounding
+    e_value:
+      enabled: true
+    # Within-family designs
+    within_family:
+      enabled: true
+
+# Robustness checks
+robustness:
+  # Ancestry stratification
+  ancestry_stratified: true
+  # Sex stratification
+  sex_stratified: true
+  # Age stratification
+  age_groups:
+    - early_childhood  # 2-6
+    - middle_childhood  # 7-12
+    - adolescence  # 13-18
+
+# Replication criteria
+replication:
+  min_correlation: 0.6  # Feature correlation across cohorts
+  min_overlap: 0.7  # Sample overlap in cluster assignment
+
+# Prospective validation
+prospective:
+  enabled: false  # Requires longitudinal data
+  baseline_to_followup:
+    min_months: 12
+    outcomes:
+      - clinical_improvement
+      - medication_response
+      - comorbidity_emergence

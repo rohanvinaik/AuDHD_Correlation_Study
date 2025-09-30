@@ -1,0 +1,56 @@
+# Multi-omics integration configuration
+
+method: mofa2  # mofa2, weighted_stack, diablo, vae
+
+# MOFA2 settings
+mofa2:
+  n_factors: 50
+  convergence_mode: fast
+  scale_views: true
+  scale_groups: false
+  ard_factors: true
+  ard_weights: true
+  spikeslab_weights: false
+
+# Weighted stack settings (fallback)
+weighted_stack:
+  weights:
+    genetics: 0.25
+    metabolomics: 0.35  # Highest - most proximal to phenotype
+    clinical: 0.25
+    microbiome: 0.15
+  normalization: per_modality
+
+# DIABLO settings
+diablo:
+  n_components: 10
+  design_matrix: full  # full, null, custom
+
+# VAE settings (advanced)
+vae:
+  latent_dim: 50
+  hidden_dims: [256, 128, 64]
+  dropout: 0.1
+  learning_rate: 0.001
+  n_epochs: 100
+  batch_size: 128
+  domain_adversarial: true  # Site removal
+
+# Integration strategy
+strategy:
+  # Split data by family and site for validation
+  split_by:
+    - family_id
+    - site
+  test_size: 0.2
+  validation_size: 0.1
+
+  # Prevent data leakage
+  leakage_control:
+    freeze_preprocessing: true
+    nested_cv: true
+
+# Output
+save_factors: true
+save_weights: true
+save_embeddings: true

@@ -1,0 +1,80 @@
+# Preprocessing configuration
+
+# Quality control thresholds
+qc:
+  genetics:
+    call_rate: 0.95
+    hardy_weinberg_pvalue: 1e-6
+    maf_threshold: 0.01
+  metabolomics:
+    cv_threshold: 0.3
+    missing_threshold: 0.5
+  clinical:
+    missing_threshold: 0.3
+
+# Missingness handling
+imputation:
+  method: mice_delta  # mice_delta, knn, iterative
+  mice:
+    n_imputations: 5
+    max_iter: 10
+    delta_adjustment: true  # For MNAR sensitivity
+  knn:
+    n_neighbors: 10
+  add_indicator: true  # Add missingness indicators
+
+# Batch/site correction
+batch_correction:
+  enabled: true
+  method: combat  # combat, ruv, limma
+  covariates:
+    - site
+    - batch
+    - platform
+  preserve_biology: true
+  parametric: true
+
+# Context covariate adjustment
+covariate_adjustment:
+  enabled: true
+  method: lmm  # lmm (linear mixed model), residuals
+  fixed_effects:
+    - age
+    - sex
+    - BMI
+    - fasting
+    - time_of_day
+    - recent_illness
+    - last_medication_dose
+  random_effects:
+    - site
+    - family_id
+
+# Scaling strategies
+scaling:
+  genetics:
+    method: standard  # standard, robust, minmax
+  metabolomics:
+    method: robust  # robust handles outliers better
+  clinical:
+    method: standard
+  microbiome:
+    method: clr  # centered log-ratio for compositional data
+
+# Outlier handling
+outliers:
+  method: robust_mahalanobis
+  threshold: 3.0
+  action: winsorize  # winsorize, remove, flag
+
+# Ancestry control
+ancestry:
+  compute_pcs: true
+  n_pcs: 10
+  within_ancestry_only: true  # Stratify by ancestry for discovery
+
+# Feature selection (optional)
+feature_selection:
+  enabled: false
+  method: variance_threshold
+  threshold: 0.01

@@ -1,0 +1,127 @@
+# Causal inference configuration
+
+# DAG specification
+dag:
+  enabled: true
+  structure: |
+    prenatal -> neonatal
+    prenatal -> biology
+    neonatal -> biology
+    biology -> phenotype
+    genetics -> biology
+    genetics -> phenotype
+    medications -> biology [time_varying]
+  adjustment_sets:
+    prenatal: [maternal_age, SES, ancestry_PCs]
+    neonatal: [prenatal, delivery_mode, NICU_stay]
+    biology: [prenatal, neonatal, age, sex, site]
+
+# Mendelian randomization
+mendelian_randomization:
+  enabled: true
+  instruments:
+    # PRS as instruments for exposures
+    - exposure: BMI
+      instrument: PRS_BMI
+      outcome: metabolic_cluster
+    - exposure: inflammation_CRP
+      instrument: PRS_inflammation
+      outcome: immune_cluster
+    - exposure: sleep_duration
+      instrument: PRS_sleep
+      outcome: neurotransmitter_cluster
+  method: two_stage_least_squares
+  sensitivity:
+    - pleiotropy_test
+    - weak_instrument_test
+
+# Mediation analysis
+mediation:
+  enabled: true
+  pathways:
+    # Genetics -> metabolites -> symptoms
+    - predictor: rare_variants
+      mediators:
+        - serotonin
+        - dopamine
+        - kynurenine
+      outcome: symptom_severity
+    # Genetics -> microbiome -> metabolites -> symptoms
+    - predictor: genetics
+      mediators:
+        - microbiome_diversity
+        - SCFA_levels
+        - p_cresol
+      outcome: GI_symptoms
+  method: baron_kenny  # baron_kenny, structural_equation
+  bootstrap_ci: true
+  n_bootstrap: 1000
+
+# Gene-environment interactions
+gxe:
+  enabled: true
+  method: causal_forest  # causal_forest, double_ml
+  genetics:
+    - rare_variants
+    - PRS_autism
+    - PRS_ADHD
+  environments:
+    prenatal:
+      - maternal_SSRI
+      - maternal_infection
+      - prenatal_stress
+      - toxin_exposure
+    perinatal:
+      - delivery_mode
+      - antibiotics_neonatal
+      - NICU_stay
+    postnatal:
+      - early_life_stress
+      - diet_quality
+      - antibiotic_courses
+  outcomes:
+    - cluster_membership
+    - symptom_severity
+    - comorbidity_risk
+  heterogeneity_analysis: true
+
+# Treatment effect estimation
+treatment_effects:
+  enabled: false  # Requires intervention data
+  treatments:
+    - stimulants
+    - SSRIs
+    - behavioral_therapy
+  outcomes:
+    - symptom_improvement
+    - side_effects
+    - quality_of_life
+  methods:
+    - propensity_score_matching
+    - inverse_probability_weighting
+    - doubly_robust
+
+# Confounding control
+confounding:
+  essential_covariates:
+    - age
+    - sex
+    - pubertal_stage
+    - ancestry_PCs
+    - site
+    - SES
+    - fasting
+    - time_of_day
+    - BMI
+    - sleep_duration
+    - recent_infection
+    - antibiotic_use
+    - last_medication_dose
+    - sample_storage_time
+  negative_controls:
+    enabled: true
+    # Metabolites not plausibly linked
+    # Outcomes temporally prior to exposure
+  unmeasured_confounding:
+    e_value: true
+    sensitivity_analysis: true

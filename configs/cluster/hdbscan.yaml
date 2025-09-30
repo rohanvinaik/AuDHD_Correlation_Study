@@ -1,0 +1,71 @@
+# Clustering configuration
+
+# Primary clustering method
+method: hdbscan  # hdbscan, lca, consensus
+
+# HDBSCAN settings
+hdbscan:
+  min_cluster_size: 50
+  min_samples: 10
+  metric: euclidean
+  cluster_selection_method: eom  # eom, leaf
+  allow_single_cluster: false
+
+# Latent class analysis
+lca:
+  n_components: 10
+  weight_concentration_prior_type: dirichlet_process
+  covariance_type: full
+
+# Consensus clustering
+consensus:
+  enabled: true
+  n_embeddings: 10  # Number of different embeddings to try
+  agreement_threshold: 0.7
+  final_method: spectral
+
+# Hierarchical clustering
+hierarchical:
+  enabled: true
+  # First level: main clusters
+  # Second level: subclusters within main
+  subcluster:
+    min_cluster_size: 20
+    min_samples: 5
+
+# Dimensionality reduction for clustering
+embedding:
+  methods:
+    - umap
+    - tsne
+  umap:
+    n_neighbors: [15, 30, 50]
+    min_dist: [0.1, 0.25, 0.5]
+    n_components: 2
+    metric: euclidean
+  tsne:
+    perplexity: [10, 30, 50, 100]
+    n_components: 2
+    n_iter: 2000
+    init: pca
+
+# Topology analysis
+topology:
+  enabled: true
+  # Topological data analysis
+  persistence:
+    enabled: true
+    max_dimension: 2
+  # Minimum spanning tree
+  mst:
+    enabled: true
+  # Spectral gaps
+  spectral_gaps:
+    enabled: true
+    n_eigenvalues: 10
+
+# Stopping criteria
+stopping_criteria:
+  min_gap_score: 1.5  # Gap score threshold
+  min_stability: 0.7  # Bootstrap stability threshold
+  min_silhouette: 0.3  # Silhouette score threshold

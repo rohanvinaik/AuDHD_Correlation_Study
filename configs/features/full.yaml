@@ -1,0 +1,170 @@
+# Full feature set configuration
+
+# Genetic features (~2000 dimensions)
+genetics:
+  enabled: true
+  neurotransmitter_genes:
+    - TPH1, TPH2  # Serotonin
+    - TH, DDC  # Dopamine
+    - GAD1, GAD2  # GABA
+    - COMT, MAOA, MAOB  # Catabolism
+    - SLC6A4, SLC6A3, SLC6A1  # Transporters
+  receptor_genes:
+    - DRD1-5
+    - HTR1A-7
+    - GABRA1-6, GABRB1-3
+  autism_risk_genes:
+    sfari_gene_score: [1, 2, 3]  # High confidence genes
+  prs:
+    - autism
+    - ADHD
+    - depression
+    - schizophrenia
+    - educational_attainment
+    - BMI
+    - smoking
+    - inflammation_CRP
+    - sleep
+  structural_variants:
+    - CNV_burden
+    - SV_burden
+    - repeat_expansions
+  rare_variants:
+    - LoF_burden
+    - missense_burden
+    - de_novo_variants
+  mitochondrial:
+    - mtDNA_CN
+    - OXPHOS_gene_sets
+  epigenetic:
+    - HLA_types
+    - imprinted_loci
+
+# Metabolomic features (~300 dimensions)
+metabolomics:
+  enabled: true
+  neurotransmitters:
+    - serotonin, 5-HIAA, melatonin
+    - dopamine, DOPAC, HVA, 3-MT
+    - norepinephrine, epinephrine, MHPG
+    - GABA, glutamate, glutamine
+  precursors:
+    - tryptophan, tyrosine, phenylalanine
+  kynurenine_pathway:
+    - kynurenine, kynurenic_acid, quinolinic_acid
+    - 3-hydroxykynurenine, xanthurenic_acid
+  energy_metabolism:
+    - lactate, pyruvate, citrate, succinate
+    - alpha-ketoglutarate, malate
+  oxidative_stress:
+    - glutathione, GSSG, 8-OHdG, MDA
+  fatty_acids:
+    - omega3_omega6_ratio, DHA, EPA, AA
+  gut_metabolites:
+    - SCFA_acetate, SCFA_butyrate, SCFA_propionate
+    - indoles, p_cresol, hippurate
+  inflammatory_markers:
+    - IL1b, IL6, IL10, IFNg, TNFalpha
+    - CRP, neopterin, hs_CRP, IgE
+  acyl_carnitines:
+    - C0, C2, C3, C4, C5, C8, C14, C16, C18
+  bile_acids:
+    - CA, CDCA, DCA, LCA, UDCA
+    - taurine_conjugated, glycine_conjugated
+  steroids:
+    - cortisol, cortisone, DHEA_S
+    - testosterone, estradiol
+  polyamines:
+    - putrescine, spermidine, spermine
+  purines:
+    - adenosine, inosine, uric_acid, hypoxanthine
+  urea_cycle:
+    - ornithine, citrulline, arginine, urea, ammonia
+  micrometabolites:
+    - TMAO, indoxyl_sulfate, p_cresyl_sulfate
+  endocrine:
+    - TSH, FT4, insulin, HOMA_IR
+    - leptin, adiponectin
+
+# Clinical features (~100 dimensions)
+clinical:
+  enabled: true
+  core_instruments:
+    - ADOS_score, ADI_R_scores, SRS_score
+    - ADHD_RS_inattentive, ADHD_RS_hyperactive
+    - Conners_scores, CBCL_scores, RBS_R
+    - SP2_total, SPM, Vineland, BRIEF_2
+    - PSQI, GAD_7, PHQ_9, CGI_S, CGI_I, EQ_5D
+  cognitive:
+    - IQ_full, IQ_verbal, IQ_nonverbal
+    - working_memory, processing_speed
+  comorbidities:
+    - tics, Tourette, OCD
+    - dyslexia, dyscalculia
+    - migraine, epilepsy_subtype
+    - hypermobile_spectrum, POTS, MCAS
+    - IBS_C, IBS_D, IBS_M
+    - functional_constipation, GERD, enuresis
+    - anxiety, depression, sleep_disorder
+  developmental:
+    - age_first_words, age_walking
+    - regression_specifics
+    - pubertal_stage_Tanner
+  family_history:
+    - ADHD_family, autism_family
+    - mood_disorder_family, psychosis_family
+    - epilepsy_family, autoimmune_family
+    - EDS_family, POTS_family
+    - thyroid_family, metabolic_family
+  outcomes:
+    - school_attendance, school_suspension
+    - grades, service_utilization
+    - quality_of_life
+  demographics:
+    - age, sex, BMI, ethnicity
+
+# Context variables (covariates)
+context:
+  enabled: true
+  variables:
+    - fasting
+    - collection_clock_time
+    - storage_days
+    - fever_72h
+    - menstrual_phase
+    - recent_illness
+    - antibiotics_30d
+    - last_medication_dose
+    - pubertal_stage
+
+# Microbiome features
+microbiome:
+  enabled: false  # Optional if available
+  diversity:
+    - alpha_diversity, beta_diversity, enterotypes
+  taxa_levels:
+    - phylum, genus, species
+  functional:
+    - SCFA_production
+    - indole_production
+    - p_cresol_production
+    - TMAO_production
+
+# Neuroimaging/EEG features
+neuro:
+  enabled: false  # Optional if available
+  EEG:
+    - delta_power, theta_power, alpha_power
+    - beta_power, gamma_power
+    - aperiodic_1f_slope
+    - alpha_peak_frequency
+  MRI_structural:
+    - total_brain_volume
+    - gray_matter_volume
+    - white_matter_volume
+    - cerebellar_volume
+  MRI_diffusion:
+    - FA, MD, RD, AD
+  MRI_functional:
+    - thalamocortical_connectivity
+    - DMN_connectivity

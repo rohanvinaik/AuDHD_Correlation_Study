@@ -1,0 +1,113 @@
+# Report generation configuration
+
+# Report types
+types:
+  - executive_summary
+  - technical_report
+  - clinician_card
+
+# Executive summary
+executive_summary:
+  enabled: true
+  sections:
+    - overview
+    - key_findings
+    - cluster_descriptions
+    - validation_metrics
+    - clinical_implications
+  format: markdown  # markdown, html, pdf
+
+# Technical report
+technical_report:
+  enabled: true
+  sections:
+    - methods
+    - confounding_analysis
+    - dag_diagrams
+    - sensitivity_analyses
+    - pathway_enrichment
+    - supplementary_figures
+  format: markdown
+  include_code: false
+
+# Clinician card (per subtype)
+clinician_card:
+  enabled: true
+  sections:
+    - subtype_description
+    - n_samples
+    - key_features
+    - metabolite_profile
+    - genetic_enrichment
+    - clinical_characteristics
+    - care_map
+    - risk_stratification
+    - monitoring_recommendations
+  format: markdown
+
+# Clinical decision support
+decision_support:
+  first_line_medications:
+    enabled: true
+  lab_recommendations:
+    enabled: true
+  referral_pathways:
+    enabled: true
+  comorbidity_risk:
+    enabled: true
+
+# Content sections
+content:
+  cluster_profiles:
+    include_n: true
+    include_demographics: true
+    include_effect_sizes: true
+    n_top_features: 10
+  biological_pathways:
+    include_enrichment: true
+    pvalue_threshold: 0.05
+    fdr_correction: true
+  validation_metrics:
+    include_internal: true
+    include_external: true
+    include_stability: true
+    include_clinical_utility: true
+  confounding:
+    include_dag: true
+    include_adjustment_sets: true
+    include_e_values: true
+    include_sensitivity: true
+
+# Tables
+tables:
+  demographics:
+    by_cluster: true
+    include_smd: true  # Standardized mean differences
+  clinical_decision_support:
+    include_medications: true
+    include_labs: true
+    include_referrals: true
+  risk_stratification:
+    include_comorbidities: true
+    include_monitoring: true
+
+# Figures
+figures:
+  embedding_plots: true
+  heatmaps: true
+  pathway_networks: true
+  persistence_diagrams: true
+  clinical_outcomes: true
+
+# Output
+output:
+  dir: reports/
+  filename_template: "{experiment_name}_{run_name}_{report_type}"
+  bundle:
+    enabled: true
+    format: zip  # zip, tar.gz
+    include:
+      - reports
+      - figures
+      - tables
+      - code  # Reproducibility bundle

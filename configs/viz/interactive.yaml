@@ -1,0 +1,88 @@
+# Visualization configuration
+
+# Interactive plots
+interactive:
+  enabled: true
+  library: plotly  # plotly, bokeh
+
+# Embedding plots
+embedding:
+  overlays:
+    - cluster
+    - diagnosis
+    - serotonin_level
+    - dopamine_level
+    - genetic_burden
+    - GI_issues
+    - medication_response
+    - comorbidities
+  tooltips:
+    - sample_id
+    - diagnosis
+    - age
+    - sex
+    - cluster
+    - key_features
+  default_overlay: cluster
+  point_size: 5
+  colorscale: Viridis
+
+# Heatmaps
+heatmaps:
+  cluster_features:
+    enabled: true
+    n_top_features: 20
+    colorscale: RdBu_r
+    center: 0  # For effect sizes
+  correlation_matrix:
+    enabled: true
+    method: spearman
+
+# Network plots
+networks:
+  metabolic:
+    enabled: true
+    layout: force_directed
+  pathway:
+    enabled: true
+    databases:
+      - KEGG
+      - Reactome
+
+# Time series / trajectories
+trajectories:
+  enabled: false  # Requires longitudinal data
+  plot_type: alluvial  # alluvial, sankey
+
+# Clinical decision support visualizations
+clinical:
+  care_maps:
+    enabled: true
+    format: table  # table, flowchart
+  risk_stratification:
+    enabled: true
+    format: radar  # radar, bar
+
+# Topology visualizations
+topology:
+  persistence_diagrams:
+    enabled: true
+  mst_graph:
+    enabled: true
+
+# Output formats
+output:
+  formats:
+    - html
+    - png
+    - svg
+  dpi: 300
+  width: 1200
+  height: 800
+
+# Styling
+theme:
+  font_family: Arial
+  font_size: 12
+  title_size: 16
+  colorblind_safe: true

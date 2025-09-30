@@ -1,0 +1,36 @@
+# SPARK dataset configuration
+name: SPARK
+source: sfari
+url: https://base.sfari.org
+
+# Data use agreement
+dua_required: true
+dua_env_var: SPARK_DUA_SIGNED
+
+# Authentication
+token_env_var: SPARK_API_TOKEN
+
+# Sample filters
+filters:
+  diagnosis:
+    - autism
+    - ADHD
+    - AuDHD
+  min_age: 2
+  max_age: 18
+
+# Available data types
+data_types:
+  - WGS
+  - WES
+  - phenotypes
+  - metabolomics_subset
+
+# Expected sample size
+n_samples: 50000
+
+# Data paths (relative to raw_data_dir)
+paths:
+  genetics: spark/genetics/
+  phenotypes: spark/phenotypes/
+  metabolomics: spark/metabolomics/

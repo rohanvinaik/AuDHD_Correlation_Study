@@ -1,0 +1,152 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "audhd-correlation-study"
+version = "0.1.0"
+description = "Multi-omics integration pipeline for ADHD/Autism subtyping"
+authors = [
+    {name = "Rohan Vinaik", email = "your.email@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+keywords = ["neuroscience", "multi-omics", "ADHD", "autism", "clustering"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "scipy>=1.10.0",
+    "scikit-learn>=1.3.0",
+    "statsmodels>=0.14.0",
+    "pyarrow>=12.0.0",
+    "fastparquet>=2023.4.0",
+    "h5py>=3.8.0",
+    "zarr>=2.14.0",
+    # Dimensionality reduction & clustering
+    "umap-learn>=0.5.3",
+    "hdbscan>=0.8.29",
+    "scanpy>=1.9.0",
+    "anndata>=0.9.0",
+    # Visualization
+    "plotly>=5.14.0",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    # Multi-omics integration
+    "mofapy2>=0.7.0",
+    # Statistics
+    "pingouin>=0.5.3",
+    # Topological data analysis
+    "ripser>=0.6.4",
+    "persim>=0.3.1",
+    # Explainability
+    "shap>=0.42.0",
+    # Batch correction
+    "combat>=0.3.3",
+    # Causal inference
+    "dowhy>=0.10.0",
+    "econml>=0.14.0",
+    # Configuration
+    "hydra-core>=1.3.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    # CLI
+    "typer[all]>=0.9.0",
+    "rich>=13.3.0",
+    # Logging
+    "structlog>=23.1.0",
+    "python-dotenv>=1.0.0",
+    # Utils
+    "tqdm>=4.65.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.3.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.10.0",
+    "black>=23.3.0",
+    "ruff>=0.0.270",
+    "mypy>=1.3.0",
+    "pre-commit>=3.3.0",
+]
+notebooks = [
+    "jupyter>=1.0.0",
+    "ipykernel>=6.23.0",
+    "ipywidgets>=8.0.0",
+]
+docs = [
+    "mkdocs>=1.4.0",
+    "mkdocs-material>=9.1.0",
+    "mkdocstrings[python]>=0.22.0",
+]
+
+[project.scripts]
+audhd = "audhd_correlation.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/rohanvinaik/AuDHD_Correlation_Study"
+Repository = "https://github.com/rohanvinaik/AuDHD_Correlation_Study"
+Documentation = "https://github.com/rohanvinaik/AuDHD_Correlation_Study/blob/main/README.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311']
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = [
+    "sklearn.*",
+    "umap.*",
+    "hdbscan.*",
+    "scanpy.*",
+    "mofapy2.*",
+    "ripser.*",
+    "persim.*",
+    "combat.*",
+    "dowhy.*",
+    "econml.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--cov=src/audhd_correlation --cov-report=html --cov-report=term-missing"

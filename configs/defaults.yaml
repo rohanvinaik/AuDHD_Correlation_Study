@@ -1,0 +1,40 @@
+# Master configuration - compose all sub-configs
+defaults:
+  - data: spark
+  - features: full
+  - preprocess: standard
+  - integrate: mofa2
+  - cluster: hdbscan
+  - validate: comprehensive
+  - causal: full
+  - viz: interactive
+  - report: clinical
+
+# Global settings
+seed: 42
+n_jobs: 4
+verbose: true
+
+# Paths
+data_root: data/
+raw_data_dir: ${data_root}/raw
+interim_data_dir: ${data_root}/interim
+processed_data_dir: ${data_root}/processed
+external_data_dir: ${data_root}/external
+output_dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+
+# Logging
+log_level: INFO
+log_file: ${output_dir}/pipeline.log
+
+# Experiment tracking
+experiment_name: audhd_subtyping
+run_name: ${now:%Y%m%d_%H%M%S}
+
+# Hydra settings
+hydra:
+  run:
+    dir: ${output_dir}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
