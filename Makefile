@@ -45,18 +45,24 @@ docker-build:
 docker-run:
 	docker run -it --rm -v $(PWD)/data:/workspace/data audhd-correlation:latest
 
-# Pipeline commands
+# Pipeline commands (using CLI)
 download-data:
-	python scripts/download_data.py
+	audhd-omics download
 
-run-pipeline:
-	python scripts/run_pipeline.py
+build-features:
+	audhd-omics build-features
+
+integrate:
+	audhd-omics integrate
 
 cluster:
-	python scripts/cluster.py
+	audhd-omics cluster
 
 validate:
-	python scripts/validate.py
+	audhd-omics validate
 
 report:
-	python scripts/make_report.py
+	audhd-omics report
+
+run-pipeline:
+	audhd-omics pipeline

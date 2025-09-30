@@ -35,14 +35,21 @@ make install
 
 ```bash
 # Run full pipeline
-audhd pipeline --config configs/defaults.yaml
+audhd-omics pipeline configs/defaults.yaml
+
+# Run full pipeline with specific steps
+audhd-omics pipeline configs/defaults.yaml --steps download,build_features,integrate
 
 # Or run individual steps
-audhd preprocess --config configs/defaults.yaml
-audhd integrate --method mofa2
-audhd cluster --method hdbscan
-audhd validate
-audhd report --report-type clinical
+audhd-omics download configs/defaults.yaml
+audhd-omics build-features configs/defaults.yaml
+audhd-omics integrate configs/defaults.yaml
+audhd-omics cluster configs/defaults.yaml
+audhd-omics validate configs/defaults.yaml
+audhd-omics report configs/defaults.yaml
+
+# With custom config
+audhd-omics cluster configs/my_custom_config.yaml
 ```
 
 ### Docker
@@ -148,9 +155,14 @@ seed: 42
 n_jobs: 4
 ```
 
-Override via command line:
+Override via Hydra config composition:
 ```bash
-audhd pipeline data=ukb integrate.method=diablo cluster.hdbscan.min_cluster_size=100
+# Use different config files
+audhd-omics pipeline configs/defaults.yaml
+
+# Create custom config that overrides specific values
+# configs/my_config.yaml can override defaults
+audhd-omics pipeline configs/my_config.yaml
 ```
 
 ## Development

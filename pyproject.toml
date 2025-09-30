@@ -90,7 +90,7 @@ docs = [
 ]
 
 [project.scripts]
-audhd = "audhd_correlation.cli:app"
+audhd-omics = "audhd_correlation.cli:app"
 
 [project.urls]
 Homepage = "https://github.com/rohanvinaik/AuDHD_Correlation_Study"
