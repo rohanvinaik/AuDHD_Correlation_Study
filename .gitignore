@@ -64,6 +64,8 @@ data/raw/*
 data/interim/*
 data/processed/*
 data/papers/*
+data/genetic_analysis/  # Genetic analysis cache and results
+data/biobanks/  # Biobank discovery results
 !data/raw/.gitkeep
 !data/interim/.gitkeep
 !data/processed/.gitkeep
