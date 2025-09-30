@@ -1,0 +1,697 @@
+{
+  "description": "ABCD Study phenotype mapping for ADHD/Autism research",
+  "version": "ABCD Release 5.0",
+  "last_updated": "2025-01-30",
+
+  "clinical_assessments": {
+    "cbcl": {
+      "package_id": "abcd_cbcls01",
+      "name": "Child Behavior Checklist",
+      "age_range": "6-18 years",
+      "respondent": "Parent",
+      "adhd_relevant_scales": {
+        "attention_problems": {
+          "variable": "cbcl_scr_syn_attention_r",
+          "description": "Attention Problems T-score",
+          "threshold": 65,
+          "clinical_cutoff": ">=65 indicates clinical concern"
+        },
+        "dsm5_adhd": {
+          "variable": "cbcl_scr_dsm5_adhd_r",
+          "description": "DSM-5 ADHD Problems T-score",
+          "threshold": 65,
+          "clinical_cutoff": ">=65 indicates clinical concern"
+        }
+      },
+      "autism_relevant_scales": {
+        "social_problems": {
+          "variable": "cbcl_scr_syn_social_r",
+          "description": "Social Problems T-score",
+          "threshold": 65,
+          "clinical_cutoff": ">=65 indicates clinical concern"
+        },
+        "withdrawn_depressed": {
+          "variable": "cbcl_scr_syn_withdep_r",
+          "description": "Withdrawn/Depressed T-score",
+          "threshold": 65,
+          "clinical_cutoff": ">=65 indicates clinical concern"
+        }
+      },
+      "summary_scales": {
+        "internalizing": {
+          "variable": "cbcl_scr_syn_internal_r",
+          "description": "Internalizing Problems T-score"
+        },
+        "externalizing": {
+          "variable": "cbcl_scr_syn_external_r",
+          "description": "Externalizing Problems T-score"
+        },
+        "total_problems": {
+          "variable": "cbcl_scr_syn_totprob_r",
+          "description": "Total Problems T-score"
+        }
+      }
+    },
+
+    "ksads": {
+      "package_id": "abcd_ksad01",
+      "name": "Kiddie Schedule for Affective Disorders (KSADS-5)",
+      "age_range": "6-18 years",
+      "respondent": "Parent interview",
+      "adhd_diagnosis": {
+        "inattentive": {
+          "variable": "ksads_adhd_raw_26_p",
+          "description": "ADHD Predominantly Inattentive",
+          "values": {
+            "0": "No diagnosis",
+            "1": "Present"
+          }
+        },
+        "hyperactive_impulsive": {
+          "variable": "ksads_adhd_raw_27_p",
+          "description": "ADHD Predominantly Hyperactive-Impulsive",
+          "values": {
+            "0": "No diagnosis",
+            "1": "Present"
+          }
+        },
+        "combined": {
+          "variable": "ksads_adhd_raw_28_p",
+          "description": "ADHD Combined Type",
+          "values": {
+            "0": "No diagnosis",
+            "1": "Present"
+          }
+        },
+        "present": {
+          "variable": "ksads_14_853_p",
+          "description": "ADHD present (any type)"
+        },
+        "past": {
+          "variable": "ksads_14_854_p",
+          "description": "ADHD past diagnosis"
+        }
+      },
+      "asd_diagnosis": {
+        "present": {
+          "variable": "ksads_23_946_p",
+          "description": "Autism Spectrum Disorder present",
+          "values": {
+            "0": "No diagnosis",
+            "1": "Present"
+          }
+        },
+        "past": {
+          "variable": "ksads_23_947_p",
+          "description": "ASD past diagnosis"
+        }
+      },
+      "comorbid_diagnoses": {
+        "depression": {
+          "variable": "ksads_1_840_p",
+          "description": "Major Depressive Disorder present"
+        },
+        "mania": {
+          "variable": "ksads_2_835_p",
+          "description": "Bipolar Disorder present"
+        },
+        "panic": {
+          "variable": "ksads_4_826_p",
+          "description": "Panic Disorder present"
+        },
+        "ocd": {
+          "variable": "ksads_8_863_p",
+          "description": "Obsessive-Compulsive Disorder present"
+        },
+        "odd": {
+          "variable": "ksads_15_901_p",
+          "description": "Oppositional Defiant Disorder present"
+        },
+        "conduct": {
+          "variable": "ksads_16_897_p",
+          "description": "Conduct Disorder present"
+        }
+      }
+    },
+
+    "scq": {
+      "package_id": "abcd_sscey01",
+      "name": "Social Communication Questionnaire",
+      "age_range": "4+ years",
+      "respondent": "Parent",
+      "purpose": "Autism screening",
+      "total_score": {
+        "variable": "scq_total",
+        "description": "Total SCQ score",
+        "range": "0-39",
+        "threshold": 15,
+        "clinical_cutoff": ">=15 indicates autism risk"
+      }
+    }
+  },
+
+  "medications": {
+    "package_id": "abcd_medhy01",
+    "name": "Medication History",
+    "adhd_medications": {
+      "stimulants": {
+        "methylphenidate": {
+          "variable": "medsy_pres_meth_stm_v2",
+          "description": "Methylphenidate (Ritalin, Concerta)",
+          "drug_class": "Stimulant"
+        },
+        "amphetamine": {
+          "variable": "medsy_pres_amph_stm_v2",
+          "description": "Amphetamine (Adderall)",
+          "drug_class": "Stimulant"
+        },
+        "dextroamphetamine": {
+          "variable": "medsy_pres_dext_stm_v2",
+          "description": "Dextroamphetamine (Dexedrine)",
+          "drug_class": "Stimulant"
+        },
+        "lisdexamfetamine": {
+          "variable": "medsy_pres_lisd_stm_v2",
+          "description": "Lisdexamfetamine (Vyvanse)",
+          "drug_class": "Stimulant"
+        }
+      },
+      "non_stimulants": {
+        "atomoxetine": {
+          "variable": "medsy_pres_atom_stm_v2",
+          "description": "Atomoxetine (Strattera)",
+          "drug_class": "Non-stimulant"
+        },
+        "guanfacine": {
+          "variable": "medsy_pres_guan_stm_v2",
+          "description": "Guanfacine (Intuniv)",
+          "drug_class": "Alpha-2 agonist"
+        },
+        "clonidine": {
+          "variable": "medsy_pres_clon_stm_v2",
+          "description": "Clonidine (Kapvay)",
+          "drug_class": "Alpha-2 agonist"
+        }
+      }
+    },
+    "other_psychotropics": {
+      "ssri": {
+        "variable": "medsy_pres_ssri_stm_v2",
+        "description": "Selective Serotonin Reuptake Inhibitors",
+        "drug_class": "Antidepressant"
+      },
+      "atypical_antipsychotic": {
+        "variable": "medsy_pres_atyp_stm_v2",
+        "description": "Atypical Antipsychotics (Risperidone, Aripiprazole)",
+        "drug_class": "Antipsychotic"
+      },
+      "mood_stabilizer": {
+        "variable": "medsy_pres_mood_stm_v2",
+        "description": "Mood Stabilizers",
+        "drug_class": "Mood stabilizer"
+      }
+    }
+  },
+
+  "neuroimaging": {
+    "structural_mri": {
+      "package_id": "abcd_smrip10201",
+      "name": "Structural MRI (FreeSurfer)",
+      "modality": "T1-weighted MRI",
+      "processing": "FreeSurfer 6.0+",
+      "global_measures": {
+        "mean_thickness": {
+          "variable": "smri_thick_cdk_mean",
+          "description": "Mean cortical thickness (mm)",
+          "units": "mm"
+        },
+        "total_surface_area": {
+          "variable": "smri_area_cdk_total",
+          "description": "Total cortical surface area",
+          "units": "mm²"
+        },
+        "total_volume": {
+          "variable": "smri_vol_cdk_total",
+          "description": "Total cortical volume",
+          "units": "mm³"
+        },
+        "intracranial_volume": {
+          "variable": "smri_vol_scs_intracranialv",
+          "description": "Intracranial volume (head size normalization)",
+          "units": "mm³"
+        }
+      },
+      "adhd_relevant_regions": {
+        "caudate": {
+          "left": "smri_vol_scs_caudatelh",
+          "right": "smri_vol_scs_caudaterh",
+          "description": "Caudate nucleus volume",
+          "relevance": "Reduced in ADHD"
+        },
+        "putamen": {
+          "left": "smri_vol_scs_putamenlh",
+          "right": "smri_vol_scs_putamenrh",
+          "description": "Putamen volume",
+          "relevance": "Basal ganglia, motor control"
+        },
+        "pallidum": {
+          "left": "smri_vol_scs_pallidumlh",
+          "right": "smri_vol_scs_pallidumrh",
+          "description": "Globus pallidus volume",
+          "relevance": "Basal ganglia circuitry"
+        },
+        "anterior_cingulate": {
+          "left_thickness": "smri_thick_cdk_cdacatelh",
+          "right_thickness": "smri_thick_cdk_cdacaterh",
+          "description": "Anterior cingulate cortex thickness",
+          "relevance": "Executive function, error detection"
+        }
+      },
+      "autism_relevant_regions": {
+        "amygdala": {
+          "left": "smri_vol_scs_amygdalalh",
+          "right": "smri_vol_scs_amygdalarh",
+          "description": "Amygdala volume",
+          "relevance": "Social processing, emotion"
+        },
+        "hippocampus": {
+          "left": "smri_vol_scs_hpuslh",
+          "right": "smri_vol_scs_hpusrh",
+          "description": "Hippocampus volume",
+          "relevance": "Memory, spatial navigation"
+        },
+        "superior_temporal": {
+          "left_thickness": "smri_thick_cdk_superiortemporal",
+          "right_thickness": "smri_thick_cdk_superiortemporal",
+          "description": "Superior temporal cortex thickness",
+          "relevance": "Social cognition, language"
+        }
+      }
+    },
+
+    "resting_state_fmri": {
+      "package_id": "abcd_betnet02",
+      "name": "Resting-State Functional Connectivity",
+      "modality": "BOLD fMRI",
+      "duration": "20 minutes (4 runs × 5 min)",
+      "atlas": "Gordon 333 parcels",
+      "networks": {
+        "default_mode": {
+          "description": "Default Mode Network (DMN)",
+          "regions": ["Medial prefrontal", "Posterior cingulate", "Angular gyrus"],
+          "relevance": "Atypical in ADHD (reduced anti-correlation with task-positive networks)"
+        },
+        "salience": {
+          "description": "Salience Network",
+          "regions": ["Anterior insula", "Anterior cingulate"],
+          "relevance": "Altered in ADHD and autism"
+        },
+        "executive_control": {
+          "description": "Frontoparietal Network",
+          "regions": ["Dorsolateral prefrontal", "Posterior parietal"],
+          "relevance": "Reduced connectivity in ADHD"
+        },
+        "attention": {
+          "description": "Dorsal Attention Network",
+          "regions": ["Frontal eye fields", "Intraparietal sulcus"],
+          "relevance": "Impaired in ADHD"
+        }
+      },
+      "connectivity_measures": {
+        "within_network": {
+          "description": "Connectivity within each network",
+          "metric": "Pearson correlation of BOLD timeseries"
+        },
+        "between_network": {
+          "description": "Connectivity between networks",
+          "metric": "Inter-network correlation"
+        }
+      }
+    },
+
+    "diffusion_mri": {
+      "package_id": "abcd_dmdtifp101",
+      "name": "Diffusion MRI (DTI)",
+      "modality": "Diffusion-weighted imaging",
+      "directions": "96 gradient directions",
+      "metrics": {
+        "fractional_anisotropy": {
+          "abbreviation": "FA",
+          "description": "Directional coherence of water diffusion",
+          "range": "0-1",
+          "interpretation": "Higher = more organized white matter"
+        },
+        "mean_diffusivity": {
+          "abbreviation": "MD",
+          "description": "Overall magnitude of water diffusion",
+          "units": "mm²/s",
+          "interpretation": "Lower = more intact white matter"
+        }
+      },
+      "adhd_relevant_tracts": {
+        "corpus_callosum": {
+          "description": "Interhemispheric connections",
+          "relevance": "Reduced FA in ADHD"
+        },
+        "superior_longitudinal_fasciculus": {
+          "description": "Frontoparietal connections",
+          "relevance": "Attention networks"
+        },
+        "anterior_thalamic_radiation": {
+          "description": "Thalamo-frontal connections",
+          "relevance": "Executive function"
+        }
+      }
+    },
+
+    "mri_findings": {
+      "package_id": "abcd_mrfindings01",
+      "name": "MRI Incidental Findings",
+      "description": "Clinically significant findings from MRI scans",
+      "categories": [
+        "No findings",
+        "Minor findings",
+        "Clinical referral recommended"
+      ]
+    }
+  },
+
+  "biospecimens": {
+    "inventory": {
+      "package_id": "abcd_biospec01",
+      "name": "Biospecimen Inventory",
+      "description": "Tracking of collected biological samples",
+      "sample_types": [
+        "Saliva (DNA)",
+        "Blood (subset)",
+        "Hair (subset)"
+      ]
+    },
+    "hormone_assays": {
+      "package_id": "abcd_hsss01",
+      "name": "Saliva Hormone Samples",
+      "description": "Hormone levels from saliva samples",
+      "available_n": "~4,500 participants (subset)",
+      "hormones": {
+        "dhea": {
+          "description": "Dehydroepiandrosterone",
+          "relevance": "Adrenal hormone, stress response",
+          "units": "pg/mL"
+        },
+        "testosterone": {
+          "description": "Testosterone",
+          "relevance": "Associated with ADHD in some studies",
+          "units": "pg/mL"
+        }
+      },
+      "note": "Limited metabolomics data currently available in ABCD"
+    }
+  },
+
+  "sleep": {
+    "sleep_disturbance": {
+      "package_id": "abcd_sds01",
+      "name": "Sleep Disturbance Scale for Children",
+      "age_range": "3-18 years",
+      "respondent": "Parent",
+      "subscales": {
+        "disorders_initiating_maintaining": {
+          "description": "Difficulty falling/staying asleep",
+          "relevance": "Common in ADHD (50-75%)"
+        },
+        "sleep_breathing_disorders": {
+          "description": "Snoring, sleep apnea symptoms",
+          "relevance": "May mimic ADHD symptoms"
+        },
+        "disorders_arousal": {
+          "description": "Sleepwalking, night terrors",
+          "relevance": "More common in neurodevelopmental disorders"
+        },
+        "sleep_wake_transition": {
+          "description": "Restless legs, periodic movements",
+          "relevance": "Associated with ADHD"
+        },
+        "excessive_somnolence": {
+          "description": "Daytime sleepiness",
+          "relevance": "Can worsen ADHD symptoms"
+        },
+        "hyperhidrosis": {
+          "description": "Excessive sweating during sleep",
+          "relevance": "Autonomic dysfunction"
+        }
+      }
+    },
+    "chronotype": {
+      "package_id": "abcd_midacsss01",
+      "name": "Munich Chronotype Questionnaire",
+      "description": "Circadian preference (morningness-eveningness)",
+      "relevance": "ADHD associated with evening chronotype",
+      "measures": {
+        "sleep_midpoint_weekday": "Mid-sleep time on school days",
+        "sleep_midpoint_weekend": "Mid-sleep time on weekends",
+        "social_jetlag": "Difference between weekday and weekend sleep timing"
+      }
+    }
+  },
+
+  "diet_metabolism": {
+    "eating_questionnaire": {
+      "package_id": "abcd_eatqp01",
+      "name": "Child Eating Behavior Questionnaire",
+      "respondent": "Parent",
+      "subscales": {
+        "food_responsiveness": "Eating in response to food cues",
+        "emotional_overeating": "Eating in response to negative emotions",
+        "enjoyment_of_food": "Interest and pleasure in food",
+        "satiety_responsiveness": "Ability to self-regulate eating",
+        "slowness_in_eating": "Eating pace",
+        "emotional_undereating": "Reduced eating when upset",
+        "food_fussiness": "Pickiness, limited diet variety"
+      },
+      "adhd_relevance": "Eating behaviors related to impulsivity and emotion regulation",
+      "autism_relevance": "Food fussiness and sensory sensitivities common in ASD"
+    },
+    "sugar_beverages": {
+      "package_id": "abcd_ssbpm01",
+      "name": "Sugar-Sweetened Beverage Consumption",
+      "description": "Frequency and quantity of sweetened drinks",
+      "relevance": "High sugar intake may worsen ADHD symptoms",
+      "measures": [
+        "Soda/pop",
+        "Sports drinks",
+        "Energy drinks",
+        "Fruit drinks (not 100% juice)",
+        "Sweetened coffee/tea"
+      ]
+    }
+  },
+
+  "cognitive_function": {
+    "nih_toolbox": {
+      "package_id": "abcd_tbss01",
+      "name": "NIH Toolbox Cognition Battery",
+      "age_range": "3-85 years (normed)",
+      "administration": "Computerized",
+      "adhd_relevant_domains": {
+        "attention": {
+          "test": "Flanker Inhibitory Control and Attention",
+          "variable": "nihtbx_flanker_uncorrected",
+          "description": "Inhibitory control, selective attention",
+          "relevance": "Core ADHD deficit"
+        },
+        "working_memory": {
+          "test": "List Sorting Working Memory",
+          "variable": "nihtbx_list_uncorrected",
+          "description": "Working memory capacity",
+          "relevance": "Impaired in ADHD"
+        },
+        "cognitive_flexibility": {
+          "test": "Dimensional Change Card Sort",
+          "variable": "nihtbx_cardsort_uncorrected",
+          "description": "Set-shifting, cognitive flexibility",
+          "relevance": "Executive function deficit in ADHD"
+        },
+        "processing_speed": {
+          "test": "Pattern Comparison Processing Speed",
+          "variable": "nihtbx_pattern_uncorrected",
+          "description": "Speed of information processing",
+          "relevance": "Often slower in ADHD"
+        }
+      },
+      "composite_scores": {
+        "fluid_cognition": {
+          "description": "Reasoning, problem-solving, adaptability",
+          "components": ["Flanker", "Card Sort", "Pattern", "List Sort", "Picture Sequence"]
+        },
+        "crystallized_cognition": {
+          "description": "Learned knowledge and skills",
+          "components": ["Picture Vocabulary", "Oral Reading"]
+        },
+        "total_cognition": {
+          "description": "Overall cognitive ability",
+          "components": ["All subtests"]
+        }
+      }
+    }
+  },
+
+  "environmental_exposures": {
+    "air_quality": {
+      "package_id": "abcd_airsleep01",
+      "name": "Residential Air Quality and Sleep Environment",
+      "source": "Geocoded residential address linkage",
+      "pollutants": {
+        "pm25": {
+          "description": "Particulate matter <2.5 μm",
+          "source": "EPA AirData",
+          "relevance": "Neurodevelopmental toxicity, linked to ADHD"
+        },
+        "no2": {
+          "description": "Nitrogen dioxide",
+          "source": "EPA AirData",
+          "relevance": "Traffic-related pollution, neurotoxic"
+        },
+        "ozone": {
+          "description": "Ground-level ozone",
+          "source": "EPA AirData",
+          "relevance": "Oxidative stress"
+        }
+      },
+      "neighborhood_characteristics": {
+        "noise_pollution": "Estimated from traffic, airports",
+        "light_pollution": "Nighttime light exposure",
+        "green_space": "Vegetation index (NDVI)"
+      }
+    },
+    "residential_history": {
+      "package_id": "abcd_rhds01",
+      "name": "Residential History Derived Scores",
+      "description": "Neighborhood-level socioeconomic and environmental data",
+      "measures": [
+        "Area Deprivation Index (ADI)",
+        "Walkability score",
+        "Crime rates",
+        "School quality metrics"
+      ]
+    }
+  },
+
+  "family_genetics": {
+    "family_history": {
+      "package_id": "abcd_fhxssp01",
+      "name": "Family History Summary Scores",
+      "description": "Psychiatric and substance use history in biological parents",
+      "conditions": {
+        "adhd": "Parental ADHD (highly heritable)",
+        "depression": "Parental depression",
+        "anxiety": "Parental anxiety disorders",
+        "substance_use": "Parental alcohol/drug problems",
+        "psychosis": "Parental psychotic disorders"
+      },
+      "scoring": {
+        "0": "Neither parent affected",
+        "1": "One parent affected",
+        "2": "Both parents affected"
+      }
+    },
+    "genomics": {
+      "availability": "Genotyping data available (restricted access)",
+      "platform": "Smokescreen Array (~700,000 SNPs)",
+      "applications": [
+        "Polygenic risk scores (PRS) for ADHD/autism",
+        "Ancestry principal components",
+        "GWAS of ADHD/autism symptoms"
+      ],
+      "note": "Separate application required for genetic data"
+    }
+  },
+
+  "demographics_ses": {
+    "demographics": {
+      "package_id": "abcd_lpds01",
+      "name": "Longitudinal Parent Demographics and SES",
+      "variables": {
+        "parent_education": {
+          "description": "Highest level of education completed",
+          "values": {
+            "1": "< 12th grade",
+            "2": "High school diploma/GED",
+            "3": "Some college",
+            "4": "Bachelor's degree",
+            "5": "Graduate degree"
+          }
+        },
+        "household_income": {
+          "description": "Total household income (past year)",
+          "categories": "15 income brackets from <$5k to >$200k"
+        },
+        "parent_employment": {
+          "description": "Current employment status",
+          "categories": ["Employed", "Unemployed", "Stay-at-home parent", "Disabled", "Retired"]
+        },
+        "household_size": "Number of people in household",
+        "parent_marital_status": "Marital status of primary caregiver"
+      }
+    }
+  },
+
+  "data_structure": {
+    "subject_id": {
+      "variable": "src_subject_id",
+      "description": "Unique subject identifier",
+      "format": "NDAR_INVxxxxxxxx"
+    },
+    "timepoints": {
+      "baseline_year_1_arm_1": "Baseline (ages 9-10)",
+      "1_year_follow_up_y_arm_1": "1-Year Follow-up",
+      "2_year_follow_up_y_arm_1": "2-Year Follow-up",
+      "3_year_follow_up_y_arm_1": "3-Year Follow-up",
+      "4_year_follow_up_y_arm_1": "4-Year Follow-up"
+    },
+    "event_variable": "eventname",
+    "site_variable": "site_id_l",
+    "family_id": "rel_family_id"
+  },
+
+  "sample_characteristics": {
+    "total_enrolled": "~11,800 children",
+    "recruitment": "21 sites across United States",
+    "age_baseline": "9-10 years",
+    "current_age_range": "9-17 years (through Y4)",
+    "sex": "~52% male",
+    "race_ethnicity": "Diverse (representative of US demographics)",
+    "adhd_prevalence": "~8-10% (clinical diagnoses + subclinical)",
+    "autism_prevalence": "~2-3%",
+    "comorbidity": "~20-30% of ADHD cases have other diagnoses"
+  },
+
+  "data_access": {
+    "repository": "NIMH Data Archive (NDA)",
+    "url": "https://nda.nih.gov/abcd",
+    "application_required": true,
+    "dac_approval_timeline": "2-4 weeks",
+    "data_use_certification": "Must be signed by authorized institutional official",
+    "cost": "Free (funded by NIH)",
+    "updates": "Annual data releases"
+  },
+
+  "notes": {
+    "metabolomics_limitation": "ABCD currently has limited metabolomics data compared to UK Biobank. Hormone assays (DHEA, testosterone) available for ~4,500 participants. Full metabolomics profiling not yet available.",
+    "strengths": [
+      "Large sample size (~11,800)",
+      "Longitudinal design (10 years planned)",
+      "Comprehensive neuroimaging (structural, functional, diffusion)",
+      "Clinical diagnoses (KSADS gold standard)",
+      "Environmental exposures (geocoded)",
+      "Family history",
+      "Age range ideal for developmental trajectories (9-19 years)"
+    ],
+    "weaknesses": [
+      "Limited metabolomics data (major gap for this study)",
+      "Participants recruited at ages 9-10 (miss early development)",
+      "Lower autism prevalence than specialized registries",
+      "Complex data structure (requires significant processing)"
+    ],
+    "integration_recommendation": "Use ABCD for neuroimaging-clinical correlations and developmental trajectories. Combine with UK Biobank for metabolomics analyses."
+  }
+}
