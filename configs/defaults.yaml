@@ -516,6 +516,34 @@ cluster:
   topology_enabled: true
   min_gap_score: 1.5
   min_stability: 0.7
+  # Anti-pattern-mining features (enabled by default)
+  use_consensus: true  # Consensus across parameter sweeps (prevents selection bias)
+  test_null_models: true  # Test against permutation/rotation/SigClust nulls
+  evaluate_topology_gates: true  # Hard topology gates before subtype claims
+  enable_config_locking: true  # Prevent post-hoc parameter tweaking
+  baseline_deviation_enabled: true  # Enable baseline-deviation pipeline
+
+# Baseline-Deviation Pipeline
+baseline:
+  local_pca_components: 5  # Dimensionality of local tangent spaces
+  density_percentile: 75.0  # For unsupervised mode: define high-density ridge
+
+# Topology Analysis
+topology:
+  neighbors: 15  # k-NN graph neighbors for baseline manifold
+  rotation_null:
+    n_rotations: 200  # Number of rotation-preserving nulls
+    preserve_scale: true  # Preserve variance structure
+  separation_gate:
+    min_score: 0.6  # Minimum separation score to claim discrete subtypes
+    min_confidence: 0.5  # Minimum CI lower bound
+    n_bootstrap: 200  # Bootstrap samples for CI estimation
+
+# Deviation Threshold
+deviation_threshold:
+  method: 'null_quantile'  # 'null_quantile' or 'fdr'
+  q: 0.99  # 99th percentile for null_quantile method
+  fdr_q: 0.05  # FDR level for FDR method
 
 # Validation configuration
 validate:
