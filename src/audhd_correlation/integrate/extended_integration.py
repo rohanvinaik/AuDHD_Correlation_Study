@@ -26,6 +26,10 @@ from .adaptive_weights import (
     AdaptiveWeightOptimizer,
     load_adaptive_weights
 )
+from .iterative_refinement import (
+    IterativeRefinementEngine,
+    run_iterative_refinement
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -460,13 +464,24 @@ def integrate_extended_multiomics(
     voice_df: Optional[pd.DataFrame] = None,
     microbiome_df: Optional[pd.DataFrame] = None,
     context_df: Optional[pd.DataFrame] = None,
-    metadata: Optional[Dict] = None
+    metadata: Optional[Dict] = None,
+    # Iterative refinement parameters
+    iterative_mode: bool = False,
+    discriminative_threshold: float = 0.3,
+    min_domains: int = 3,
+    max_iterations: int = 10,
+    optimize_weights_per_iteration: bool = True,
+    output_dir: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Extended multi-omics integration including all feature types
 
     Implements hierarchical integration with time-aware adjustment for
     circadian features and weighted combination based on proximity to phenotype.
+
+    Supports iterative refinement mode that automatically identifies and removes
+    non-discriminative data sources, re-weights remaining domains, and iteratively
+    improves subtype separation until convergence.
 
     Args:
         genetic_df: Genetic features (SNPs, PRS, CNVs)
@@ -483,8 +498,17 @@ def integrate_extended_multiomics(
         context_df: Collection context (time, fasting status, etc.)
         metadata: Additional metadata
 
+        # Iterative refinement parameters
+        iterative_mode: If True, run iterative refinement to prune non-discriminative domains
+        discriminative_threshold: Minimum composite score (0-1) to keep a domain
+        min_domains: Minimum number of domains to retain (default: 3)
+        max_iterations: Maximum refinement iterations (default: 10)
+        optimize_weights_per_iteration: Re-optimize weights after each pruning (default: True)
+        output_dir: If provided, export refinement results to this directory
+
     Returns:
-        Dictionary with integrated features and networks
+        Dictionary with integrated features and networks. If iterative_mode=True,
+        also includes 'refinement_results' with iteration history and convergence info.
     """
     logger.info("Starting extended multi-omics integration...")
 
@@ -678,6 +702,80 @@ def integrate_extended_multiomics(
 
     multilayer_network = network_builder.integrate_networks(networks)
 
+    # Iterative refinement mode
+    refinement_results = None
+    if iterative_mode:
+        logger.info("\n" + "="*80)
+        logger.info("STARTING ITERATIVE REFINEMENT MODE")
+        logger.info("="*80)
+
+        # Define clustering function for iterative refinement
+        # This function will be called repeatedly with different domain subsets
+        def clustering_function(domain_features_subset, domain_weights):
+            """Simple clustering for iterative refinement."""
+            from sklearn.cluster import KMeans
+            from sklearn.preprocessing import StandardScaler
+
+            # Concatenate and weight features
+            weighted_features = []
+            for domain, df in domain_features_subset.items():
+                if df is not None and not df.empty:
+                    scaled = StandardScaler().fit_transform(df)
+                    weight = domain_weights.get(domain, 1.0)
+                    weighted = scaled * np.sqrt(weight)  # Weight by sqrt for variance
+                    weighted_features.append(weighted)
+
+            if not weighted_features:
+                raise ValueError("No features available for clustering")
+
+            all_features = np.hstack(weighted_features)
+
+            # Determine optimal number of clusters (3-6 range typical for ASD/ADHD)
+            from sklearn.metrics import silhouette_score
+            best_k = 3
+            best_score = -1
+            for k in range(3, min(7, all_features.shape[0] // 2)):
+                kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+                labels = kmeans.fit_predict(all_features)
+                score = silhouette_score(all_features, labels)
+                if score > best_score:
+                    best_score = score
+                    best_k = k
+
+            # Final clustering with best k
+            kmeans = KMeans(n_clusters=best_k, random_state=42, n_init=10)
+            cluster_labels = kmeans.fit_predict(all_features)
+
+            return cluster_labels
+
+        # Run iterative refinement
+        refinement_results = run_iterative_refinement(
+            domain_features=preprocessed_dict,
+            clustering_function=clustering_function,
+            literature_weights=literature_weights,
+            discriminative_threshold=discriminative_threshold,
+            min_domains=min_domains,
+            max_iterations=max_iterations,
+            optimize_weights=optimize_weights_per_iteration,
+            output_dir=output_dir
+        )
+
+        # Update weights and data_dict to use only final domains
+        final_domains = refinement_results['final_domains']
+        final_weights = refinement_results['final_weights']
+
+        logger.info(f"\nUsing refined domains: {final_domains}")
+        logger.info("Re-running integration with refined domain set...")
+
+        # Filter to final domains
+        refined_data_dict = {d: preprocessed_dict[d] for d in final_domains if d in preprocessed_dict}
+
+        # Re-run hierarchical integration with refined domains
+        refined_integrator = HierarchicalIntegrator(filtered_levels, final_weights)
+        integrated_features = refined_integrator.hierarchical_integration(refined_data_dict)
+
+        logger.info(f"Refined integrated features: {integrated_features.shape}")
+
     # Return results
     results = {
         'integrated_features': integrated_features,
@@ -690,6 +788,14 @@ def integrate_extended_multiomics(
         'n_features': integrated_features.shape[1],
         'modalities': list(data_dict.keys())
     }
+
+    # Add refinement results if iterative mode was used
+    if refinement_results is not None:
+        results['refinement_results'] = refinement_results
+        results['final_domains'] = refinement_results['final_domains']
+        results['final_weights'] = refinement_results['final_weights']
+        results['refinement_improvement'] = refinement_results['improvement']
+        results['refinement_iterations'] = refinement_results['n_iterations']
 
     logger.info("Extended multi-omics integration complete!")
 

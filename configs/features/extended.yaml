@@ -356,6 +356,32 @@ pipeline_integration:
     clinical_decision_support: true
     personalized_monitoring_plan: true
 
+  # Iterative refinement (NEW)
+  iterative_refinement:
+    enabled: false  # Set to true to enable automatic domain pruning
+    discriminative_threshold: 0.3  # Minimum composite score (0-1) to keep domain
+    min_domains: 3  # Never prune below this many domains
+    max_iterations: 10  # Stop after this many refinement iterations
+    convergence_threshold: 0.01  # Stop if silhouette improvement < this value
+    optimize_weights_per_iteration: true  # Re-optimize weights after each pruning
+    preserve_strong_evidence_domains: true  # Never remove 'strong' evidence domains
+    export_results: true  # Export iteration history and visualizations
+    output_directory: results/iterative_refinement/
+
+    # Discriminative power metrics (composite scoring)
+    metric_weights:
+      silhouette_contribution: 0.35  # Domain-specific silhouette score
+      classification_importance: 0.30  # Random Forest feature importance
+      between_cluster_variance: 0.20  # ANOVA F-statistic
+      correlation_with_clustering: 0.15  # Correlation with cluster labels
+
+    # Convergence criteria (any satisfied = stop)
+    convergence_criteria:
+      - no_domains_to_remove
+      - quality_improvement_below_threshold
+      - max_iterations_reached
+      - min_domains_reached
+
 # Cost-effectiveness considerations
 resource_optimization:
   screening_tier:
