@@ -1,0 +1,393 @@
+# Prenatal and Maternal Health Variable Mappings
+# Maps questionnaire variables from SPARK, ABCD, SSC to standardized prenatal features
+
+# SPARK (Simons Foundation Powering Autism Research for Knowledge)
+# Medical History Questionnaire - Pregnancy section
+spark_prenatal_mapping:
+  # Maternal infections
+  maternal_infection:
+    source_var: "MHQ_pregnancy_infection"
+    type: binary
+    description: "Any infection during pregnancy"
+
+  infection_type:
+    source_var: "MHQ_infection_type"
+    type: categorical
+    values: ["influenza", "fever_unspecified", "uti", "other"]
+
+  infection_trimester:
+    source_var: "MHQ_infection_when"
+    type: categorical
+    values: ["first", "second", "third"]
+    recode:
+      "1st trimester": 1
+      "2nd trimester": 2
+      "3rd trimester": 3
+
+  infection_fever:
+    source_var: "MHQ_infection_fever"
+    type: binary
+    description: "Fever during infection"
+
+  infection_hospitalization:
+    source_var: "MHQ_infection_hospital"
+    type: binary
+
+  # Medications
+  maternal_medication:
+    source_var: "MHQ_pregnancy_medications"
+    type: binary
+
+  medication_ssri:
+    source_var: "MHQ_med_antidepressant"
+    type: binary
+    note: "Any antidepressant - need to check specific drug names"
+
+  medication_names:
+    source_var: "MHQ_med_list"
+    type: text
+    note: "Free text - requires NLP parsing"
+
+  # Pregnancy complications
+  gestational_diabetes:
+    source_var: "MHQ_gest_diabetes"
+    type: binary
+
+  preeclampsia:
+    source_var: "MHQ_preeclampsia"
+    type: binary
+
+  pregnancy_complications:
+    source_var: "MHQ_complications"
+    type: text
+    note: "Free text describing complications"
+
+  # Birth outcomes
+  gestational_age_weeks:
+    source_var: "birth_gestational_age"
+    type: continuous
+    units: weeks
+    normal_range: [37, 42]
+
+  birth_weight_grams:
+    source_var: "birth_weight"
+    type: continuous
+    units: grams
+    conversion: "pounds * 453.592"  # If given in pounds
+
+  apgar_5min:
+    source_var: "birth_apgar_5min"
+    type: ordinal
+    range: [0, 10]
+
+  delivery_method:
+    source_var: "delivery_type"
+    type: categorical
+    values: ["vaginal", "cesarean", "assisted"]
+
+  nicu_admission:
+    source_var: "nicu_admit"
+    type: binary
+
+  # Maternal health status
+  maternal_age:
+    source_var: "mother_age_at_birth"
+    type: continuous
+
+  maternal_education:
+    source_var: "mother_education"
+    type: ordinal
+
+  # Prenatal care
+  prenatal_vitamins:
+    source_var: "prenatal_vitamins_taken"
+    type: binary
+
+  prenatal_care_visits:
+    source_var: "prenatal_visits"
+    type: count
+
+# ABCD Study (Adolescent Brain Cognitive Development)
+# Developmental History Questionnaire (retrospective)
+abcd_prenatal_mapping:
+  # Note: ABCD collects retrospective pregnancy history at age 9-10 baseline
+  # Higher recall bias than SPARK
+
+  # Maternal infections
+  maternal_infection:
+    source_var: "devhx_pregnancy_infection"
+    type: binary
+    recall_bias: high
+
+  infection_fever:
+    source_var: "devhx_infection_fever"
+    type: binary
+
+  # Medications (limited detail)
+  maternal_medication:
+    source_var: "devhx_pregnancy_meds"
+    type: binary
+
+  # Substance use (critical for confounding)
+  maternal_smoking:
+    source_var: "devhx_prenatal_smoking"
+    type: categorical
+    values: ["none", "some", "daily"]
+
+  maternal_alcohol:
+    source_var: "devhx_prenatal_alcohol"
+    type: categorical
+    values: ["none", "rare", "occasional", "regular"]
+
+  maternal_drugs:
+    source_var: "devhx_prenatal_drugs"
+    type: binary
+
+  # Pregnancy complications
+  pregnancy_complications:
+    source_var: "devhx_complications"
+    type: multi_select
+    options:
+      - gestational_diabetes
+      - preeclampsia
+      - bleeding
+      - other
+
+  # Birth outcomes
+  gestational_age_weeks:
+    source_var: "birth_gestational_age"
+    type: continuous
+    recall_bias: moderate
+
+  birth_weight_category:
+    source_var: "birth_weight_cat"
+    type: categorical
+    values: ["very_low", "low", "normal", "high"]
+
+  preterm_birth:
+    source_var: "birth_preterm"
+    type: binary
+
+  low_birth_weight:
+    source_var: "birth_lbw"
+    type: binary
+
+  apgar_low:
+    source_var: "birth_apgar_low"
+    type: binary
+    note: "Binary version - APGAR <7 at 5 min"
+
+  # Maternal health
+  maternal_age:
+    source_var: "demo_prnt_age_at_birth"
+    type: continuous
+    calculated: true
+
+  # Prenatal care quality
+  prenatal_care_adequate:
+    source_var: "devhx_prenatal_care_adequate"
+    type: binary
+
+  prenatal_vitamins:
+    source_var: "devhx_prenatal_vitamins"
+    type: binary
+
+# SSC (Simons Simplex Collection)
+# More detailed pregnancy history
+ssc_prenatal_mapping:
+  # Comprehensive infection tracking
+  maternal_infection_detailed:
+    source_var: "pregnancy_infection_history"
+    type: structured
+    fields:
+      - infection_type
+      - timing_trimester
+      - severity
+      - treatment
+
+  # Detailed medication log
+  maternal_medications_log:
+    source_var: "pregnancy_medication_log"
+    type: structured
+    note: "Drug name, start/stop dates, indication"
+
+  # Pregnancy complications with timing
+  complications_detailed:
+    source_var: "pregnancy_complications_detailed"
+    type: structured
+
+  # Birth outcomes
+  gestational_age_days:
+    source_var: "birth_ga_days"
+    type: continuous
+    units: days
+
+  birth_weight_grams:
+    source_var: "birth_weight_grams"
+    type: continuous
+
+  # Apgar scores (both timepoints)
+  apgar_1min:
+    source_var: "apgar_1min"
+    type: ordinal
+
+  apgar_5min:
+    source_var: "apgar_5min"
+    type: ordinal
+
+  # Maternal biomarkers (if available)
+  maternal_cortisol:
+    source_var: "maternal_cortisol_pregnancy"
+    type: continuous
+    note: "Rare - only in subset"
+
+# NHANES (National Health and Nutrition Examination Survey)
+# Reproductive Health Questionnaire
+nhanes_prenatal_mapping:
+  # Birth outcomes from reproductive health module
+  gestational_age:
+    source_var: "RHQ162"
+    type: continuous
+    description: "Gestational age in weeks"
+
+  birth_weight:
+    source_var: "RHQ166"
+    type: continuous
+    conversion: "ounces * 28.3495"
+
+  # Prenatal care
+  prenatal_care_month:
+    source_var: "RHQ171"
+    type: ordinal
+    description: "Month prenatal care began"
+
+  # Complications
+  pregnancy_diabetes:
+    source_var: "MCQ160L"
+    type: binary
+
+  pregnancy_hypertension:
+    source_var: "BPQ020"
+    type: binary
+
+# All of Us Research Program
+# Pregnancy Module
+all_of_us_prenatal_mapping:
+  # Comprehensive pregnancy history
+  pregnancy_complications:
+    source_var: "pregnancy_complications_ppi"
+    type: multi_select
+
+  maternal_medications:
+    source_var: "pregnancy_meds_ppi"
+    type: structured
+
+  # Birth outcomes
+  gestational_age:
+    source_var: "gestational_age_survey"
+    type: continuous
+
+  birth_weight:
+    source_var: "birth_weight_survey"
+    type: continuous
+
+  # EHR linkage available
+  ehr_pregnancy_dx:
+    source_var: "ehr_icd_pregnancy"
+    type: codes
+    note: "ICD codes from linked EHR"
+
+  ehr_prenatal_meds:
+    source_var: "ehr_rx_pregnancy"
+    type: codes
+    note: "RxNorm codes from EHR"
+
+# Data quality indicators
+data_quality_flags:
+  # Recall bias assessment
+  recall_bias_high:
+    - source: ABCD
+      reason: "9-10 years post-pregnancy"
+    - source: SPARK
+      reason: "Variable timing, up to 5+ years"
+
+  recall_bias_moderate:
+    - source: SPARK
+      reason: "If completed within 2 years of birth"
+
+  recall_bias_low:
+    - source: SSC
+      reason: "Detailed structured interview"
+    - source: All of Us
+      reason: "EHR linkage available"
+
+  # Missing data patterns
+  high_missing_expected:
+    - maternal_infection_timing
+    - specific_medication_names
+    - infection_severity
+
+  # Validation strategies
+  triangulation_possible:
+    - birth_records: "State vital statistics"
+    - medical_records: "Hospital delivery records"
+    - biomarkers: "Cord blood, maternal serum"
+
+# Variable harmonization rules
+harmonization:
+  gestational_age:
+    - Convert all to weeks
+    - Flag values <20 or >44 as outliers
+    - If only preterm_birth binary, impute:
+        preterm=1 → 35 weeks (median)
+        preterm=0 → 39 weeks (median)
+
+  birth_weight:
+    - Convert all to grams
+    - Flag <500g or >6000g as outliers
+    - Handle missing with missingness indicator
+
+  infection_timing:
+    - Map to trimester (1, 2, 3)
+    - If only "during pregnancy" → trimester=2 (imputed)
+    - Create indicator for timing_known vs timing_imputed
+
+  medication_classification:
+    - Parse free text for drug names
+    - Map to standard classes (SSRI, anticonvulsant, etc.)
+    - Flag uncertain classifications
+
+# Extraction priorities
+extraction_priorities:
+  tier_1_critical:
+    - gestational_age_weeks
+    - birth_weight_grams
+    - maternal_infection (any)
+    - preterm_birth
+
+  tier_2_important:
+    - infection_timing (trimester)
+    - maternal_medication_ssri
+    - pregnancy_complications
+    - apgar_5min
+
+  tier_3_valuable:
+    - infection_type
+    - medication_other
+    - maternal_stress
+    - prenatal_vitamins
+
+  tier_4_optional:
+    - infection_severity
+    - medication_dosage
+    - maternal_biomarkers
+    - detailed_timing
+
+# Integration with existing environmental features
+link_to_environmental:
+  prenatal_window_days: [-280, 0]
+  link_variables:
+    - air_quality_pm25_prenatal
+    - water_quality_prenatal
+    - epa_toxics_prenatal
+  note: "Combine questionnaire data with environmental exposures"

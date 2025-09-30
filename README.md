@@ -69,6 +69,7 @@ A comprehensive, production-ready system for discovering biologically distinct p
 - **[Prompt 2.1 Summary](docs/PROMPT_2_1_SUMMARY.md)** - Autonomic, Circadian, Salivary pipelines
 - **[Prompt 2.2 Summary](docs/PROMPT_2_2_SUMMARY.md)** - Environmental & Toxicant pipelines
 - **[Prompt 2.3 Summary](docs/PROMPT_2_3_SUMMARY.md)** - Sensory, Interoception, Voice pipelines
+- **[Prenatal & Maternal Health](docs/PRENATAL_MATERNAL_HEALTH.md)** - Pregnancy exposures, infections, medications, birth outcomes
 
 ### Integration & Clustering Documentation (NEW)
 - **[Prompt 3.1 Summary](docs/PROMPT_3_1_SUMMARY.md)** - Extended multi-modal integration system
@@ -322,8 +323,9 @@ python scripts/download_tracker.py
 
 ```
 AuDHD_Correlation_Study/
-├── src/audhd_correlation/           # Main analysis package (~15,500 lines)
+├── src/audhd_correlation/           # Main analysis package (~16,700 lines)
 │   ├── data/                        # Data loaders and harmonization
+│   │   └── prenatal_loader.py       # NEW: Prenatal data from SPARK/ABCD/SSC (400 lines)
 │   ├── preprocess/                  # Preprocessing and normalization
 │   ├── integrate/                   # Multi-omics integration
 │   │   ├── methods.py               # Standard integration (MOFA/PCA/CCA)
@@ -334,7 +336,7 @@ AuDHD_Correlation_Study/
 │   ├── modeling/                    # Clustering algorithms
 │   │   ├── clustering.py            # Standard clustering (882 lines)
 │   │   └── extended_clustering.py   # Feature-aware + ensemble (850 lines)
-│   ├── features/                    # Feature extraction pipelines (~4,430 lines)
+│   ├── features/                    # Feature extraction pipelines (~5,230 lines)
 │   │   ├── autonomic.py             # HRV, EDA, cardiovascular (380 lines)
 │   │   ├── circadian.py             # Cortisol, melatonin, actigraphy (420 lines)
 │   │   ├── salivary.py              # Stress, inflammation, microbiome (350 lines)
@@ -342,7 +344,8 @@ AuDHD_Correlation_Study/
 │   │   ├── toxicants.py             # Heavy metals, organic pollutants (680 lines)
 │   │   ├── sensory_detailed.py      # Auditory, visual, tactile, gating (860 lines)
 │   │   ├── interoception.py         # Heartbeat tasks, questionnaires (380 lines)
-│   │   └── voice_analysis.py        # Prosodic, spectral, MFCC (730 lines)
+│   │   ├── voice_analysis.py        # Prosodic, spectral, MFCC (730 lines)
+│   │   └── prenatal_maternal.py     # NEW: Maternal infections, medications, complications (800 lines)
 │   ├── causal/                      # NEW: Causal inference
 │   │   └── extended_causal.py       # Mediation, G×E, mixtures, networks (1,300 lines)
 │   ├── analysis/                    # NEW: Multi-omics analysis
@@ -722,14 +725,35 @@ pip install tslearn
 - ✅ Cost tracking and optimization (<$1/month target)
 - ✅ Cross-analysis overlap detection
 
+**Prenatal & Maternal Health System (1,500 lines) - NEW!**
+- ✅ **Maternal infection tracking** with trimester-specific analysis
+  - Critical window detection (neurogenesis weeks 10-20, synaptogenesis weeks 20-34)
+  - Infection types: Influenza, bacterial, viral, UTI, COVID-19
+  - Severity grading + fever tracking + hospitalization
+  - Antibiotic exposure by trimester
+  - **Infection risk score** (0-10 scale weighing timing, severity, fever)
+- ✅ **Medication exposure analysis**
+  - SSRIs, SNRIs, anticonvulsants, antibiotics, acetaminophen, benzodiazepines
+  - Trimester-specific exposure windows
+  - Risk stratification (high/moderate/low)
+  - Polypharmacy detection
+- ✅ **Pregnancy complications**: Gestational diabetes, preeclampsia, IUGR, placental abnormalities
+- ✅ **Birth outcomes**: Gestational age, birth weight, APGAR scores, preterm birth, delivery method
+- ✅ **Maternal stress & nutrition**: Depression, anxiety, cortisol, folate, vitamin D, omega-3
+- ✅ **Data source mappings**: SPARK, ABCD, SSC, NHANES, All of Us (5 cohorts)
+- ✅ **Data quality tracking**: Recall bias levels, missingness indicators, confidence scores
+- ✅ **Harmonization**: GA/BW unit conversion, infection timing imputation, quality flags
+- ✅ Integration with G×E and critical period analysis
+
 ### System Updates
 
-- ✅ Configuration expanded to 376 feature definitions with literature-based weights
-- ✅ Comprehensive documentation (11 detailed guides)
+- ✅ Configuration expanded to 376+ feature definitions with literature-based weights
+- ✅ Comprehensive documentation (12 detailed guides)
 - ✅ Data acquisition complete (14.7 GB across 5 sources)
 - ✅ Automated monitoring paused (manual check mode)
 - ✅ **Enhanced iterative refinement with 6 advanced discriminative analysis methods**
-- ✅ Total codebase: ~15,500 lines of production-ready analysis code
+- ✅ **Prenatal & maternal health system** - maternal immune activation, medication exposures, birth complications
+- ✅ Total codebase: ~16,700 lines of production-ready analysis code
 
 ## 🤝 Contributing
 
