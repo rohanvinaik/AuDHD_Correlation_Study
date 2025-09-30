@@ -1,283 +1,233 @@
 """
-Main pipeline orchestration functions
+Main pipeline orchestration - thin, readable, delegates to modules
 """
-from pathlib import Path
-from typing import Optional, List
-from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
-
 from ..config import load_config as load_validated_config, AppConfig
+from ..utils.io import save_data, load_data
+from rich.console import Console
 
 console = Console()
 
 
-def load_config(cfg_path: str) -> AppConfig:
-    """Load and validate configuration"""
-    return load_validated_config(cfg_path)
+def _cfg(path: str) -> AppConfig:
+    """Load and validate config (internal helper)"""
+    return load_validated_config(path)
 
 
-def download(cfg: str) -> None:
+def download(cfg_path: str) -> None:
     """
-    Download raw data from SPARK, SSC, ABCD, UK Biobank
-    Requires DUAs and API tokens in .env
+    Fetch raw data from SPARK/SSC/ABCD/UKB & references (requires DUAs)
     """
-    config = load_config(cfg)
+    cfg = _cfg(cfg_path)
 
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        console=console,
-    ) as progress:
-        # Check DUAs
-        task = progress.add_task("Checking Data Use Agreements...", total=1)
-        # TODO: Implement DUA checks
-        progress.update(task, advance=1)
+    console.print("[bold]→ download[/bold]")
 
-        # Download datasets
-        datasets = ["SPARK", "SSC", "ABCD", "UKB"]
-        for dataset in datasets:
-            task = progress.add_task(f"Downloading {dataset}...", total=1)
-            # TODO: Implement download for each dataset
-            progress.update(task, advance=1)
+    # Import modules dynamically to avoid circular imports
+    from ..data import registries, loaders
 
-        # Download references
-        task = progress.add_task("Downloading ontologies & pathways...", total=1)
-        # TODO: Implement reference downloads (KEGG, Reactome, etc.)
-        progress.update(task, advance=1)
+    # Check DUA compliance
+    registries.ensure_sources(cfg)
+    console.print("  [green]✓[/green] DUA checks passed")
+
+    # Fetch raw datasets
+    loaders.fetch_all_datasets(cfg)
+    console.print("  [green]✓[/green] Datasets downloaded")
+
+    # Fetch reference data (ontologies, pathways)
+    loaders.fetch_references(cfg)
+    console.print("  [green]✓[/green] References downloaded")
 
 
-def build_features(cfg: str) -> None:
+def build_features(cfg_path: str) -> None:
     """
-    QC, harmonize, and assemble feature tables
-    - Genomics QC: VQSR, call rate, Hardy-Weinberg
-    - Metabolomics QC: CV filter, drift correction
-    - Batch/site correction: ComBat
-    - Imputation: delta-adjusted MICE
-    - Context adjustment: fasting, time-of-day, medications
+    QC, harmonize, and assemble multi-modal feature tables
     """
-    config = load_config(cfg)
+    cfg = _cfg(cfg_path)
 
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        console=console,
-    ) as progress:
-        # QC steps
-        qc_tasks = [
-            "Genomics QC (VQSR, call rate)",
-            "Metabolomics QC (CV, drift)",
-            "Clinical data validation",
-            "Microbiome QC",
-        ]
-        for task_name in qc_tasks:
-            task = progress.add_task(task_name, total=1)
-            # TODO: Implement QC steps
-            progress.update(task, advance=1)
+    console.print("[bold]→ build_features[/bold]")
 
-        # Harmonization
-        task = progress.add_task("Site/batch harmonization (ComBat)", total=1)
-        # TODO: Implement ComBat
-        progress.update(task, advance=1)
+    from ..data import loaders, ontology, qc, harmonize, context
+    from ..features import assemble
+    from ..preprocess import impute, batch_effects, scaling, adjust
 
-        # Context adjustment
-        task = progress.add_task("Context covariate adjustment", total=1)
-        # TODO: Implement LMM adjustment
-        progress.update(task, advance=1)
+    # Load raw tables
+    tables = loaders.load_all(cfg)
+    console.print("  [green]✓[/green] Raw data loaded")
 
-        # Imputation
-        task = progress.add_task("Imputation (delta-MICE)", total=1)
-        # TODO: Implement MICE
-        progress.update(task, advance=1)
+    # Map to ontologies (HPO, SNOMED, RxNorm)
+    tables = ontology.map_all(tables, cfg)
+    console.print("  [green]✓[/green] Ontology mapping complete")
 
-        # Feature assembly
-        task = progress.add_task("Assembling feature matrices", total=1)
-        # TODO: Assemble final matrices
-        progress.update(task, advance=1)
+    # QC per modality
+    tables = qc.run_all(tables, cfg)
+    console.print("  [green]✓[/green] QC passed")
+
+    # Add context tags (fasting, time-of-day, etc.)
+    tables = context.add_tags(tables, cfg)
+    console.print("  [green]✓[/green] Context tags added")
+
+    # Assemble feature matrices
+    X = assemble.build_feature_matrices(tables, cfg)
+    console.print("  [green]✓[/green] Feature matrices assembled")
+
+    # Imputation (delta-adjusted MICE)
+    X = impute.run(X, cfg)
+    console.print("  [green]✓[/green] Imputation complete")
+
+    # Batch/site correction (ComBat/RUV)
+    X = batch_effects.correct(X, cfg)
+    console.print("  [green]✓[/green] Batch effects corrected")
+
+    # Partial out covariates (LMM)
+    X = adjust.partial_out(X, cfg)
+    console.print("  [green]✓[/green] Covariates adjusted")
+
+    # Apply scaling
+    X = scaling.apply(X, cfg)
+    console.print("  [green]✓[/green] Scaling applied")
+
+    # Save processed features
+    assemble.save(X, cfg)
+    console.print("  [green]✓[/green] Features saved")
 
 
-def integrate(cfg: str) -> None:
+def integrate(cfg_path: str) -> None:
     """
-    Multi-omics integration
-    Methods: weighted stack, MOFA2, DIABLO, multi-kernel
+    Integrate multi-omics (stack/MOFA/DIABLO/graph)
     """
-    config = load_config(cfg)
+    cfg = _cfg(cfg_path)
 
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        console=console,
-    ) as progress:
-        # Split data (prevent leakage)
-        task = progress.add_task("Splitting by family/site", total=1)
-        # TODO: Implement split
-        progress.update(task, advance=1)
+    console.print("[bold]→ integrate[/bold]")
 
-        # Integration
-        task = progress.add_task("Running MOFA2 integration", total=1)
-        # TODO: Implement MOFA2
-        progress.update(task, advance=1)
+    from ..features import assemble
+    from ..integrate import stack, mofa, diablo, graphs
 
-        # Save factors
-        task = progress.add_task("Saving latent factors", total=1)
-        # TODO: Save outputs
-        progress.update(task, advance=1)
+    # Load preprocessed features
+    X = assemble.load_processed(cfg)
+    console.print("  [green]✓[/green] Processed features loaded")
+
+    # Run integration method(s)
+    Z = {}
+
+    if cfg.integrate.method == "stack":
+        Z["stack"] = stack.run(X, cfg)
+        console.print("  [green]✓[/green] Weighted stack complete")
+
+    if cfg.integrate.method == "mofa2":
+        Z["mofa2"] = mofa.run(X, cfg)
+        console.print("  [green]✓[/green] MOFA2 complete")
+
+    if cfg.integrate.method == "diablo":
+        Z["diablo"] = diablo.run(X, cfg)
+        console.print("  [green]✓[/green] DIABLO complete")
+
+    if cfg.integrate.method == "gmkf":
+        Z["gmkf"] = graphs.run(X, cfg)
+        console.print("  [green]✓[/green] Multi-kernel fusion complete")
+
+    # Save integrated embeddings
+    assemble.save_embeddings(Z, cfg)
+    console.print("  [green]✓[/green] Embeddings saved")
 
 
-def cluster(cfg: str) -> None:
+def cluster(cfg_path: str) -> None:
     """
-    Clustering + topology analysis
-    - Embeddings: UMAP, t-SNE with multiple parameters
-    - Clustering: HDBSCAN, LCA, consensus
-    - Topology: persistence diagrams, MST gaps, spectral gaps
+    Embeddings + consensus clustering + topology gaps
     """
-    config = load_config(cfg)
+    cfg = _cfg(cfg_path)
 
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        console=console,
-    ) as progress:
-        # Embeddings
-        task = progress.add_task("Computing embeddings (UMAP, t-SNE)", total=1)
-        # TODO: Implement embeddings
-        progress.update(task, advance=1)
+    console.print("[bold]→ cluster[/bold]")
 
-        # Clustering
-        task = progress.add_task("HDBSCAN clustering", total=1)
-        # TODO: Implement HDBSCAN
-        progress.update(task, advance=1)
+    from ..features import assemble
+    from ..modeling import representation, clustering, topology
 
-        task = progress.add_task("Latent class analysis", total=1)
-        # TODO: Implement LCA
-        progress.update(task, advance=1)
+    # Load integrated embeddings
+    Z = assemble.load_embeddings(cfg)
+    console.print("  [green]✓[/green] Embeddings loaded")
 
-        task = progress.add_task("Consensus clustering", total=1)
-        # TODO: Implement consensus
-        progress.update(task, advance=1)
+    # Optional: additional representation layer (VAE)
+    embs = representation.make_embeddings(Z, cfg)
+    console.print("  [green]✓[/green] Embeddings computed (UMAP/t-SNE)")
 
-        # Topology
-        task = progress.add_task("Topological data analysis", total=1)
-        # TODO: Implement ripser
-        progress.update(task, advance=1)
+    # Consensus clustering (HDBSCAN + LCA)
+    labels, consensus = clustering.consensus(embs, cfg)
+    console.print("  [green]✓[/green] Consensus clustering complete")
 
-        task = progress.add_task("Gap analysis (MST, spectral)", total=1)
-        # TODO: Implement gap tests
-        progress.update(task, advance=1)
+    # Topology analysis (gaps, persistence)
+    gaps = topology.evaluate(embs["umap_main"], labels, cfg)
+    console.print(f"  [green]✓[/green] Gap score: {gaps.get('gap_score', 0.0):.2f}")
+
+    # Save clustering results
+    assemble.save_clusters(labels, consensus, gaps, cfg)
+    console.print("  [green]✓[/green] Clusters saved")
 
 
-def validate(cfg: str) -> None:
+def validate(cfg_path: str) -> None:
     """
-    Comprehensive validation
-    - Internal: silhouette, stability, biological
-    - External: leave-site-out, cross-ancestry
-    - Causal: MR, mediation, G×E
-    - Sensitivity: meds, fasting, MNAR
+    Internal/external/stability/causal/sensitivity validation
     """
-    config = load_config(cfg)
+    cfg = _cfg(cfg_path)
 
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        console=console,
-    ) as progress:
-        # Internal validation
-        task = progress.add_task("Internal validation (silhouette, stability)", total=1)
-        # TODO: Implement internal validation
-        progress.update(task, advance=1)
+    console.print("[bold]→ validate[/bold]")
 
-        # Biological validation
-        task = progress.add_task("Biological validation (metabolites, pathways)", total=1)
-        # TODO: Implement biological tests
-        progress.update(task, advance=1)
+    from ..features import assemble
+    from ..validation import internal, external, sensitivity
+    from ..validation import causal as causal_mod
 
-        # External validation
-        task = progress.add_task("External validation (holdout cohorts)", total=1)
-        # TODO: Implement external validation
-        progress.update(task, advance=1)
+    # Load data and labels
+    X = assemble.load_processed(cfg)
+    labels = assemble.load_labels(cfg)
+    console.print("  [green]✓[/green] Data and labels loaded")
 
-        task = progress.add_task("Leave-site-out cross-validation", total=1)
-        # TODO: Implement LSOCV
-        progress.update(task, advance=1)
+    # Internal validation (silhouette, stability, biological)
+    internal_results = internal.run_all(X, labels, cfg)
+    console.print(f"  [green]✓[/green] Internal validation: "
+                  f"silhouette={internal_results.get('silhouette', 0.0):.3f}, "
+                  f"stability={internal_results.get('stability', 0.0):.3f}")
 
-        # Causal inference
-        task = progress.add_task("Mendelian randomization", total=1)
-        # TODO: Implement MR
-        progress.update(task, advance=1)
+    # External validation (holdout cohorts, leave-site-out)
+    external_results = external.run_all(cfg)
+    console.print("  [green]✓[/green] External validation complete")
 
-        task = progress.add_task("Mediation analysis", total=1)
-        # TODO: Implement mediation
-        progress.update(task, advance=1)
+    # Sensitivity analyses (meds, fasting, MNAR)
+    sensitivity_results = sensitivity.run_all(cfg)
+    console.print("  [green]✓[/green] Sensitivity analyses complete")
 
-        task = progress.add_task("G×E interaction analysis", total=1)
-        # TODO: Implement G×E with causal forest
-        progress.update(task, advance=1)
-
-        # Sensitivity
-        task = progress.add_task("Sensitivity analyses", total=1)
-        # TODO: Implement sensitivity tests
-        progress.update(task, advance=1)
+    # Causal inference (MR, mediation, G×E)
+    causal_results = causal_mod.run_all(cfg)
+    console.print("  [green]✓[/green] Causal analyses complete")
 
 
-def report(cfg: str) -> None:
+def report(cfg_path: str) -> None:
     """
-    Generate reports
-    - Executive summary
-    - Technical report with DAGs, sensitivity
-    - Clinician decision cards (per subtype)
-    - Clinical decision support tables
+    Generate executive summary + clinician decision cards
     """
-    config = load_config(cfg)
+    cfg = _cfg(cfg_path)
 
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        console=console,
-    ) as progress:
-        # Cluster characterization
-        task = progress.add_task("Characterizing clusters (SHAP)", total=1)
-        # TODO: Compute SHAP values
-        progress.update(task, advance=1)
+    console.print("[bold]→ report[/bold]")
 
-        # Visualizations
-        task = progress.add_task("Generating visualizations", total=1)
-        # TODO: Create plots
-        progress.update(task, advance=1)
+    from ..reporting import report as report_mod
 
-        # Executive summary
-        task = progress.add_task("Executive summary", total=1)
-        # TODO: Render Jinja template
-        progress.update(task, advance=1)
+    # Generate all report types
+    report_mod.build_all(cfg)
+    console.print("  [green]✓[/green] Reports generated")
 
-        # Technical report
-        task = progress.add_task("Technical report", total=1)
-        # TODO: Render technical report
-        progress.update(task, advance=1)
+    # Print output locations
+    output_dir = cfg.output_dir
+    console.print(f"\n[bold cyan]Reports saved to:[/bold cyan] {output_dir}")
 
-        # Clinician cards
-        task = progress.add_task("Clinician decision cards", total=1)
-        # TODO: Generate per-subtype cards
-        progress.update(task, advance=1)
-
-        # Decision support
-        task = progress.add_task("Clinical decision support tables", total=1)
-        # TODO: Generate care maps, risk stratification
-        progress.update(task, advance=1)
+    for report_type in cfg.report.types:
+        for fmt in cfg.report.output_formats:
+            console.print(f"  • {report_type}.{fmt}")
 
 
-def pipeline(cfg: str, steps: Optional[List[str]] = None) -> None:
+def pipeline(cfg_path: str, steps: Optional[List[str]] = None) -> None:
     """
     Run full pipeline or selected steps
 
     Args:
-        cfg: Path to config file
-        steps: Optional list of steps to run. If None, runs all steps.
-               Valid steps: download, build_features, integrate, cluster, validate, report
+        cfg_path: Path to config file
+        steps: Optional list of steps. If None, runs all.
+               Valid: download, build_features, integrate, cluster, validate, report
     """
     all_steps = {
         "download": download,
@@ -291,25 +241,20 @@ def pipeline(cfg: str, steps: Optional[List[str]] = None) -> None:
     if steps is None:
         steps_to_run = list(all_steps.keys())
     else:
-        # Validate steps
         invalid = set(steps) - set(all_steps.keys())
         if invalid:
-            raise ValueError(f"Invalid steps: {invalid}. Valid steps: {list(all_steps.keys())}")
+            raise ValueError(f"Invalid steps: {invalid}")
         steps_to_run = steps
 
-    console.print(f"\n[bold]Running pipeline steps: {', '.join(steps_to_run)}[/bold]\n")
+    console.print(f"\n[bold]Pipeline: {', '.join(steps_to_run)}[/bold]")
+    console.print(f"[dim]Config: {cfg_path}[/dim]\n")
 
     for step_name in steps_to_run:
-        console.print(f"\n[bold cyan]{'='*60}[/bold cyan]")
-        console.print(f"[bold cyan]Step: {step_name}[/bold cyan]")
-        console.print(f"[bold cyan]{'='*60}[/bold cyan]\n")
-
+        console.print(f"[bold cyan]{'─'*60}[/bold cyan]")
         try:
-            all_steps[step_name](cfg)
+            all_steps[step_name](cfg_path)
         except Exception as e:
-            console.print(f"\n[bold red]✗ Step '{step_name}' failed: {e}[/bold red]")
+            console.print(f"[bold red]✗ Pipeline failed at '{step_name}': {e}[/bold red]")
             raise
 
-    console.print(f"\n[bold green]{'='*60}[/bold green]")
-    console.print(f"[bold green]Pipeline completed successfully![/bold green]")
-    console.print(f"[bold green]{'='*60}[/bold green]\n")
+    console.print(f"\n[bold green]Pipeline complete ✓[/bold green]\n")
