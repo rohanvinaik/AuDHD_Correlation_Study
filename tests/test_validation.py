@@ -230,9 +230,9 @@ class TestBootstrapStability:
         )
 
         assert len(result.ari_scores) > 0
-        assert 0 <= result.mean_ari <= 1
+        assert 0 <= result.ari_mean <= 1
         assert 0 <= result.stability_score <= 1
-        assert result.interpretation in ['highly_stable', 'stable', 'moderately_stable', 'unstable']
+        assert result.interpretation in ['excellent', 'good', 'moderate', 'poor']
 
     def test_confidence_intervals(self, clustering_data):
         """Test confidence interval computation"""
@@ -242,11 +242,11 @@ class TestBootstrapStability:
             X, y, self.clustering_func, n_bootstrap=20, sample_fraction=0.8
         )
 
-        ci_ari = result.confidence_interval_ari
-        ci_ami = result.confidence_interval_ami
+        ci_ari = result.ari_ci
+        ci_ami = result.ami_ci
 
-        assert ci_ari[0] <= result.mean_ari <= ci_ari[1]
-        assert ci_ami[0] <= result.mean_ami <= ci_ami[1]
+        assert ci_ari[0] <= result.ari_mean <= ci_ari[1]
+        assert ci_ami[0] <= result.ami_mean <= ci_ami[1]
 
 
 class TestSubsamplingStability:
@@ -482,7 +482,7 @@ class TestCrossSiteValidation:
             X, y, site_labels, self.clustering_func
         )
 
-        assert result.mean_ari >= 0
+        assert result.ari_mean >= 0
         assert result.generalization_score >= 0
 
 
@@ -502,7 +502,7 @@ class TestStratifiedCV:
         )
 
         assert len(result.fold_ari_scores) > 0
-        assert result.mean_ari >= 0
+        assert result.ari_mean >= 0
 
 
 class TestBatchEffectValidation:

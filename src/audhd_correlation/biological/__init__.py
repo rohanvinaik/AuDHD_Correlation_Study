@@ -7,7 +7,22 @@ from .gsea import (
     run_gsea,
     prerank_gsea,
     load_gene_sets,
+    compare_cluster_enrichments,
+    generate_enrichment_table,
     GSEAResult,
+    GSEAResults,
+)
+
+from .gene_id_mapping import (
+    GeneIDMapper,
+    normalize_gene_set,
+    normalize_pathway_database,
+)
+
+from .pathway_database import (
+    load_pathway_database,
+    PathwayDatabase,
+    merge_pathway_databases,
 )
 
 from .networks import (
@@ -29,7 +44,9 @@ from .drug_targets import (
     predict_drug_targets,
     rank_druggable_targets,
     find_approved_drugs,
+    drug_repurposing_candidates,
     DrugTargetResult,
+    DrugTargetResults,
 )
 
 # Pipeline wrapper functions
@@ -59,7 +76,18 @@ __all__ = [
     'run_gsea',
     'prerank_gsea',
     'load_gene_sets',
+    'compare_cluster_enrichments',
+    'generate_enrichment_table',
     'GSEAResult',
+    'GSEAResults',
+    # Gene ID Mapping
+    'GeneIDMapper',
+    'normalize_gene_set',
+    'normalize_pathway_database',
+    # Pathway Database
+    'load_pathway_database',
+    'PathwayDatabase',
+    'merge_pathway_databases',
     # Networks
     'reconstruct_metabolic_network',
     'analyze_ppi_network',
@@ -75,7 +103,9 @@ __all__ = [
     'predict_drug_targets',
     'rank_druggable_targets',
     'find_approved_drugs',
+    'drug_repurposing_candidates',
     'DrugTargetResult',
+    'DrugTargetResults',
     # Pipeline wrappers
     'run_pathway_enrichment',
     'build_biological_networks',

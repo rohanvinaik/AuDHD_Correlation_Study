@@ -70,103 +70,62 @@ class GSEAResults:
 
 
 def load_gene_sets(
-    database: str = 'GO_Biological_Process',
-    species: str = 'human',
-    custom_gmt: Optional[str] = None,
+    database_path: str,
+    format: str = "auto",
+    gene_mapper: Optional[object] = None,  # GeneIDMapper
+    min_size: int = 15,
+    max_size: int = 500,
 ) -> Dict[str, Set[str]]:
     """
-    Load gene sets from pathway databases
+    Load gene sets from pathway database file
 
     Args:
-        database: Database name ('GO_Biological_Process', 'KEGG', 'Reactome', 'MSigDB')
-        species: Species ('human', 'mouse')
-        custom_gmt: Path to custom GMT file
+        database_path: Path to pathway database file (GMT, GPAD, TSV, CSV)
+        format: File format ("gmt", "gpad", "tsv", "csv", "auto")
+        gene_mapper: GeneIDMapper for gene normalization (optional)
+        min_size: Minimum gene set size
+        max_size: Maximum gene set size
 
     Returns:
         Dictionary mapping pathway names to gene sets
+
+    Raises:
+        FileNotFoundError: If database_path doesn't exist
+
+    Example:
+        # Load MSigDB Hallmark gene sets
+        gene_sets = load_gene_sets(
+            database_path="data/h.all.v2023.1.Hs.symbols.gmt",
+            format="gmt"
+        )
+
+    Download pathway databases:
+        • MSigDB: https://www.gsea-msigdb.org/gsea/downloads.jsp
+        • Gene Ontology: http://geneontology.org/docs/download-ontology/
+        • KEGG: https://www.genome.jp/kegg/pathway.html
+        • Reactome: https://reactome.org/download-data
+
+    Or use CLI:
+        audhd-pipeline download-pathways --database msigdb
     """
-    if custom_gmt:
-        return _load_gmt_file(custom_gmt)
+    from .pathway_database import load_pathway_database
 
-    # For now, return example gene sets
-    # In production, would integrate with GSEApy or load from databases
-    gene_sets = _get_example_gene_sets(database, species)
+    # Load database
+    db = load_pathway_database(
+        database_path=database_path,
+        format=format,
+        gene_mapper=gene_mapper,
+        normalize_genes=(gene_mapper is not None),
+    )
 
-    return gene_sets
+    # Filter by size
+    db_filtered = db.filter_by_size(min_size=min_size, max_size=max_size)
 
-
-def _load_gmt_file(gmt_path: str) -> Dict[str, Set[str]]:
-    """Load gene sets from GMT file"""
-    gene_sets = {}
-
-    with open(gmt_path, 'r') as f:
-        for line in f:
-            parts = line.strip().split('\t')
-            if len(parts) < 3:
-                continue
-
-            pathway_name = parts[0]
-            # parts[1] is description (skip)
-            genes = set(parts[2:])
-
-            gene_sets[pathway_name] = genes
-
-    return gene_sets
+    return db_filtered.pathways
 
 
-def _get_example_gene_sets(database: str, species: str) -> Dict[str, Set[str]]:
-    """Get example gene sets for demonstration"""
-    # These are simplified examples
-    # In production, integrate with actual databases
-
-    if database == 'GO_Biological_Process':
-        return {
-            'GO:0006955_immune_response': {
-                'IL6', 'TNF', 'IFNG', 'IL1B', 'IL10', 'CD4', 'CD8A', 'FOXP3'
-            },
-            'GO:0006954_inflammatory_response': {
-                'IL6', 'TNF', 'IL1B', 'NFKB1', 'PTGS2', 'CCL2', 'CXCL8'
-            },
-            'GO:0006412_translation': {
-                'RPS6', 'RPL13', 'EIF4E', 'EIF2S1', 'MTOR', 'RPS6KB1'
-            },
-            'GO:0007268_chemical_synaptic_transmission': {
-                'SYT1', 'SLC17A7', 'DLG4', 'GRIN1', 'GRIN2A', 'GRIA1', 'SYN1'
-            },
-            'GO:0007399_nervous_system_development': {
-                'NEUROD1', 'NEUROG2', 'SOX2', 'PAX6', 'NKX2-1', 'ASCL1'
-            },
-            'GO:0006030_chitin_metabolic_process': {
-                'CHIA', 'CHIT1', 'CHI3L1', 'CHI3L2', 'OVGP1'
-            },
-        }
-
-    elif database == 'KEGG':
-        return {
-            'hsa04610:Complement_and_coagulation_cascades': {
-                'C1QA', 'C1QB', 'C3', 'C5', 'F2', 'F10', 'SERPINE1'
-            },
-            'hsa04060:Cytokine-cytokine_receptor_interaction': {
-                'IL6', 'IL6R', 'TNF', 'TNFRSF1A', 'IL1B', 'IL1R1', 'IFNG', 'IFNGR1'
-            },
-            'hsa04080:Neuroactive_ligand-receptor_interaction': {
-                'DRD1', 'DRD2', 'HTR1A', 'HTR2A', 'GRIA1', 'GRIN1', 'GABRA1'
-            },
-        }
-
-    elif database == 'Reactome':
-        return {
-            'R-HSA-168256:Immune_System': {
-                'CD4', 'CD8A', 'IL6', 'TNF', 'IFNG', 'IL1B', 'IL10'
-            },
-            'R-HSA-112316:Neuronal_System': {
-                'SLC17A7', 'GRIN1', 'GRIN2A', 'DLG4', 'SYT1', 'SYN1'
-            },
-        }
-
-    else:
-        warnings.warn(f"Unknown database: {database}. Using example gene sets.")
-        return _get_example_gene_sets('GO_Biological_Process', species)
+# Removed hardcoded pathway fallbacks - users must provide explicit pathway database files
+# See load_gene_sets() documentation for download instructions
 
 
 def run_gsea(
@@ -177,6 +136,8 @@ def run_gsea(
     n_permutations: int = 1000,
     min_size: int = 15,
     max_size: int = 500,
+    ranking_method: str = "log2fc",
+    fdr_method: str = "bh",
     random_state: int = 42,
 ) -> GSEAResults:
     """
@@ -190,25 +151,29 @@ def run_gsea(
         n_permutations: Number of permutations for null distribution
         min_size: Minimum gene set size
         max_size: Maximum gene set size
+        ranking_method: Gene ranking method ("log2fc", "signal_to_noise", "t_stat")
+        fdr_method: FDR correction method ("bh", "bonferroni", "none")
         random_state: Random seed
 
     Returns:
         GSEAResults with enriched pathways
+
+    Ranking methods:
+        - "log2fc": Log2 fold change (default)
+        - "signal_to_noise": (mean1 - mean2) / (std1 + std2)
+        - "t_stat": T-statistic from t-test
     """
     np.random.seed(random_state)
 
     # Create binary labels (cluster vs rest)
     y = (labels == cluster_id).astype(int)
 
-    # Calculate fold change and rank genes
-    cluster_mean = expression_data[y == 1].mean(axis=0)
-    other_mean = expression_data[y == 0].mean(axis=0)
-
-    # Log2 fold change
-    fc = np.log2((cluster_mean + 1) / (other_mean + 1))
-
-    # Rank genes by fold change
-    ranked_genes = fc.sort_values(ascending=False)
+    # Rank genes by specified method
+    ranked_genes = _rank_genes(
+        expression_data=expression_data,
+        labels=y,
+        method=ranking_method,
+    )
 
     # Run preranked GSEA
     results = prerank_gsea(
@@ -217,10 +182,68 @@ def run_gsea(
         n_permutations=n_permutations,
         min_size=min_size,
         max_size=max_size,
+        fdr_method=fdr_method,
         random_state=random_state,
     )
 
     return results
+
+
+def _rank_genes(
+    expression_data: pd.DataFrame,
+    labels: np.ndarray,
+    method: str = "log2fc",
+) -> pd.Series:
+    """Rank genes by differential expression
+
+    Args:
+        expression_data: Gene expression matrix
+        labels: Binary labels (0/1)
+        method: Ranking method
+
+    Returns:
+        Series of gene ranks (higher = more upregulated in class 1)
+    """
+    cluster_expr = expression_data[labels == 1]
+    other_expr = expression_data[labels == 0]
+
+    if method == "log2fc":
+        # Log2 fold change
+        cluster_mean = cluster_expr.mean(axis=0)
+        other_mean = other_expr.mean(axis=0)
+        ranks = np.log2((cluster_mean + 1) / (other_mean + 1))
+
+    elif method == "signal_to_noise":
+        # Signal-to-noise ratio
+        cluster_mean = cluster_expr.mean(axis=0)
+        other_mean = other_expr.mean(axis=0)
+        cluster_std = cluster_expr.std(axis=0)
+        other_std = other_expr.std(axis=0)
+
+        # Avoid division by zero
+        denom = cluster_std + other_std + 1e-8
+        ranks = (cluster_mean - other_mean) / denom
+
+    elif method == "t_stat":
+        # T-statistic
+        from scipy.stats import ttest_ind
+
+        t_stats = []
+        for gene in expression_data.columns:
+            t_stat, _ = ttest_ind(
+                cluster_expr[gene],
+                other_expr[gene],
+                equal_var=False,  # Welch's t-test
+            )
+            t_stats.append(t_stat)
+
+        ranks = pd.Series(t_stats, index=expression_data.columns)
+
+    else:
+        raise ValueError(f"Unknown ranking method: {method}")
+
+    # Sort descending
+    return ranks.sort_values(ascending=False)
 
 
 def prerank_gsea(
@@ -229,6 +252,7 @@ def prerank_gsea(
     n_permutations: int = 1000,
     min_size: int = 15,
     max_size: int = 500,
+    fdr_method: str = "bh",
     random_state: int = 42,
 ) -> GSEAResults:
     """
@@ -240,10 +264,16 @@ def prerank_gsea(
         n_permutations: Number of permutations
         min_size: Minimum gene set size
         max_size: Maximum gene set size
+        fdr_method: FDR correction method ("bh", "bonferroni", "none")
         random_state: Random seed
 
     Returns:
         GSEAResults with enrichment statistics
+
+    FDR methods:
+        - "bh": Benjamini-Hochberg (False Discovery Rate)
+        - "bonferroni": Bonferroni correction (more conservative)
+        - "none": No correction (not recommended)
     """
     np.random.seed(random_state)
 
@@ -284,7 +314,7 @@ def prerank_gsea(
 
     # FDR correction
     pvals = [info['pval'] for info in pathway_info.values()]
-    fdrs = _calculate_fdr(pvals)
+    fdrs = _calculate_fdr(pvals, method=fdr_method)
 
     # Create results
     for i, (pathway_name, info) in enumerate(pathway_info.items()):
@@ -430,30 +460,59 @@ def _calculate_enrichment_score(
     return float(es), float(nes), float(pval), leading_edge, int(max_pos), running_es
 
 
-def _calculate_fdr(pvals: List[float]) -> List[float]:
-    """Calculate FDR using Benjamini-Hochberg procedure"""
+def _calculate_fdr(pvals: List[float], method: str = "bh") -> List[float]:
+    """Calculate FDR using specified method
+
+    Args:
+        pvals: List of p-values
+        method: Correction method ("bh", "bonferroni", "none")
+
+    Returns:
+        List of corrected p-values
+    """
     n = len(pvals)
     if n == 0:
         return []
 
-    # Sort p-values
-    sorted_idx = np.argsort(pvals)
-    sorted_pvals = np.array(pvals)[sorted_idx]
+    pvals_arr = np.array(pvals)
 
-    # Calculate FDR
-    fdrs = np.zeros(n)
-    for i in range(n):
-        fdrs[i] = sorted_pvals[i] * n / (i + 1)
+    if method == "bh":
+        # Benjamini-Hochberg FDR
+        sorted_idx = np.argsort(pvals_arr)
+        sorted_pvals = pvals_arr[sorted_idx]
 
-    # Ensure monotonicity
-    for i in range(n - 2, -1, -1):
-        fdrs[i] = min(fdrs[i], fdrs[i + 1])
+        # Calculate FDR
+        fdrs = np.zeros(n)
+        for i in range(n):
+            fdrs[i] = sorted_pvals[i] * n / (i + 1)
 
-    # Unsort
-    unsorted_fdrs = np.zeros(n)
-    unsorted_fdrs[sorted_idx] = fdrs
+        # Ensure monotonicity
+        for i in range(n - 2, -1, -1):
+            fdrs[i] = min(fdrs[i], fdrs[i + 1])
 
-    return unsorted_fdrs.tolist()
+        # Unsort
+        unsorted_fdrs = np.zeros(n)
+        unsorted_fdrs[sorted_idx] = fdrs
+
+        # Cap at 1.0
+        unsorted_fdrs = np.minimum(unsorted_fdrs, 1.0)
+
+        return unsorted_fdrs.tolist()
+
+    elif method == "bonferroni":
+        # Bonferroni correction
+        corrected = np.minimum(pvals_arr * n, 1.0)
+        return corrected.tolist()
+
+    elif method == "none":
+        # No correction
+        return pvals
+
+    else:
+        raise ValueError(
+            f"Unknown FDR method: {method}. "
+            f"Supported: 'bh', 'bonferroni', 'none'"
+        )
 
 
 def compare_cluster_enrichments(
@@ -463,6 +522,8 @@ def compare_cluster_enrichments(
     cluster_ids: Optional[List[int]] = None,
     n_permutations: int = 1000,
     fdr_threshold: float = 0.25,
+    ranking_method: str = "log2fc",
+    fdr_method: str = "bh",
 ) -> pd.DataFrame:
     """
     Compare pathway enrichments across clusters
@@ -474,9 +535,11 @@ def compare_cluster_enrichments(
         cluster_ids: Clusters to compare (default: all)
         n_permutations: Number of permutations
         fdr_threshold: FDR threshold for significance
+        ranking_method: Gene ranking method
+        fdr_method: FDR correction method
 
     Returns:
-        DataFrame with pathway enrichments per cluster
+        DataFrame with pathway enrichments per cluster (NES values)
     """
     if cluster_ids is None:
         cluster_ids = np.unique(labels[labels >= 0])  # Exclude noise (-1)
@@ -490,6 +553,8 @@ def compare_cluster_enrichments(
             gene_sets=gene_sets,
             cluster_id=cluster_id,
             n_permutations=n_permutations,
+            ranking_method=ranking_method,
+            fdr_method=fdr_method,
         )
 
         # Keep only significant pathways
@@ -502,3 +567,135 @@ def compare_cluster_enrichments(
     comparison_df = pd.DataFrame(all_results).fillna(0)
 
     return comparison_df
+
+
+def generate_enrichment_table(
+    expression_data: pd.DataFrame,
+    labels: np.ndarray,
+    gene_sets: Dict[str, Set[str]],
+    cluster_ids: Optional[List[int]] = None,
+    n_permutations: int = 1000,
+    fdr_threshold: float = 0.25,
+    ranking_method: str = "log2fc",
+    fdr_method: str = "bh",
+    include_leading_edge: bool = True,
+    max_leading_edge_genes: int = 10,
+) -> pd.DataFrame:
+    """
+    Generate comprehensive enrichment table for all clusters
+
+    Creates a detailed table with:
+    - Pathway information
+    - Cluster-specific enrichment scores
+    - FDR values
+    - Leading edge genes
+    - Pathway sizes
+
+    Args:
+        expression_data: Gene expression matrix
+        labels: Cluster labels
+        gene_sets: Pathway gene sets
+        cluster_ids: Clusters to analyze (default: all)
+        n_permutations: Number of permutations
+        fdr_threshold: FDR threshold for significance
+        ranking_method: Gene ranking method
+        fdr_method: FDR correction method
+        include_leading_edge: Include leading edge genes in output
+        max_leading_edge_genes: Maximum leading edge genes to show per pathway
+
+    Returns:
+        DataFrame with comprehensive enrichment results
+
+    Output columns:
+        - pathway_id: Pathway identifier
+        - pathway_name: Pathway name
+        - cluster_X_NES: Normalized enrichment score for cluster X
+        - cluster_X_FDR: FDR q-value for cluster X
+        - cluster_X_leading_edge: Leading edge genes for cluster X
+        - pathway_size: Number of genes in pathway
+        - n_clusters_enriched: Number of clusters with significant enrichment
+    """
+    if cluster_ids is None:
+        cluster_ids = np.unique(labels[labels >= 0])
+
+    # Store all results
+    all_results = []
+
+    for cluster_id in cluster_ids:
+        results = run_gsea(
+            expression_data=expression_data,
+            labels=labels,
+            gene_sets=gene_sets,
+            cluster_id=cluster_id,
+            n_permutations=n_permutations,
+            ranking_method=ranking_method,
+            fdr_method=fdr_method,
+        )
+
+        # Add cluster ID to each result
+        for r in results.results:
+            all_results.append({
+                'cluster_id': cluster_id,
+                'pathway_id': r.pathway_id,
+                'pathway_name': r.pathway_name,
+                'pathway_size': r.pathway_size,
+                'NES': r.nes,
+                'FDR': r.fdr,
+                'pval': r.pval,
+                'leading_edge': r.leading_edge_genes[:max_leading_edge_genes],
+                'leading_edge_size': r.leading_edge_size,
+            })
+
+    # Convert to DataFrame
+    df = pd.DataFrame(all_results)
+
+    # Pivot to wide format
+    rows = []
+    for pathway_id in df['pathway_id'].unique():
+        pathway_df = df[df['pathway_id'] == pathway_id]
+
+        row = {
+            'pathway_id': pathway_id,
+            'pathway_name': pathway_df['pathway_name'].iloc[0],
+            'pathway_size': pathway_df['pathway_size'].iloc[0],
+        }
+
+        # Add cluster-specific columns
+        for cluster_id in cluster_ids:
+            cluster_data = pathway_df[pathway_df['cluster_id'] == cluster_id]
+
+            if len(cluster_data) > 0:
+                row[f'cluster_{cluster_id}_NES'] = cluster_data['NES'].iloc[0]
+                row[f'cluster_{cluster_id}_FDR'] = cluster_data['FDR'].iloc[0]
+
+                if include_leading_edge:
+                    leading_edge = cluster_data['leading_edge'].iloc[0]
+                    row[f'cluster_{cluster_id}_leading_edge'] = ','.join(leading_edge)
+            else:
+                row[f'cluster_{cluster_id}_NES'] = 0.0
+                row[f'cluster_{cluster_id}_FDR'] = 1.0
+                if include_leading_edge:
+                    row[f'cluster_{cluster_id}_leading_edge'] = ""
+
+        # Count significant enrichments
+        n_enriched = sum(
+            pathway_df['FDR'] <= fdr_threshold
+        )
+        row['n_clusters_enriched'] = n_enriched
+
+        rows.append(row)
+
+    enrichment_table = pd.DataFrame(rows)
+
+    # Sort by number of enriched clusters, then by best NES
+    nes_cols = [col for col in enrichment_table.columns if col.endswith('_NES')]
+    enrichment_table['max_abs_NES'] = enrichment_table[nes_cols].abs().max(axis=1)
+
+    enrichment_table = enrichment_table.sort_values(
+        ['n_clusters_enriched', 'max_abs_NES'],
+        ascending=[False, False]
+    )
+
+    enrichment_table = enrichment_table.drop('max_abs_NES', axis=1)
+
+    return enrichment_table

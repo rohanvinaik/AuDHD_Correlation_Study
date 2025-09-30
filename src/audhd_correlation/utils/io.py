@@ -31,7 +31,17 @@ def load_data(path: Union[str, Path], **kwargs: Any) -> Union[pd.DataFrame, np.n
         import zarr
         return zarr.open(path, mode="r", **kwargs)
     else:
-        raise ValueError(f"Unsupported file format: {suffix}")
+        supported = [".parquet", ".h5", ".hdf5", ".csv", ".feather", ".zarr"]
+        raise ValueError(
+            f"Unsupported file format: '{suffix}'\n\n"
+            f"Supported formats for load_data():\n"
+            f"  • {', '.join(supported)}\n\n"
+            f"Recommendations:\n"
+            f"  • For Excel files (.xlsx): Export to CSV first\n"
+            f"  • For large datasets: Use Parquet (fast, compressed)\n"
+            f"  • For compatibility: Use CSV\n"
+            f"  • For arrays: Use Zarr or HDF5"
+        )
 
 
 def save_data(
@@ -61,7 +71,16 @@ def save_data(
         elif suffix == ".feather":
             data.to_feather(path, **kwargs)
         else:
-            raise ValueError(f"Unsupported format for DataFrame: {suffix}")
+            supported_df = [".parquet", ".h5", ".hdf5", ".csv", ".feather"]
+            raise ValueError(
+                f"Unsupported format for DataFrame: '{suffix}'\n\n"
+                f"Supported formats for saving DataFrames:\n"
+                f"  • {', '.join(supported_df)}\n\n"
+                f"Recommendations:\n"
+                f"  • Best performance: Parquet (.parquet)\n"
+                f"  • Best compatibility: CSV (.csv)\n"
+                f"  • For Excel: Save as CSV, open in Excel"
+            )
     elif isinstance(data, np.ndarray):
         if suffix == ".npy":
             np.save(path, data, **kwargs)
@@ -69,6 +88,15 @@ def save_data(
             import zarr
             zarr.save(str(path), data, **kwargs)
         else:
-            raise ValueError(f"Unsupported format for array: {suffix}")
+            supported_arr = [".npy", ".zarr"]
+            raise ValueError(
+                f"Unsupported format for NumPy array: '{suffix}'\n\n"
+                f"Supported formats for saving arrays:\n"
+                f"  • {', '.join(supported_arr)}\n\n"
+                f"Recommendations:\n"
+                f"  • For NumPy arrays: .npy (fast, native)\n"
+                f"  • For large arrays: .zarr (chunked, compressed)\n"
+                f"  • To save as table: Convert to DataFrame first"
+            )
     else:
         raise TypeError(f"Unsupported data type: {type(data)}")

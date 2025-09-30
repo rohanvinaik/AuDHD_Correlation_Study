@@ -172,9 +172,8 @@ class TestStabilityMetrics:
 
         result = bootstrap_stability(X, y, n_bootstrap=10)
 
-        ari_key = 'mean_ari' if 'mean_ari' in result else 'ari_mean'
-        assert 0 <= result[ari_key] <= 1, \
-            f"Bootstrap ARI {result[ari_key]} out of range [0, 1]"
+        assert 0 <= result.ari_mean <= 1, \
+            f"Bootstrap ARI {result.ari_mean} out of range [0, 1]"
 
     def test_stability_increases_with_quality(self):
         """Test that stability increases with clustering quality"""
@@ -194,9 +193,7 @@ class TestStabilityMetrics:
         result_good = bootstrap_stability(X_good, y_good, n_bootstrap=10)
         result_poor = bootstrap_stability(X_poor, y_poor, n_bootstrap=10)
 
-        ari_key = 'mean_ari' if 'mean_ari' in result_good else 'ari_mean'
-
-        assert result_good[ari_key] > result_poor[ari_key], \
+        assert result_good.ari_mean > result_poor.ari_mean, \
             "Good clustering should have higher stability"
 
 

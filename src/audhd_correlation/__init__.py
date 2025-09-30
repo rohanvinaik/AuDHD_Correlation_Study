@@ -20,9 +20,15 @@ INTERIM_DATA_DIR = DATA_ROOT / "interim"
 PROCESSED_DATA_DIR = DATA_ROOT / "processed"
 EXTERNAL_DATA_DIR = DATA_ROOT / "external"
 
+# Main API - Pipeline class and convenience function
+from .pipeline import Pipeline, run_pipeline
+
 __all__ = [
     "__version__",
     "PACKAGE_ROOT",
     "PROJECT_ROOT",
     "DATA_ROOT",
+    # Main API
+    "Pipeline",
+    "run_pipeline",
 ]

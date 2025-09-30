@@ -545,10 +545,10 @@ def calculate_cross_cohort_stability(
             nmi_scores.append(nmi)
 
     return {
-        'mean_ari': np.mean(ari_scores),
-        'std_ari': np.std(ari_scores),
-        'mean_nmi': np.mean(nmi_scores),
-        'std_nmi': np.std(nmi_scores),
-        'min_ari': np.min(ari_scores),
-        'max_ari': np.max(ari_scores),
+        'ari_mean': np.mean(ari_scores),
+        'ari_std': np.std(ari_scores),
+        'nmi_mean': np.mean(nmi_scores),
+        'nmi_std': np.std(nmi_scores),
+        'ari_min': np.min(ari_scores),
+        'ari_max': np.max(ari_scores),
     }

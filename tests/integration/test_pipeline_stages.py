@@ -194,10 +194,8 @@ class TestValidationPipeline:
             n_bootstrap=10,  # Small number for speed
         )
 
-        assert 'mean_ari' in result or 'ari_mean' in result
         # ARI should be between 0 and 1
-        ari_key = 'mean_ari' if 'mean_ari' in result else 'ari_mean'
-        assert 0 <= result[ari_key] <= 1
+        assert 0 <= result.ari_mean <= 1
 
 
 class TestBiologicalAnalysisPipeline:

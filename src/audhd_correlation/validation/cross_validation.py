@@ -14,17 +14,36 @@ from sklearn.model_selection import KFold, StratifiedKFold, LeaveOneGroupOut
 
 @dataclass
 class CrossValidationResult:
-    """Result of cross-validation"""
+    """Result of cross-validation
+
+    Uses standardized naming convention: {metric}_{statistic}
+    See docs/validation_metric_names.md for full specification.
+    """
     fold_ari_scores: List[float]
     fold_ami_scores: List[float]
-    mean_ari: float
-    std_ari: float
-    mean_ami: float
-    std_ami: float
-    confidence_interval_ari: Tuple[float, float]
-    confidence_interval_ami: Tuple[float, float]
+    ari_mean: float  # Renamed from mean_ari
+    ari_std: float   # Renamed from std_ari
+    ami_mean: float  # Renamed from mean_ami
+    ami_std: float   # Renamed from std_ami
+    ari_ci: Tuple[float, float]  # Renamed from confidence_interval_ari
+    ami_ci: Tuple[float, float]  # Renamed from confidence_interval_ami
     generalization_score: float  # Overall score (0-1)
     interpretation: str
+
+    def to_dict(self) -> dict:
+        """Convert to dictionary with standard field names"""
+        return {
+            "fold_ari_scores": self.fold_ari_scores,
+            "fold_ami_scores": self.fold_ami_scores,
+            "ari_mean": float(self.ari_mean),
+            "ari_std": float(self.ari_std),
+            "ami_mean": float(self.ami_mean),
+            "ami_std": float(self.ami_std),
+            "ari_ci": [float(self.ari_ci[0]), float(self.ari_ci[1])],
+            "ami_ci": [float(self.ami_ci[0]), float(self.ami_ci[1])],
+            "generalization_score": float(self.generalization_score),
+            "interpretation": self.interpretation,
+        }
 
 
 def cross_site_validation(
@@ -471,12 +490,12 @@ def _compute_cv_result(
     return CrossValidationResult(
         fold_ari_scores=list(ari_scores),
         fold_ami_scores=list(ami_scores),
-        mean_ari=mean_ari,
-        std_ari=std_ari,
-        mean_ami=mean_ami,
-        std_ami=std_ami,
-        confidence_interval_ari=ci_ari,
-        confidence_interval_ami=ci_ami,
+        ari_mean=mean_ari,
+        ari_std=std_ari,
+        ami_mean=mean_ami,
+        ami_std=std_ami,
+        ari_ci=ci_ari,
+        ami_ci=ci_ami,
         generalization_score=gen_score,
         interpretation=interpretation,
     )
@@ -487,12 +506,12 @@ def _default_cv_result() -> CrossValidationResult:
     return CrossValidationResult(
         fold_ari_scores=[],
         fold_ami_scores=[],
-        mean_ari=0.0,
-        std_ari=0.0,
-        mean_ami=0.0,
-        std_ami=0.0,
-        confidence_interval_ari=(0.0, 0.0),
-        confidence_interval_ami=(0.0, 0.0),
+        ari_mean=0.0,
+        ari_std=0.0,
+        ami_mean=0.0,
+        ami_std=0.0,
+        ari_ci=(0.0, 0.0),
+        ami_ci=(0.0, 0.0),
         generalization_score=0.0,
         interpretation="poor_generalization",
     )

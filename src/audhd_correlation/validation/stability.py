@@ -14,19 +14,69 @@ from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score, fow
 
 @dataclass
 class StabilityResult:
-    """Container for stability analysis results"""
+    """Container for stability analysis results
+
+    Uses standardized naming convention: {metric}_{statistic}
+    See docs/validation_metric_names.md for full specification.
+    """
+    # Raw scores from all bootstraps
     ari_scores: np.ndarray
     ami_scores: np.ndarray
-    fowlkes_mallows_scores: np.ndarray
+    fmi_scores: np.ndarray  # Renamed from fowlkes_mallows_scores
     jaccard_scores: np.ndarray
-    mean_ari: float
-    std_ari: float
-    mean_ami: float
-    std_ami: float
-    confidence_interval_ari: Tuple[float, float]
-    confidence_interval_ami: Tuple[float, float]
-    stability_score: float  # Overall stability (0-1)
-    interpretation: str
+
+    # Summary statistics (STANDARD NAMING)
+    ari_mean: float  # Renamed from mean_ari
+    ari_std: float   # Renamed from std_ari
+    ari_ci: Tuple[float, float]  # Renamed from confidence_interval_ari
+
+    ami_mean: float  # Renamed from mean_ami
+    ami_std: float   # Renamed from std_ami
+    ami_ci: Tuple[float, float]  # Renamed from confidence_interval_ami
+
+    fmi_mean: float
+    fmi_std: float
+
+    jaccard_mean: float
+    jaccard_std: float
+
+    # Overall assessment
+    stability_score: float  # 0-1, higher = more stable
+    interpretation: str  # "excellent", "good", "moderate", "poor"
+
+    def to_dict(self) -> Dict:
+        """
+        Convert to dictionary with standard field names
+
+        Returns:
+            Dictionary suitable for JSON serialization
+        """
+        return {
+            # Summary statistics
+            "ari_mean": float(self.ari_mean),
+            "ari_std": float(self.ari_std),
+            "ari_ci": [float(self.ari_ci[0]), float(self.ari_ci[1])],
+
+            "ami_mean": float(self.ami_mean),
+            "ami_std": float(self.ami_std),
+            "ami_ci": [float(self.ami_ci[0]), float(self.ami_ci[1])],
+
+            "fmi_mean": float(self.fmi_mean),
+            "fmi_std": float(self.fmi_std),
+
+            "jaccard_mean": float(self.jaccard_mean),
+            "jaccard_std": float(self.jaccard_std),
+
+            # Overall
+            "stability_score": float(self.stability_score),
+            "interpretation": self.interpretation,
+
+            # Raw scores (for inspection)
+            "ari_scores": self.ari_scores.tolist(),
+            "ami_scores": self.ami_scores.tolist(),
+            "fmi_scores": self.fmi_scores.tolist(),
+            "jaccard_scores": self.jaccard_scores.tolist(),
+        }
 
 
 def bootstrap_stability(
@@ -103,27 +153,31 @@ def bootstrap_stability(
     # Convert to arrays
     ari_scores = np.array(ari_scores)
     ami_scores = np.array(ami_scores)
-    fm_scores = np.array(fm_scores)
+    fmi_scores = np.array(fm_scores)
     jaccard_scores = np.array(jaccard_scores)
 
-    # Compute statistics
-    mean_ari = np.mean(ari_scores)
-    std_ari = np.std(ari_scores)
-    mean_ami = np.mean(ami_scores)
-    std_ami = np.std(ami_scores)
+    # Compute statistics (STANDARD NAMING)
+    ari_mean = np.mean(ari_scores)
+    ari_std = np.std(ari_scores)
+    ami_mean = np.mean(ami_scores)
+    ami_std = np.std(ami_scores)
+    fmi_mean = np.mean(fmi_scores)
+    fmi_std = np.std(fmi_scores)
+    jaccard_mean = np.mean(jaccard_scores)
+    jaccard_std = np.std(jaccard_scores)
 
     # Confidence intervals (95%)
-    ci_ari = (
+    ari_ci = (
         np.percentile(ari_scores, 2.5),
         np.percentile(ari_scores, 97.5)
     )
-    ci_ami = (
+    ami_ci = (
         np.percentile(ami_scores, 2.5),
         np.percentile(ami_scores, 97.5)
     )
 
     # Overall stability score (weighted average)
-    stability = 0.5 * mean_ari + 0.5 * mean_ami
+    stability = 0.5 * ari_mean + 0.5 * ami_mean
 
     # Interpretation
     if stability > 0.8:
@@ -138,14 +192,18 @@ def bootstrap_stability(
     return StabilityResult(
         ari_scores=ari_scores,
         ami_scores=ami_scores,
-        fowlkes_mallows_scores=fm_scores,
+        fmi_scores=fmi_scores,  # RENAMED
         jaccard_scores=jaccard_scores,
-        mean_ari=mean_ari,
-        std_ari=std_ari,
-        mean_ami=mean_ami,
-        std_ami=std_ami,
-        confidence_interval_ari=ci_ari,
-        confidence_interval_ami=ci_ami,
+        ari_mean=ari_mean,  # RENAMED
+        ari_std=ari_std,    # RENAMED
+        ari_ci=ari_ci,      # RENAMED
+        ami_mean=ami_mean,  # RENAMED
+        ami_std=ami_std,    # RENAMED
+        ami_ci=ami_ci,      # RENAMED
+        fmi_mean=fmi_mean,  # NEW
+        fmi_std=fmi_std,    # NEW
+        jaccard_mean=jaccard_mean,  # NEW
+        jaccard_std=jaccard_std,    # NEW
         stability_score=stability,
         interpretation=interpretation,
     )
@@ -286,14 +344,18 @@ def noise_stability(
         results[f"noise_{noise_level:.2f}"] = StabilityResult(
             ari_scores=ari_scores,
             ami_scores=ami_scores,
-            fowlkes_mallows_scores=fm_scores,
+            fmi_scores=fm_scores,
             jaccard_scores=jaccard_scores,
-            mean_ari=mean_ari,
-            std_ari=std_ari,
-            mean_ami=mean_ami,
-            std_ami=std_ami,
-            confidence_interval_ari=ci_ari,
-            confidence_interval_ami=ci_ami,
+            ari_mean=mean_ari,
+            ari_std=std_ari,
+            ami_mean=mean_ami,
+            ami_std=std_ami,
+            ari_ci=ci_ari,
+            ami_ci=ci_ami,
+            fmi_mean=np.mean(fm_scores),
+            fmi_std=np.std(fm_scores),
+            jaccard_mean=np.mean(jaccard_scores),
+            jaccard_std=np.std(jaccard_scores),
             stability_score=stability,
             interpretation=interpretation,
         )
@@ -400,14 +462,18 @@ def feature_stability(
         results[f"features_{fraction:.1f}"] = StabilityResult(
             ari_scores=ari_scores,
             ami_scores=ami_scores,
-            fowlkes_mallows_scores=fm_scores,
+            fmi_scores=fm_scores,
             jaccard_scores=jaccard_scores,
-            mean_ari=mean_ari,
-            std_ari=std_ari,
-            mean_ami=mean_ami,
-            std_ami=std_ami,
-            confidence_interval_ari=ci_ari,
-            confidence_interval_ami=ci_ami,
+            ari_mean=mean_ari,
+            ari_std=std_ari,
+            ami_mean=mean_ami,
+            ami_std=std_ami,
+            ari_ci=ci_ari,
+            ami_ci=ci_ami,
+            fmi_mean=np.mean(fm_scores),
+            fmi_std=np.std(fm_scores),
+            jaccard_mean=np.mean(jaccard_scores),
+            jaccard_std=np.std(jaccard_scores),
             stability_score=stability,
             interpretation=interpretation,
         )
@@ -548,14 +614,18 @@ def _default_stability_result() -> StabilityResult:
     return StabilityResult(
         ari_scores=np.array([]),
         ami_scores=np.array([]),
-        fowlkes_mallows_scores=np.array([]),
+        fmi_scores=np.array([]),
         jaccard_scores=np.array([]),
-        mean_ari=0.0,
-        std_ari=0.0,
-        mean_ami=0.0,
-        std_ami=0.0,
-        confidence_interval_ari=(0.0, 0.0),
-        confidence_interval_ami=(0.0, 0.0),
+        ari_mean=0.0,
+        ari_std=0.0,
+        ami_mean=0.0,
+        ami_std=0.0,
+        ari_ci=(0.0, 0.0),
+        ami_ci=(0.0, 0.0),
+        fmi_mean=0.0,
+        fmi_std=0.0,
+        jaccard_mean=0.0,
+        jaccard_std=0.0,
         stability_score=0.0,
-        interpretation="unstable",
+        interpretation="poor",
     )

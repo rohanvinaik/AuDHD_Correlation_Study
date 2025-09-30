@@ -69,6 +69,90 @@ class ValidationReport:
     overall_quality: Optional[float] = None
     recommendations: Optional[List[str]] = None
 
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert report to dictionary with standard field names
+
+        Returns:
+            Dictionary suitable for JSON serialization
+        """
+        result = {}
+
+        # Internal metrics
+        if hasattr(self.internal_metrics, 'to_dict'):
+            result['internal_metrics'] = self.internal_metrics.to_dict()
+        else:
+            result['internal_metrics'] = asdict(self.internal_metrics)
+
+        result['stability_metrics'] = self.stability_metrics
+        result['outlier_robustness'] = self.outlier_robustness
+        result['balanced_metrics'] = self.balanced_metrics
+
+        # Stability analysis
+        if self.bootstrap_result:
+            result['bootstrap'] = self.bootstrap_result.to_dict()
+
+        if self.subsampling_results:
+            result['subsampling'] = {
+                k: v.to_dict() for k, v in self.subsampling_results.items()
+            }
+
+        if self.noise_results:
+            result['noise'] = {
+                k: v.to_dict() for k, v in self.noise_results.items()
+            }
+
+        if self.feature_results:
+            result['feature'] = {
+                k: v.to_dict() for k, v in self.feature_results.items()
+            }
+
+        if self.permutation_result:
+            result['permutation'] = self.permutation_result
+
+        # Biological validity
+        if self.enrichment_results:
+            result['enrichment'] = [asdict(r) for r in self.enrichment_results]
+
+        if self.clinical_results:
+            result['clinical'] = [asdict(r) for r in self.clinical_results]
+
+        # Cross-validation
+        if self.cross_site_result:
+            result['cross_site'] = asdict(self.cross_site_result)
+
+        if self.stratified_cv_result:
+            result['stratified_cv'] = asdict(self.stratified_cv_result)
+
+        # Summary
+        result['overall_quality'] = self.overall_quality
+        result['recommendations'] = self.recommendations or []
+
+        return result
+
+    def to_html(self, output_path: Optional[str] = None) -> str:
+        """
+        Generate HTML report
+
+        Args:
+            output_path: Optional path to save HTML file
+
+        Returns:
+            HTML string
+        """
+        html = _generate_html_from_report(self)
+
+        if output_path:
+            output_path = Path(output_path)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(output_path, 'w') as f:
+                f.write(html)
+
+            print(f"HTML report saved: {output_path}")
+
+        return html
+
 
 def generate_validation_report(
     X: np.ndarray,
@@ -462,10 +546,10 @@ def _save_text_report(report: ValidationReport, output_path: Path) -> None:
         if report.bootstrap_result is not None:
             f.write("BOOTSTRAP STABILITY\n")
             f.write("-" * 80 + "\n")
-            f.write(f"Mean ARI: {report.bootstrap_result.mean_ari:.3f} "
-                   f"± {report.bootstrap_result.std_ari:.3f}\n")
-            f.write(f"95% CI: [{report.bootstrap_result.confidence_interval_ari[0]:.3f}, "
-                   f"{report.bootstrap_result.confidence_interval_ari[1]:.3f}]\n")
+            f.write(f"Mean ARI: {report.bootstrap_result.ari_mean:.3f} "
+                   f"± {report.bootstrap_result.ari_std:.3f}\n")
+            f.write(f"95% CI: [{report.bootstrap_result.ari_ci[0]:.3f}, "
+                   f"{report.bootstrap_result.ari_ci[1]:.3f}]\n")
             f.write(f"Stability Score: {report.bootstrap_result.stability_score:.3f}\n")
             f.write(f"Interpretation: {report.bootstrap_result.interpretation}\n\n")
 
@@ -483,8 +567,8 @@ def _save_text_report(report: ValidationReport, output_path: Path) -> None:
         if report.stratified_cv_result is not None:
             f.write("STRATIFIED CROSS-VALIDATION\n")
             f.write("-" * 80 + "\n")
-            f.write(f"Mean ARI: {report.stratified_cv_result.mean_ari:.3f} "
-                   f"± {report.stratified_cv_result.std_ari:.3f}\n")
+            f.write(f"Mean ARI: {report.stratified_cv_result.ari_mean:.3f} "
+                   f"± {report.stratified_cv_result.ari_std:.3f}\n")
             f.write(f"Generalization Score: {report.stratified_cv_result.generalization_score:.3f}\n")
             f.write(f"Interpretation: {report.stratified_cv_result.interpretation}\n\n")
 
@@ -581,3 +665,27 @@ def _save_html_report(report: ValidationReport, output_path: Path) -> None:
 
     with open(output_path, 'w') as f:
         f.write(html)
+
+
+def _generate_html_from_report(report: ValidationReport) -> str:
+    """Generate HTML content from ValidationReport (used by to_html method)"""
+    # Reuse existing HTML generation logic
+    from io import StringIO
+    import tempfile
+    
+    # Create temp file
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
+        temp_path = f.name
+    
+    # Use existing function
+    _save_html_report(report, Path(temp_path))
+    
+    # Read back
+    with open(temp_path) as f:
+        html = f.read()
+    
+    # Clean up
+    Path(temp_path).unlink()
+    
+    return html
+
