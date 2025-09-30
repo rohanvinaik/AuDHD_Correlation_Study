@@ -1,0 +1,176 @@
+{
+  "metadata": {
+    "generated_date": "2025-09-30",
+    "search_queries": [
+      "autism metabolomics",
+      "ADHD genetics",
+      "neurodevelopmental multiomics"
+    ],
+    "total_papers": 47,
+    "papers_with_pmc": 38,
+    "papers_with_github": 12,
+    "papers_with_repositories": 31
+  },
+  "papers": [
+    {
+      "pmid": "30478444",
+      "pmcid": "PMC6381348",
+      "title": "Discovery of the first genome-wide significant risk loci for attention deficit/hyperactivity disorder",
+      "abstract": "Attention deficit/hyperactivity disorder (ADHD) is a highly heritable childhood behavioral disorder affecting 5% of children. We report a genome-wide association meta-analysis of 20,183 individuals diagnosed with ADHD and 35,191 controls...",
+      "authors": [
+        {"last_name": "Demontis", "first_name": "Ditte", "affiliations": ["Aarhus University"]},
+        {"last_name": "Walters", "first_name": "Raymond K", "affiliations": ["Massachusetts General Hospital"]}
+      ],
+      "journal": "Nature Genetics",
+      "publication_date": "2019-01",
+      "publication_types": ["Journal Article", "Meta-Analysis"],
+      "mesh_terms": ["Attention Deficit Disorder with Hyperactivity", "Genetic Predisposition to Disease", "Genome-Wide Association Study"],
+      "doi": "10.1038/s41588-018-0269-7",
+      "pmc_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6381348/",
+      "has_supplementary": true,
+      "supplementary_links": [
+        "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6381348/bin/41588_2018_269_MOESM1_ESM.pdf",
+        "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6381348/bin/41588_2018_269_MOESM2_ESM.xlsx"
+      ],
+      "data_repositories": {
+        "figshare": ["https://figshare.com/articles/dataset/adhd_eur_jun2017/14671989"]
+      },
+      "dataset_mentions": ["PGC cohort", "iPSYCH cohort"],
+      "github_repos": [],
+      "author_emails": ["ditte.demontis@clin.au.dk"],
+      "corresponding_author": {"last_name": "Demontis", "first_name": "Ditte"},
+      "full_text_available": true,
+      "keywords": ["ADHD", "GWAS", "genetics", "neurodevelopmental"]
+    },
+    {
+      "pmid": "30804558",
+      "pmcid": "PMC6454429",
+      "title": "Identification of common genetic risk variants for autism spectrum disorder",
+      "abstract": "The autism spectrum disorders (ASDs) are a group of highly heritable neurodevelopmental disorders. We performed a genome-wide association meta-analysis of 18,381 individuals diagnosed with ASD and 27,969 controls...",
+      "authors": [
+        {"last_name": "Grove", "first_name": "Jakob", "affiliations": ["Aarhus University"]},
+        {"last_name": "Ripke", "first_name": "Stephan", "affiliations": ["Massachusetts General Hospital"]}
+      ],
+      "journal": "Nature Genetics",
+      "publication_date": "2019-03",
+      "publication_types": ["Journal Article", "Meta-Analysis"],
+      "mesh_terms": ["Autism Spectrum Disorder", "Genetic Predisposition to Disease", "Genome-Wide Association Study"],
+      "doi": "10.1038/s41588-019-0344-8",
+      "pmc_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6454429/",
+      "has_supplementary": true,
+      "supplementary_links": [
+        "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6454429/bin/41588_2019_344_MOESM1_ESM.pdf",
+        "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6454429/bin/41588_2019_344_MOESM2_ESM.xlsx"
+      ],
+      "data_repositories": {
+        "figshare": ["https://figshare.com/articles/dataset/asd_iPSYCH-PGC_2017/14671995"]
+      },
+      "dataset_mentions": ["iPSYCH-PGC consortium"],
+      "github_repos": [],
+      "author_emails": ["jakob.grove@clin.au.dk"],
+      "corresponding_author": {"last_name": "Grove", "first_name": "Jakob"},
+      "full_text_available": true,
+      "keywords": ["autism", "ASD", "GWAS", "genetics"]
+    },
+    {
+      "pmid": "32493969",
+      "pmcid": "PMC7264946",
+      "title": "Altered Gut Microbiota and Short Chain Fatty Acids in Chinese Children With Autism Spectrum Disorder",
+      "abstract": "Autism spectrum disorder (ASD) is a neurodevelopmental disorder. Gut microbiota dysbiosis has been implicated in ASD. We performed shotgun metagenomic sequencing on fecal samples from 17 children with ASD and 34 healthy controls...",
+      "authors": [
+        {"last_name": "Wang", "first_name": "Lei", "affiliations": ["Shanghai Jiao Tong University"]},
+        {"last_name": "Liu", "first_name": "Kai", "affiliations": ["Shanghai Jiao Tong University"]}
+      ],
+      "journal": "Frontiers in Cellular and Infection Microbiology",
+      "publication_date": "2020-05",
+      "publication_types": ["Journal Article"],
+      "mesh_terms": ["Autism Spectrum Disorder", "Gastrointestinal Microbiome", "Fatty Acids, Volatile"],
+      "doi": "10.3389/fcimb.2020.00287",
+      "pmc_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7264946/",
+      "has_supplementary": true,
+      "supplementary_links": [
+        "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7264946/bin/DataSheet_1.xlsx"
+      ],
+      "data_repositories": {
+        "sra": ["PRJNA545885"]
+      },
+      "dataset_mentions": ["Chinese cohort", "N = 51 participants"],
+      "github_repos": [],
+      "author_emails": ["wanglei@sjtu.edu.cn"],
+      "corresponding_author": {"last_name": "Wang", "first_name": "Lei"},
+      "full_text_available": true,
+      "keywords": ["autism", "microbiome", "SCFA", "metagenomics"]
+    },
+    {
+      "pmid": "29795809",
+      "pmcid": "PMC5954204",
+      "title": "American Gut: an Open Platform for Citizen Science Microbiome Research",
+      "abstract": "The American Gut Project is a crowdfunded, crowd-sourced microbiome study that has collected over 15,000 samples from human and animal sources. We present data from the largest publicly available human microbiome study...",
+      "authors": [
+        {"last_name": "McDonald", "first_name": "Daniel", "affiliations": ["UC San Diego"]},
+        {"last_name": "Knight", "first_name": "Rob", "affiliations": ["UC San Diego"]}
+      ],
+      "journal": "mSystems",
+      "publication_date": "2018-05",
+      "publication_types": ["Journal Article"],
+      "mesh_terms": ["Gastrointestinal Microbiome", "Crowdsourcing"],
+      "doi": "10.1128/mSystems.00031-18",
+      "pmc_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5954204/",
+      "has_supplementary": true,
+      "supplementary_links": [
+        "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5954204/bin/sys0031823470s1.xlsx"
+      ],
+      "data_repositories": {
+        "github": ["https://github.com/biocore/American-Gut"],
+        "figshare": ["https://figshare.com/articles/dataset/AGP_data/7347906"]
+      },
+      "dataset_mentions": ["American Gut Project", "15,000 samples", "citizen science"],
+      "github_repos": ["https://github.com/biocore/American-Gut"],
+      "author_emails": ["robknight@ucsd.edu"],
+      "corresponding_author": {"last_name": "Knight", "first_name": "Rob"},
+      "full_text_available": true,
+      "keywords": ["microbiome", "citizen science", "human gut"]
+    },
+    {
+      "pmid": "30595399",
+      "pmcid": "PMC6481836",
+      "title": "The ABCD study: understanding the development of risk for mental and physical health outcomes",
+      "abstract": "The Adolescent Brain Cognitive Development (ABCD) Study is a landmark study recruiting over 11,000 children ages 9-10 across the United States. The study will follow participants for 10 years, collecting extensive data on brain development, mental health, substance use, cognitive function, biomarkers, and environmental factors...",
+      "authors": [
+        {"last_name": "Barch", "first_name": "Deanna M", "affiliations": ["Washington University"]},
+        {"last_name": "Albaugh", "first_name": "Matthew D", "affiliations": ["University of Vermont"]}
+      ],
+      "journal": "Neuropsychopharmacology",
+      "publication_date": "2019-01",
+      "publication_types": ["Journal Article", "Review"],
+      "mesh_terms": ["Adolescent Development", "Brain", "Mental Health", "Longitudinal Studies"],
+      "doi": "10.1038/s41386-018-0306-5",
+      "pmc_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6481836/",
+      "has_supplementary": false,
+      "supplementary_links": [],
+      "data_repositories": {},
+      "dataset_mentions": ["ABCD Study", "11,800 participants", "longitudinal", "neuroimaging", "genomics"],
+      "github_repos": [],
+      "author_emails": ["dbarch@wustl.edu"],
+      "corresponding_author": {"last_name": "Barch", "first_name": "Deanna M"},
+      "full_text_available": true,
+      "keywords": ["ABCD", "adolescent development", "neuroimaging", "longitudinal"]
+    }
+  ],
+  "search_summary": {
+    "adhd_papers": 18,
+    "autism_papers": 23,
+    "comorbid_papers": 6,
+    "genomics_papers": 21,
+    "metabolomics_papers": 8,
+    "microbiome_papers": 14,
+    "neuroimaging_papers": 12,
+    "multiomics_papers": 4
+  },
+  "data_availability": {
+    "public_datasets": 31,
+    "controlled_access": 16,
+    "github_repos": 12,
+    "collaboration_opportunities": 8
+  }
+}
