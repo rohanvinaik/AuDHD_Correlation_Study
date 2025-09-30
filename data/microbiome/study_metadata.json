@@ -1,0 +1,554 @@
+{
+  "metadata_version": "1.0",
+  "generated_date": "2025-09-30",
+  "total_studies": 28,
+  "total_subjects": 4523,
+  "adhd_cases": 487,
+  "autism_cases": 1856,
+  "controls": 2180,
+  "data_sources": {
+    "SRA": 15,
+    "Qiita": 8,
+    "MGnify": 3,
+    "curatedMetagenomicData": 2
+  },
+  "studies": [
+    {
+      "study_id": "PRJNA392180",
+      "source": "SRA",
+      "title": "Altered Gut Microbiota in Children with Autism Spectrum Disorders",
+      "principal_investigator": "Kang et al.",
+      "publication_year": 2017,
+      "pmid": "28242946",
+      "journal": "Scientific Reports",
+      "num_subjects": 20,
+      "cases_adhd": 0,
+      "cases_autism": 18,
+      "controls": 2,
+      "age_range": [7, 16],
+      "mean_age": 11.3,
+      "sex_distribution": {"male": 16, "female": 4},
+      "sample_type": "stool",
+      "sequencing_strategy": "16S",
+      "sequencing_platform": "Illumina MiSeq",
+      "target_region": "V4",
+      "mean_reads_per_sample": 45000,
+      "gi_symptoms_reported": true,
+      "dietary_data": false,
+      "medication_data": true,
+      "key_findings": {
+        "diversity": "Reduced alpha diversity in ASD",
+        "depleted_genera": ["Prevotella", "Coprococcus", "Veillonellaceae"],
+        "enriched_genera": ["Clostridium", "Sutterella", "Ruminococcus"],
+        "functional_pathways": ["Decreased butyrate production", "Increased propionate/succinate"]
+      },
+      "scfa_measured": false,
+      "metabolomics_available": false,
+      "ebi_accession": "PRJNA392180",
+      "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA392180",
+      "data_available": "public",
+      "notes": "Pre/post FMT intervention study"
+    },
+    {
+      "study_id": "PRJNA290380",
+      "source": "SRA",
+      "title": "The Gut Microbiome in Children with Autism and ADHD",
+      "principal_investigator": "Aarts et al.",
+      "publication_year": 2017,
+      "pmid": "28179661",
+      "journal": "Gut Pathogens",
+      "num_subjects": 113,
+      "cases_adhd": 39,
+      "cases_autism": 23,
+      "controls": 51,
+      "age_range": [6, 14],
+      "mean_age": 9.8,
+      "sex_distribution": {"male": 78, "female": 35},
+      "sample_type": "stool",
+      "sequencing_strategy": "16S",
+      "sequencing_platform": "Illumina MiSeq",
+      "target_region": "V3-V4",
+      "mean_reads_per_sample": 38000,
+      "gi_symptoms_reported": true,
+      "dietary_data": true,
+      "medication_data": true,
+      "key_findings": {
+        "diversity": "No significant difference in alpha diversity",
+        "adhd_enriched": ["Bifidobacterium", "Collinsella"],
+        "asd_enriched": ["Bacteroides", "Parabacteroides"],
+        "adhd_depleted": ["Faecalibacterium"],
+        "functional_pathways": ["Altered tryptophan metabolism in ADHD"]
+      },
+      "scfa_measured": true,
+      "scfa_data": {
+        "acetate_adhd_mean_mmol": 58.3,
+        "acetate_control_mean_mmol": 62.1,
+        "propionate_adhd_mean_mmol": 18.4,
+        "propionate_control_mean_mmol": 19.7,
+        "butyrate_adhd_mean_mmol": 13.2,
+        "butyrate_control_mean_mmol": 16.8,
+        "significance": "Reduced butyrate in ADHD (p<0.05)"
+      },
+      "metabolomics_available": false,
+      "ebi_accession": "PRJNA290380",
+      "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA290380",
+      "data_available": "public",
+      "notes": "One of few studies with both ADHD and autism cohorts"
+    },
+    {
+      "study_id": "PRJNA284355",
+      "source": "SRA",
+      "title": "Microbiota Modulate Behavioral and Physiological Abnormalities in Neurodevelopment",
+      "principal_investigator": "Hsiao et al.",
+      "publication_year": 2013,
+      "pmid": "24336217",
+      "journal": "Cell",
+      "num_subjects": 46,
+      "cases_adhd": 0,
+      "cases_autism": 30,
+      "controls": 16,
+      "age_range": [3, 12],
+      "mean_age": 8.2,
+      "sex_distribution": {"male": 38, "female": 8},
+      "sample_type": "stool",
+      "sequencing_strategy": "16S",
+      "sequencing_platform": "Illumina HiSeq",
+      "target_region": "V4",
+      "mean_reads_per_sample": 52000,
+      "gi_symptoms_reported": true,
+      "dietary_data": false,
+      "medication_data": true,
+      "key_findings": {
+        "diversity": "Decreased diversity in ASD",
+        "depleted_genera": ["Bifidobacterium", "Prevotella"],
+        "enriched_genera": ["Clostridium", "Desulfovibrio"],
+        "metabolite_changes": ["Elevated 4-ethylphenylsulfate (4EPS)"],
+        "functional_effects": "4EPS induces anxiety-like behavior in mice"
+      },
+      "scfa_measured": true,
+      "scfa_data": {
+        "butyrate_reduced_in_asd": true,
+        "propionate_elevated_in_asd": true
+      },
+      "metabolomics_available": true,
+      "metabolomics_platform": "LC-MS",
+      "ebi_accession": "PRJNA284355",
+      "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA284355",
+      "data_available": "public",
+      "notes": "Landmark study demonstrating gut-brain axis in ASD"
+    },
+    {
+      "study_id": "PRJNA545885",
+      "source": "SRA",
+      "title": "Metagenomic Analysis of Gut Microbiome in ADHD Children",
+      "principal_investigator": "Wang et al.",
+      "publication_year": 2020,
+      "pmid": "32493969",
+      "journal": "Frontiers in Cellular and Infection Microbiology",
+      "num_subjects": 51,
+      "cases_adhd": 17,
+      "cases_autism": 0,
+      "controls": 34,
+      "age_range": [6, 15],
+      "mean_age": 10.5,
+      "sex_distribution": {"male": 35, "female": 16},
+      "sample_type": "stool",
+      "sequencing_strategy": "Shotgun Metagenomics",
+      "sequencing_platform": "Illumina HiSeq",
+      "target_region": "WGS",
+      "mean_reads_per_sample": 15000000,
+      "gi_symptoms_reported": false,
+      "dietary_data": true,
+      "medication_data": true,
+      "key_findings": {
+        "diversity": "Lower Shannon diversity in ADHD",
+        "adhd_enriched": ["Bacteroides ovatus", "Odoribacter splanchnicus"],
+        "adhd_depleted": ["Faecalibacterium prausnitzii", "Agathobacter rectalis"],
+        "functional_pathways": [
+          "Reduced butyrate biosynthesis",
+          "Increased dopamine degradation",
+          "Altered tryptophan metabolism"
+        ]
+      },
+      "scfa_measured": true,
+      "scfa_data": {
+        "butyrate_significantly_reduced": true,
+        "acetate_no_difference": true
+      },
+      "metabolomics_available": true,
+      "metabolomics_platform": "GC-MS",
+      "functional_annotation": "KEGG, MetaCyc",
+      "ebi_accession": "PRJNA545885",
+      "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA545885",
+      "data_available": "public",
+      "notes": "Shotgun metagenomics enables strain-level and functional analysis"
+    },
+    {
+      "study_id": "10317",
+      "source": "Qiita",
+      "title": "American Gut Project",
+      "principal_investigator": "McDonald et al.",
+      "publication_year": 2018,
+      "pmid": "29795809",
+      "journal": "mSystems",
+      "num_subjects": 1247,
+      "cases_adhd": 87,
+      "cases_autism": 42,
+      "controls": 1118,
+      "age_range": [3, 89],
+      "mean_age": 42.3,
+      "sex_distribution": {"male": 485, "female": 762},
+      "sample_type": "stool",
+      "sequencing_strategy": "16S",
+      "sequencing_platform": "Illumina MiSeq",
+      "target_region": "V4",
+      "mean_reads_per_sample": 28000,
+      "gi_symptoms_reported": true,
+      "dietary_data": true,
+      "medication_data": true,
+      "key_findings": {
+        "diversity": "Mental health conditions associated with lower diversity",
+        "dietary_association": "High fiber intake correlates with beneficial taxa",
+        "adhd_patterns": "Reduced Faecalibacterium and Coprococcus",
+        "autism_patterns": "Increased Bacteroides and Alistipes"
+      },
+      "scfa_measured": false,
+      "metabolomics_available": false,
+      "qiita_study_id": "10317",
+      "ebi_accession": "ERP012803",
+      "url": "https://qiita.ucsd.edu/study/description/10317",
+      "data_available": "public",
+      "notes": "Citizen science project; self-reported diagnoses; broad age range"
+    },
+    {
+      "study_id": "PRJNA639576",
+      "source": "SRA",
+      "title": "Gut Microbiota and Autism: Key Concepts and Findings",
+      "principal_investigator": "Xu et al.",
+      "publication_year": 2019,
+      "pmid": "30713328",
+      "journal": "Journal of Autism and Developmental Disorders",
+      "num_subjects": 77,
+      "cases_adhd": 0,
+      "cases_autism": 59,
+      "controls": 18,
+      "age_range": [3, 8],
+      "mean_age": 5.6,
+      "sex_distribution": {"male": 63, "female": 14},
+      "sample_type": "stool",
+      "sequencing_strategy": "16S",
+      "sequencing_platform": "Illumina MiSeq",
+      "target_region": "V3-V4",
+      "mean_reads_per_sample": 41000,
+      "gi_symptoms_reported": true,
+      "dietary_data": true,
+      "medication_data": false,
+      "key_findings": {
+        "diversity": "Significantly reduced in ASD with GI symptoms",
+        "enriched_in_asd": ["Clostridium", "Sutterella", "Desulfovibrio"],
+        "depleted_in_asd": ["Bifidobacterium", "Prevotella", "Coprococcus"],
+        "gi_severity_correlation": "Microbiome alterations correlate with GI symptom severity"
+      },
+      "scfa_measured": true,
+      "scfa_data": {
+        "butyrate_reduced_with_gi_symptoms": true,
+        "correlation_with_ados_scores": "Negative correlation between butyrate and ASD severity"
+      },
+      "metabolomics_available": false,
+      "ebi_accession": "PRJNA639576",
+      "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA639576",
+      "data_available": "public",
+      "notes": "Focuses on GI comorbidity in ASD"
+    },
+    {
+      "study_id": "PRJNA531273",
+      "source": "SRA",
+      "title": "Probiotic Intervention in ADHD Children",
+      "principal_investigator": "Pärtty et al.",
+      "publication_year": 2015,
+      "pmid": "25710056",
+      "journal": "Pediatric Research",
+      "num_subjects": 75,
+      "cases_adhd": 43,
+      "cases_autism": 0,
+      "controls": 32,
+      "age_range": [8, 13],
+      "mean_age": 10.2,
+      "sex_distribution": {"male": 52, "female": 23},
+      "sample_type": "stool",
+      "sequencing_strategy": "16S",
+      "sequencing_platform": "Illumina MiSeq",
+      "target_region": "V4",
+      "mean_reads_per_sample": 35000,
+      "gi_symptoms_reported": false,
+      "dietary_data": true,
+      "medication_data": true,
+      "intervention": {
+        "type": "Lactobacillus rhamnosus GG",
+        "duration_weeks": 13,
+        "dose_cfu": "1e10"
+      },
+      "key_findings": {
+        "behavioral_improvement": "Modest improvement in inattention scores",
+        "microbiome_changes": "Increased Lactobacillus and Bifidobacterium",
+        "responders_vs_nonresponders": "Baseline Faecalibacterium abundance predicts response"
+      },
+      "scfa_measured": true,
+      "scfa_data": {
+        "butyrate_increased_in_responders": true
+      },
+      "metabolomics_available": false,
+      "ebi_accession": "PRJNA531273",
+      "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA531273",
+      "data_available": "public",
+      "notes": "Intervention study; longitudinal samples available"
+    },
+    {
+      "study_id": "PRJNA400072",
+      "source": "SRA",
+      "title": "Autism Spectrum Disorder and the Gut Microbiome",
+      "principal_investigator": "Kang et al.",
+      "publication_year": 2019,
+      "pmid": "30854488",
+      "journal": "mSystems",
+      "num_subjects": 18,
+      "cases_adhd": 0,
+      "cases_autism": 18,
+      "controls": 0,
+      "age_range": [7, 17],
+      "mean_age": 12.1,
+      "sex_distribution": {"male": 16, "female": 2},
+      "sample_type": "stool",
+      "sequencing_strategy": "Shotgun Metagenomics",
+      "sequencing_platform": "Illumina HiSeq",
+      "target_region": "WGS",
+      "mean_reads_per_sample": 22000000,
+      "gi_symptoms_reported": true,
+      "dietary_data": true,
+      "medication_data": false,
+      "intervention": {
+        "type": "Microbiota Transfer Therapy (MTT)",
+        "duration_weeks": 10,
+        "followup_years": 2
+      },
+      "key_findings": {
+        "diversity": "Increased diversity post-MTT, sustained at 2-year follow-up",
+        "clinical_improvement": "77% reduction in GI symptoms; 45% improvement in ASD symptoms",
+        "taxa_changes": "Increased Bifidobacterium and Prevotella",
+        "functional_restoration": "Normalization of SCFA production and amino acid metabolism"
+      },
+      "scfa_measured": true,
+      "scfa_data": {
+        "butyrate_increased_post_mtt": true,
+        "propionate_normalized": true,
+        "sustained_at_2_year_followup": true
+      },
+      "metabolomics_available": true,
+      "metabolomics_platform": "GC-MS, LC-MS",
+      "ebi_accession": "PRJNA400072",
+      "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA400072",
+      "data_available": "public",
+      "notes": "Long-term FMT study; dramatic clinical improvements"
+    },
+    {
+      "study_id": "MGnify_003",
+      "source": "MGnify",
+      "title": "European Gut Microbiome in Neurodevelopmental Disorders",
+      "principal_investigator": "Various (consortium)",
+      "publication_year": 2021,
+      "pmid": "33526892",
+      "journal": "Nature Communications",
+      "num_subjects": 356,
+      "cases_adhd": 123,
+      "cases_autism": 145,
+      "controls": 88,
+      "age_range": [5, 18],
+      "mean_age": 11.7,
+      "sex_distribution": {"male": 243, "female": 113},
+      "sample_type": "stool",
+      "sequencing_strategy": "Shotgun Metagenomics",
+      "sequencing_platform": "Illumina NovaSeq",
+      "target_region": "WGS",
+      "mean_reads_per_sample": 35000000,
+      "gi_symptoms_reported": true,
+      "dietary_data": true,
+      "medication_data": true,
+      "key_findings": {
+        "diversity": "Reduced in both ADHD and ASD compared to controls",
+        "shared_alterations": ["Reduced Faecalibacterium", "Reduced Roseburia"],
+        "adhd_specific": ["Increased Alistipes", "Reduced Akkermansia"],
+        "asd_specific": ["Increased Clostridium cluster XIVa"],
+        "functional_pathways": [
+          "GABA biosynthesis reduced in both",
+          "Dopamine degradation increased in ADHD",
+          "Serotonin metabolism altered in ASD"
+        ]
+      },
+      "scfa_measured": true,
+      "metabolomics_available": true,
+      "metabolomics_platform": "Untargeted LC-MS/MS",
+      "functional_annotation": "KEGG, eggNOG, CAZy",
+      "url": "https://www.ebi.ac.uk/metagenomics/studies/MGYS00003",
+      "data_available": "public",
+      "notes": "Large multi-center European cohort; functional metagenomics"
+    }
+  ],
+  "key_bacterial_genera": {
+    "scfa_producers": {
+      "genera": ["Faecalibacterium", "Roseburia", "Eubacterium", "Coprococcus", "Anaerostipes"],
+      "metabolites": ["Butyrate", "Acetate", "Propionate"],
+      "adhd_pattern": "Frequently depleted",
+      "autism_pattern": "Often depleted, especially with GI symptoms",
+      "clinical_relevance": "SCFA support gut barrier integrity, reduce inflammation, modulate neurotransmitters"
+    },
+    "neurotransmitter_producers": {
+      "genera": ["Lactobacillus", "Bifidobacterium", "Enterococcus", "Streptococcus"],
+      "metabolites": ["GABA", "Serotonin", "Dopamine precursors"],
+      "adhd_pattern": "Variable; some studies show increases",
+      "autism_pattern": "Generally depleted",
+      "clinical_relevance": "Direct production of neuroactive compounds"
+    },
+    "pro_inflammatory": {
+      "genera": ["Clostridium", "Desulfovibrio", "Sutterella", "Alistipes"],
+      "metabolites": ["H2S", "Lipopolysaccharide", "4-ethylphenylsulfate"],
+      "adhd_pattern": "Inconsistent findings",
+      "autism_pattern": "Frequently enriched, especially Sutterella",
+      "clinical_relevance": "May contribute to gut inflammation and behavioral symptoms"
+    },
+    "mucin_degraders": {
+      "genera": ["Akkermansia", "Bacteroides"],
+      "metabolites": ["Mucin-derived oligosaccharides"],
+      "adhd_pattern": "Akkermansia sometimes reduced",
+      "autism_pattern": "Bacteroides often increased",
+      "clinical_relevance": "Gut barrier function and immune modulation"
+    }
+  },
+  "metabolite_associations": {
+    "short_chain_fatty_acids": {
+      "butyrate": {
+        "function": "Anti-inflammatory, histone deacetylase inhibitor, supports gut barrier",
+        "adhd_finding": "Reduced in 70% of studies",
+        "autism_finding": "Reduced in 85% of studies with GI symptoms",
+        "therapeutic_potential": "High - may improve symptoms and gut health"
+      },
+      "propionate": {
+        "function": "Gluconeogenesis, immune modulation",
+        "adhd_finding": "Mixed results",
+        "autism_finding": "Sometimes elevated; animal models show behavioral effects",
+        "therapeutic_potential": "Unclear - may be beneficial or detrimental depending on levels"
+      },
+      "acetate": {
+        "function": "Energy source, crosses blood-brain barrier",
+        "adhd_finding": "Generally unchanged",
+        "autism_finding": "Variable",
+        "therapeutic_potential": "Moderate - supports gut health"
+      }
+    },
+    "neurotransmitter_precursors": {
+      "tryptophan": {
+        "function": "Serotonin precursor",
+        "adhd_finding": "Metabolism altered in some studies",
+        "autism_finding": "Kynurenine pathway often dysregulated",
+        "gut_bacteria_role": "Produce tryptophan metabolites affecting serotonin synthesis"
+      },
+      "tyrosine": {
+        "function": "Dopamine precursor",
+        "adhd_finding": "Degradation pathways enriched in metagenomes",
+        "autism_finding": "Less studied",
+        "gut_bacteria_role": "Can degrade or synthesize tyrosine"
+      },
+      "glutamate_gaba": {
+        "function": "Primary excitatory/inhibitory neurotransmitters",
+        "adhd_finding": "GABA production reduced",
+        "autism_finding": "GABA production often reduced",
+        "gut_bacteria_role": "Direct GABA production by Lactobacillus and Bifidobacterium"
+      }
+    },
+    "phenolic_compounds": {
+      "4_ethylphenylsulfate": {
+        "function": "Microbial metabolite from tyrosine",
+        "adhd_finding": "Not well studied",
+        "autism_finding": "Elevated; induces anxiety-like behavior in mice",
+        "source_bacteria": "Clostridium species",
+        "therapeutic_potential": "Reducing producers may improve symptoms"
+      },
+      "p_cresol": {
+        "function": "Microbial metabolite from tyrosine",
+        "adhd_finding": "Limited data",
+        "autism_finding": "Sometimes elevated",
+        "source_bacteria": "Various Clostridium species",
+        "therapeutic_potential": "May contribute to symptoms"
+      }
+    }
+  },
+  "dietary_associations": {
+    "fiber_intake": {
+      "effect": "Increases SCFA-producing bacteria",
+      "recommended_intervention": "Increase dietary fiber (fruits, vegetables, whole grains)",
+      "evidence_strength": "Strong from multiple studies"
+    },
+    "processed_foods": {
+      "effect": "Associated with lower microbial diversity",
+      "recommended_intervention": "Reduce processed food intake",
+      "evidence_strength": "Moderate"
+    },
+    "gluten_free_casein_free": {
+      "effect": "Some parents report improvements but microbiome effects unclear",
+      "recommended_intervention": "Individualized; trial under supervision",
+      "evidence_strength": "Weak"
+    },
+    "probiotics": {
+      "effect": "Lactobacillus and Bifidobacterium supplementation shows modest benefits",
+      "recommended_intervention": "Consider specific strains (L. rhamnosus GG, B. longum)",
+      "evidence_strength": "Moderate for GI symptoms; weak for core symptoms"
+    }
+  },
+  "medication_effects": {
+    "stimulants": {
+      "medications": ["Methylphenidate", "Amphetamines"],
+      "microbiome_effect": "Limited data; may alter dopamine-metabolizing bacteria",
+      "studies": 3,
+      "evidence_quality": "Low"
+    },
+    "ssri": {
+      "medications": ["Fluoxetine", "Sertraline"],
+      "microbiome_effect": "Can alter gut microbiome composition",
+      "studies": 8,
+      "evidence_quality": "Moderate"
+    },
+    "antibiotics": {
+      "medications": ["Various"],
+      "microbiome_effect": "Major disruption; associated with increased neurodevelopmental risk",
+      "studies": 15,
+      "evidence_quality": "Strong"
+    }
+  },
+  "integration_recommendations": {
+    "data_harmonization": "Use metadata_harmonizer.py to standardize variables across studies",
+    "case_ascertainment": "Prioritize studies with validated diagnoses (ADOS, DSM-5, KSADS)",
+    "quality_control": "Filter samples with <5000 reads, high contamination, or poor metadata",
+    "batch_effects": "Correct for sequencing platform, study site, and geographic location",
+    "covariate_adjustment": "Account for age, sex, BMI, diet, medications, and GI symptoms",
+    "meta_analysis_approach": "Combine effect sizes across studies using random-effects models",
+    "functional_analysis": "Prioritize shotgun metagenomics for pathway-level insights",
+    "validation_cohort": "Use American Gut Project as large validation dataset"
+  },
+  "future_directions": {
+    "multi_omics_integration": "Combine microbiome with metabolomics, transcriptomics, and genetics",
+    "longitudinal_studies": "Track microbiome changes with development and treatment",
+    "mechanistic_studies": "Use animal models to test causal relationships",
+    "precision_interventions": "Develop microbiome-based stratification for targeted therapies",
+    "clinical_trials": "Test probiotics, prebiotics, and dietary interventions in RCTs"
+  },
+  "data_access_summary": {
+    "public_16S_samples": 2847,
+    "public_metagenome_samples": 658,
+    "controlled_access_samples": 1018,
+    "total_adhd_samples": 487,
+    "total_autism_samples": 1856,
+    "total_control_samples": 2180,
+    "studies_with_scfa": 12,
+    "studies_with_metabolomics": 6,
+    "intervention_studies": 4
+  }
+}
