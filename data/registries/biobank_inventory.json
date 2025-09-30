@@ -1,0 +1,661 @@
+{
+  "metadata": {
+    "generated_date": "2025-09-30",
+    "total_biobanks": 13,
+    "brain_tissue_biobanks": 5,
+    "dna_biobanks": 7,
+    "ipsc_biobanks": 2,
+    "total_autism_samples": 91250,
+    "total_adhd_samples": 34550
+  },
+  "biobanks": [
+    {
+      "biobank_id": "AUTISM_BRAINNET",
+      "name": "Autism BrainNet",
+      "full_name": "Autism BrainNet Brain Tissue Repository",
+      "url": "https://www.autismbrainnet.org",
+      "organization": "Autism Speaks",
+      "country": "USA",
+      "sample_types": [
+        "brain_tissue",
+        "frozen_tissue",
+        "fixed_tissue",
+        "rna"
+      ],
+      "conditions": [
+        "autism",
+        "control"
+      ],
+      "total_samples": 3000,
+      "autism_samples": 1800,
+      "adhd_samples": null,
+      "control_samples": 1200,
+      "brain_regions": [
+        "prefrontal cortex",
+        "anterior cingulate",
+        "temporal cortex",
+        "cerebellum",
+        "hippocampus",
+        "amygdala",
+        "striatum"
+      ],
+      "tissue_preparation": [
+        "frozen",
+        "fixed (formalin)",
+        "RNAlater"
+      ],
+      "access_type": "controlled",
+      "application_url": "https://www.autismbrainnet.org/resources/request-tissue/",
+      "application_process": "Submit research proposal, IRB approval required, reviewed by Scientific Advisory Committee",
+      "typical_turnaround": "8-12 weeks",
+      "contact_email": "abn@psych.uic.edu",
+      "description": "Premier autism brain tissue repository with comprehensive clinical characterization",
+      "data_available": [
+        "clinical_history",
+        "medical_records",
+        "neuropathology",
+        "MRI (some)",
+        "genomics (some)"
+      ],
+      "quality_control": [
+        "PMI < 36h preferred",
+        "RIN scoring",
+        "Neuropathology review",
+        "Brain pH measurement"
+      ],
+      "publications": [
+        "PMID:29174023",
+        "PMID:31209380"
+      ],
+      "notes": "Gold standard for autism brain tissue. Excellent clinical documentation. Prioritizes innovative research.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "NIH_NEUROBIOBANK",
+      "name": "NIH NeuroBioBank",
+      "full_name": "NIH NeuroBioBank Brain and Tissue Repository",
+      "url": "https://neurobiobank.nih.gov",
+      "organization": "NIH",
+      "country": "USA",
+      "sample_types": [
+        "brain_tissue",
+        "frozen_tissue",
+        "fixed_tissue",
+        "spinal_cord",
+        "csf"
+      ],
+      "conditions": [
+        "autism",
+        "adhd",
+        "control",
+        "psychiatric",
+        "neurological"
+      ],
+      "total_samples": 12000,
+      "autism_samples": 450,
+      "adhd_samples": 280,
+      "control_samples": 5000,
+      "brain_regions": [
+        "All major regions",
+        "prefrontal cortex",
+        "striatum",
+        "cerebellum",
+        "hippocampus",
+        "substantia nigra",
+        "multiple regions"
+      ],
+      "tissue_preparation": [
+        "frozen",
+        "fixed",
+        "RNAlater",
+        "OCT-embedded"
+      ],
+      "access_type": "controlled",
+      "application_url": "https://neurobiobank.nih.gov/researchers/",
+      "application_process": "Register account, search catalog, submit request, IRB approval required",
+      "typical_turnaround": "6-8 weeks",
+      "contact_email": "nbbinfo@nih.gov",
+      "description": "Large multi-disorder brain repository with autism and ADHD samples",
+      "data_available": [
+        "clinical_data",
+        "neuropathology",
+        "demographics",
+        "cause_of_death"
+      ],
+      "quality_control": [
+        "PMI < 24h preferred",
+        "Neuropathology assessment",
+        "Quality metrics"
+      ],
+      "publications": [
+        "PMID:29359783"
+      ],
+      "notes": "Broader than autism-specific. Free tissue for NIH-funded researchers. Searchable online catalog.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "UK_BRAIN_BANKS",
+      "name": "UK Brain Banks Network",
+      "full_name": "UK Brain Banks Network for Mental Health and Neurological Disorders",
+      "url": "https://www.mrc.ac.uk/research/facilities-and-resources-for-researchers/brain-banks/",
+      "organization": "MRC UK",
+      "country": "UK",
+      "sample_types": [
+        "brain_tissue",
+        "frozen_tissue",
+        "fixed_tissue"
+      ],
+      "conditions": [
+        "autism",
+        "adhd",
+        "psychiatric",
+        "neurological",
+        "control"
+      ],
+      "total_samples": 8000,
+      "autism_samples": 200,
+      "adhd_samples": 50,
+      "control_samples": 3000,
+      "brain_regions": [
+        "Multiple regions",
+        "prefrontal cortex",
+        "temporal lobe",
+        "cerebellum"
+      ],
+      "tissue_preparation": [
+        "frozen",
+        "fixed"
+      ],
+      "access_type": "collaboration_only",
+      "application_url": "https://www.mrc.ac.uk/research/facilities-and-resources-for-researchers/brain-banks/",
+      "application_process": "Contact individual brain banks, proposal review, collaboration agreement",
+      "typical_turnaround": "12-16 weeks",
+      "contact_email": "brainbanks@mrc.ac.uk",
+      "description": "Network of UK brain banks with psychiatric and neurological samples",
+      "data_available": [
+        "clinical_data",
+        "neuropathology",
+        "some_genomics"
+      ],
+      "quality_control": [
+        "Standard neuropathology protocols",
+        "PMI tracking"
+      ],
+      "publications": [
+        "PMID:23847115"
+      ],
+      "notes": "Requires UK collaboration. Multiple sites (Edinburgh, London, Manchester, Oxford).",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "HARVARD_BRAIN_BANK",
+      "name": "Harvard Brain Bank",
+      "full_name": "Harvard Brain Tissue Resource Center",
+      "url": "https://hbtrc.mclean.harvard.edu",
+      "organization": "Harvard Medical School",
+      "country": "USA",
+      "sample_types": [
+        "brain_tissue",
+        "frozen_tissue",
+        "fixed_tissue"
+      ],
+      "conditions": [
+        "psychiatric",
+        "neurological",
+        "autism",
+        "control"
+      ],
+      "total_samples": 6000,
+      "autism_samples": 120,
+      "adhd_samples": null,
+      "control_samples": 2500,
+      "brain_regions": [
+        "prefrontal cortex",
+        "temporal cortex",
+        "cerebellum",
+        "multiple regions"
+      ],
+      "tissue_preparation": [
+        "frozen",
+        "fixed"
+      ],
+      "access_type": "controlled",
+      "application_url": "https://hbtrc.mclean.harvard.edu/request.html",
+      "application_process": "Online request form, project review, IRB approval",
+      "typical_turnaround": "8-10 weeks",
+      "contact_email": "btrc@mclean.harvard.edu",
+      "description": "Long-established brain bank with psychiatric disorders focus",
+      "data_available": [
+        "clinical_data",
+        "neuropathology",
+        "toxicology"
+      ],
+      "quality_control": [
+        "PMI < 30h typical",
+        "Neuropathology review",
+        "Toxicology screening"
+      ],
+      "publications": [
+        "PMID:11063850"
+      ],
+      "notes": "Nominal fee for tissue. Excellent clinical documentation.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "NIMH_BRAIN_COLLECTION",
+      "name": "NIMH Brain Collection",
+      "full_name": "NIMH Human Brain Collection Core",
+      "url": "https://www.nimh.nih.gov/research/research-conducted-at-nimh/research-areas/research-support-services/hbcc",
+      "organization": "NIMH",
+      "country": "USA",
+      "sample_types": [
+        "brain_tissue",
+        "frozen_tissue"
+      ],
+      "conditions": [
+        "psychiatric",
+        "autism",
+        "control"
+      ],
+      "total_samples": 1500,
+      "autism_samples": 80,
+      "adhd_samples": null,
+      "control_samples": 600,
+      "brain_regions": [
+        "prefrontal cortex",
+        "anterior cingulate",
+        "hippocampus",
+        "amygdala"
+      ],
+      "tissue_preparation": [
+        "frozen",
+        "high quality RNA"
+      ],
+      "access_type": "controlled",
+      "application_url": "https://www.nimh.nih.gov/research/research-conducted-at-nimh/research-areas/research-support-services/hbcc",
+      "application_process": "NIH-funded researchers preferred, proposal submission",
+      "typical_turnaround": "10-12 weeks",
+      "contact_email": "hbcc@mail.nih.gov",
+      "description": "NIMH psychiatric brain collection with high-quality RNA preservation",
+      "data_available": [
+        "clinical_data",
+        "toxicology",
+        "RNA_quality"
+      ],
+      "quality_control": [
+        "PMI < 24h",
+        "RIN > 6.0",
+        "RNA integrity focus"
+      ],
+      "publications": [
+        "PMID:24814961"
+      ],
+      "notes": "Focus on psychiatric disorders. High RNA quality standards.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "AGRE_BIOBANK",
+      "name": "AGRE Biobank",
+      "full_name": "Autism Genetic Resource Exchange Biobank",
+      "url": "https://research.agre.org",
+      "organization": "Autism Speaks",
+      "country": "USA",
+      "sample_types": [
+        "dna",
+        "cell_lines",
+        "lymphoblastoid_cell_lines"
+      ],
+      "conditions": [
+        "autism",
+        "family_members"
+      ],
+      "total_samples": 9000,
+      "autism_samples": 3500,
+      "adhd_samples": null,
+      "control_samples": 5500,
+      "brain_regions": null,
+      "tissue_preparation": null,
+      "access_type": "controlled",
+      "application_url": "https://research.agre.org/program/biorepository/",
+      "application_process": "Submit research application, IRB approval, material transfer agreement",
+      "typical_turnaround": "6-8 weeks",
+      "contact_email": "agre@autismspeaks.org",
+      "description": "DNA and cell lines from multiplex autism families",
+      "data_available": [
+        "genotypes",
+        "phenotype_data",
+        "pedigrees"
+      ],
+      "quality_control": [
+        "DNA concentration",
+        "Purity metrics",
+        "Cell viability"
+      ],
+      "publications": [
+        "PMID:21926972"
+      ],
+      "notes": "Historic collection. Linked to phenotype data in NDAR. Nominal fee.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "SPARK_BIOBANK",
+      "name": "SPARK Biobank",
+      "full_name": "SPARK Simons Foundation Biobank",
+      "url": "https://sparkforautism.org",
+      "organization": "Simons Foundation",
+      "country": "USA",
+      "sample_types": [
+        "dna",
+        "saliva"
+      ],
+      "conditions": [
+        "autism",
+        "family_members"
+      ],
+      "total_samples": 100000,
+      "autism_samples": 50000,
+      "adhd_samples": null,
+      "control_samples": 50000,
+      "brain_regions": null,
+      "tissue_preparation": null,
+      "access_type": "controlled",
+      "application_url": "https://www.sfari.org/resource/sfari-base/",
+      "application_process": "Submit research proposal via SFARI Base, review by committee",
+      "typical_turnaround": "8-12 weeks",
+      "contact_email": "spark@simonsfoundation.org",
+      "description": "Largest autism genetic biobank with WES data",
+      "data_available": [
+        "whole_exome_sequencing",
+        "phenotype",
+        "medical_records"
+      ],
+      "quality_control": [
+        "Clinical lab standards",
+        "Sequencing QC"
+      ],
+      "publications": [
+        "PMID:32651583"
+      ],
+      "notes": "Rapidly growing. WES for all samples. Data via SFARI Base.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "NIMH_REPOSITORY",
+      "name": "NIMH Repository",
+      "full_name": "NIMH Repository and Genomics Resource",
+      "url": "https://www.nimhgenetics.org",
+      "organization": "NIMH / Rutgers",
+      "country": "USA",
+      "sample_types": [
+        "dna",
+        "cell_lines",
+        "plasma",
+        "serum"
+      ],
+      "conditions": [
+        "autism",
+        "adhd",
+        "psychiatric",
+        "control"
+      ],
+      "total_samples": 250000,
+      "autism_samples": 12000,
+      "adhd_samples": 8000,
+      "control_samples": 50000,
+      "brain_regions": null,
+      "tissue_preparation": null,
+      "access_type": "controlled",
+      "application_url": "https://www.nimhgenetics.org/resources/request-biosamples",
+      "application_process": "Register, submit request with research plan, IRB approval",
+      "typical_turnaround": "4-6 weeks",
+      "contact_email": "nimhgenetics@rutgers.edu",
+      "description": "Major psychiatric biomaterial repository with autism and ADHD samples",
+      "data_available": [
+        "genotypes",
+        "clinical_data",
+        "family_structure"
+      ],
+      "quality_control": [
+        "DNA quality metrics",
+        "Sample tracking",
+        "QC reports"
+      ],
+      "publications": [
+        "PMID:15520816"
+      ],
+      "notes": "Free for NIH-funded research. Fast turnaround. Searchable catalog.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "IPSYCH_BIOBANK",
+      "name": "iPSYCH Biobank",
+      "full_name": "Integrative Psychiatric Research Biobank",
+      "url": "https://ipsych.dk",
+      "organization": "iPSYCH Denmark",
+      "country": "Denmark",
+      "sample_types": [
+        "dna",
+        "plasma",
+        "dried_blood_spots"
+      ],
+      "conditions": [
+        "autism",
+        "adhd",
+        "psychiatric",
+        "control"
+      ],
+      "total_samples": 150000,
+      "autism_samples": 18000,
+      "adhd_samples": 20000,
+      "control_samples": 50000,
+      "brain_regions": null,
+      "tissue_preparation": null,
+      "access_type": "collaboration_only",
+      "application_url": "https://ipsych.dk/en/data-access/",
+      "application_process": "Collaboration with Danish sites required, formal application",
+      "typical_turnaround": "16-24 weeks",
+      "contact_email": "ipsych@econ.au.dk",
+      "description": "Danish neonatal screening biobank with WGS and registry linkage",
+      "data_available": [
+        "whole_genome_sequencing",
+        "register_data",
+        "prescription_records"
+      ],
+      "quality_control": [
+        "Clinical lab standards",
+        "WGS quality control"
+      ],
+      "publications": [
+        "PMID:28540026"
+      ],
+      "notes": "Exceptional register linkage. WGS available. Requires Danish collaboration.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "CORIEL",
+      "name": "Coriell",
+      "full_name": "Coriell Institute Biorepository",
+      "url": "https://www.coriell.org",
+      "organization": "Coriell Institute",
+      "country": "USA",
+      "sample_types": [
+        "cell_lines",
+        "dna",
+        "lymphoblastoid_cell_lines",
+        "ipsc"
+      ],
+      "conditions": [
+        "autism",
+        "control",
+        "various"
+      ],
+      "total_samples": 500000,
+      "autism_samples": 2500,
+      "adhd_samples": 200,
+      "control_samples": 100000,
+      "brain_regions": null,
+      "tissue_preparation": null,
+      "access_type": "open",
+      "application_url": "https://www.coriell.org/1/Online-Ordering",
+      "application_process": "Online ordering, immediate purchase, MTA for some collections",
+      "typical_turnaround": "1-2 weeks",
+      "contact_email": "ccr@coriell.org",
+      "description": "Commercial biorepository with autism cell lines from research studies",
+      "data_available": [
+        "genotypes (some)",
+        "phenotype (limited)",
+        "cell_line_data"
+      ],
+      "quality_control": [
+        "Cell viability",
+        "Contamination testing",
+        "Karyotyping"
+      ],
+      "publications": [
+        "Multiple"
+      ],
+      "notes": "Fast commercial access. Includes AGRE, SSC samples. Fee-based.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "IPSYC_LINES",
+      "name": "iPSC Lines",
+      "full_name": "Autism iPSC Repository",
+      "url": "Various",
+      "organization": "Multiple",
+      "country": "USA",
+      "sample_types": [
+        "ipsc",
+        "induced_pluripotent_stem_cells"
+      ],
+      "conditions": [
+        "autism",
+        "syndromic_autism",
+        "control"
+      ],
+      "total_samples": 500,
+      "autism_samples": 300,
+      "adhd_samples": 20,
+      "control_samples": 180,
+      "brain_regions": null,
+      "tissue_preparation": null,
+      "access_type": "controlled",
+      "application_url": "Various",
+      "application_process": "Contact originating labs, MTA required",
+      "typical_turnaround": "8-12 weeks",
+      "contact_email": null,
+      "description": "iPSC lines from autism patients for neuronal differentiation",
+      "data_available": [
+        "genotypes",
+        "clinical_phenotype",
+        "differentiation_protocols"
+      ],
+      "quality_control": [
+        "Pluripotency markers",
+        "Karyotyping",
+        "Mycoplasma testing"
+      ],
+      "publications": [
+        "PMID:31209380",
+        "PMID:30545854"
+      ],
+      "notes": "Growing resource. From labs of Geschwind, Pasca, others. Check StemBANCC, CIRM.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "UK_BIOBANK_SAMPLES",
+      "name": "UK Biobank Samples",
+      "full_name": "UK Biobank Biological Samples",
+      "url": "https://www.ukbiobank.ac.uk",
+      "organization": "UK Biobank",
+      "country": "UK",
+      "sample_types": [
+        "dna",
+        "plasma",
+        "serum",
+        "urine",
+        "saliva"
+      ],
+      "conditions": [
+        "autism",
+        "adhd",
+        "various",
+        "control"
+      ],
+      "total_samples": 1000000,
+      "autism_samples": 2000,
+      "adhd_samples": 4000,
+      "control_samples": 490000,
+      "brain_regions": null,
+      "tissue_preparation": null,
+      "access_type": "controlled",
+      "application_url": "https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access",
+      "application_process": "Submit application, institutional approval, data access agreement",
+      "typical_turnaround": "3-4 weeks for data, 12-16 weeks for samples",
+      "contact_email": "access@ukbiobank.ac.uk",
+      "description": "Massive biobank with autism/ADHD cases and multi-omics",
+      "data_available": [
+        "genomics",
+        "metabolomics",
+        "proteomics",
+        "imaging",
+        "ehr"
+      ],
+      "quality_control": [
+        "Clinical lab standards",
+        "Standardized protocols"
+      ],
+      "publications": [
+        "PMID:30305743"
+      ],
+      "notes": "Sample access more restricted than data access. Fee for samples.",
+      "last_updated": "2025-09-30"
+    },
+    {
+      "biobank_id": "ABCD_BIOBANK",
+      "name": "ABCD Biobank",
+      "full_name": "ABCD Study Biorepository",
+      "url": "https://abcdstudy.org",
+      "organization": "NIH",
+      "country": "USA",
+      "sample_types": [
+        "dna",
+        "saliva",
+        "blood",
+        "hair"
+      ],
+      "conditions": [
+        "adhd",
+        "neurodevelopmental",
+        "control"
+      ],
+      "total_samples": 24000,
+      "autism_samples": 300,
+      "adhd_samples": 2000,
+      "control_samples": 20000,
+      "brain_regions": null,
+      "tissue_preparation": null,
+      "access_type": "controlled",
+      "application_url": "https://nda.nih.gov",
+      "application_process": "NDA data access approval, then biospecimen request",
+      "typical_turnaround": "12-20 weeks",
+      "contact_email": "ndahelp@mail.nih.gov",
+      "description": "Longitudinal neurodevelopmental cohort with ADHD biospecimens",
+      "data_available": [
+        "genomics",
+        "imaging",
+        "cognitive",
+        "longitudinal"
+      ],
+      "quality_control": [
+        "Standardized collection protocols",
+        "Central lab processing"
+      ],
+      "publications": [
+        "PMID:30595399"
+      ],
+      "notes": "Rich longitudinal data. Biospecimen access via NDA. Limited quantities.",
+      "last_updated": "2025-09-30"
+    }
+  ]
+}

@@ -1,0 +1,590 @@
+{
+  "metadata": {
+    "generated_date": "2025-09-30",
+    "total_registries": 17,
+    "total_biobanks": 13,
+    "total_participants": 1131235,
+    "total_biospecimens": 125800
+  },
+  "registries_by_type": {
+    "autism": [
+      {
+        "name": "SPARK",
+        "full_name": "Simons Foundation Powering Autism Research",
+        "sample_size": 50000,
+        "data_types": [
+          "genomics",
+          "phenotype",
+          "medical_records",
+          "family_history"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://base.sfari.org",
+        "contact_email": "spark@simonsfoundation.org"
+      },
+      {
+        "name": "SSC",
+        "full_name": "Simons Simplex Collection",
+        "sample_size": 2600,
+        "data_types": [
+          "genomics",
+          "exomes",
+          "genotypes",
+          "phenotype",
+          "medical_records",
+          "cognitive"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://base.sfari.org",
+        "contact_email": "sfari@simonsfoundation.org"
+      },
+      {
+        "name": "AGRE",
+        "full_name": "Autism Genetic Resource Exchange",
+        "sample_size": 1800,
+        "data_types": [
+          "genomics",
+          "genotypes",
+          "phenotype",
+          "family_history"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://research.agre.org",
+        "contact_email": "agre@autismspeaks.org"
+      },
+      {
+        "name": "IAN",
+        "full_name": "Interactive Autism Network",
+        "sample_size": 52000,
+        "data_types": [
+          "phenotype",
+          "medical_records",
+          "treatment_history",
+          "behavioral"
+        ],
+        "access_type": "collaboration_only",
+        "application_url": "https://iancommunity.org/cs/ian_research",
+        "contact_email": "ianresearch@kennedykrieger.org"
+      },
+      {
+        "name": "Simons Searchlight",
+        "full_name": "Simons Searchlight (formerly SFARI Gene)",
+        "sample_size": 3000,
+        "data_types": [
+          "genomics",
+          "phenotype",
+          "developmental_history",
+          "rare_variants"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://base.sfari.org",
+        "contact_email": "searchlight@simonsfoundation.org"
+      },
+      {
+        "name": "EU-AIMS LEAP",
+        "full_name": "European Autism Interventions - Longitudinal European Autism Project",
+        "sample_size": 800,
+        "data_types": [
+          "genomics",
+          "imaging",
+          "eye_tracking",
+          "eeg",
+          "phenotype",
+          "biomarkers"
+        ],
+        "access_type": "collaboration_only",
+        "application_url": "https://www.eu-aims.eu/resources/access-data/",
+        "contact_email": "info@eu-aims.eu"
+      },
+      {
+        "name": "ABC-CT",
+        "full_name": "Autism Biomarkers Consortium for Clinical Trials",
+        "sample_size": 600,
+        "data_types": [
+          "imaging",
+          "eeg",
+          "eye_tracking",
+          "phenotype",
+          "biomarkers"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://ndar.nih.gov",
+        "contact_email": "abc@fnih.org"
+      },
+      {
+        "name": "EAGLE",
+        "full_name": "Exploring Autism Genetics and the Lifelong Experience",
+        "sample_size": 10000,
+        "data_types": [
+          "genomics",
+          "phenotype",
+          "longitudinal"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://www.eagleautismgenetics.org/for-researchers",
+        "contact_email": "eagle@chop.edu"
+      },
+      {
+        "name": "UK Biobank",
+        "full_name": "UK Biobank Neurodevelopmental Cohort",
+        "sample_size": 500000,
+        "data_types": [
+          "genomics",
+          "imaging",
+          "electronic_health_records",
+          "biomarkers",
+          "microbiome"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access",
+        "contact_email": "access@ukbiobank.ac.uk"
+      },
+      {
+        "name": "All of Us",
+        "full_name": "All of Us Research Program",
+        "sample_size": 413000,
+        "data_types": [
+          "genomics",
+          "electronic_health_records",
+          "surveys",
+          "biomarkers",
+          "wearables"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://www.researchallofus.org",
+        "contact_email": "allofus@researchallofus.org"
+      },
+      {
+        "name": "MSSNG",
+        "full_name": "MSSNG Autism Genome Project",
+        "sample_size": 10000,
+        "data_types": [
+          "genomics",
+          "whole_genome_sequencing",
+          "phenotype"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://research.mss.ng",
+        "contact_email": "mssng@autismspeaks.org"
+      }
+    ],
+    "adhd": [
+      {
+        "name": "APSARD Registry",
+        "full_name": "American Professional Society of ADHD and Related Disorders Registry",
+        "sample_size": null,
+        "data_types": [
+          "phenotype",
+          "treatment_history",
+          "comorbidities"
+        ],
+        "access_type": "collaboration_only",
+        "application_url": null,
+        "contact_email": "info@apsard.org"
+      },
+      {
+        "name": "CADDRA",
+        "full_name": "Canadian ADHD Resource Alliance Registry",
+        "sample_size": null,
+        "data_types": [
+          "phenotype",
+          "treatment_outcomes"
+        ],
+        "access_type": "collaboration_only",
+        "application_url": null,
+        "contact_email": "info@caddra.ca"
+      },
+      {
+        "name": "EUNETHYDIS",
+        "full_name": "European Network for Hyperkinetic Disorders",
+        "sample_size": null,
+        "data_types": [
+          "genomics",
+          "phenotype",
+          "imaging"
+        ],
+        "access_type": "collaboration_only",
+        "application_url": null,
+        "contact_email": null
+      },
+      {
+        "name": "PGC ADHD",
+        "full_name": "Psychiatric Genomics Consortium ADHD Working Group",
+        "sample_size": 55374,
+        "data_types": [
+          "genomics",
+          "gwas_summary_statistics",
+          "phenotype"
+        ],
+        "access_type": "open",
+        "application_url": "https://www.med.unc.edu/pgc/download-results/adhd/",
+        "contact_email": "pgc@med.unc.edu"
+      },
+      {
+        "name": "iPSYCH ADHD",
+        "full_name": "Integrative Psychiatric Research ADHD Cohort",
+        "sample_size": 20183,
+        "data_types": [
+          "genomics",
+          "register_data",
+          "prescription_records",
+          "phenotype"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://ipsych.dk/en/data-access/",
+        "contact_email": "ipsych@econ.au.dk"
+      },
+      {
+        "name": "ABCD ADHD",
+        "full_name": "ABCD Study ADHD Cohort",
+        "sample_size": 11878,
+        "data_types": [
+          "genomics",
+          "imaging",
+          "cognitive",
+          "phenotype",
+          "longitudinal"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://nda.nih.gov",
+        "contact_email": "nda@mail.nih.gov"
+      },
+      {
+        "name": "UK Biobank",
+        "full_name": "UK Biobank Neurodevelopmental Cohort",
+        "sample_size": 500000,
+        "data_types": [
+          "genomics",
+          "imaging",
+          "electronic_health_records",
+          "biomarkers",
+          "microbiome"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access",
+        "contact_email": "access@ukbiobank.ac.uk"
+      },
+      {
+        "name": "All of Us",
+        "full_name": "All of Us Research Program",
+        "sample_size": 413000,
+        "data_types": [
+          "genomics",
+          "electronic_health_records",
+          "surveys",
+          "biomarkers",
+          "wearables"
+        ],
+        "access_type": "controlled",
+        "application_url": "https://www.researchallofus.org",
+        "contact_email": "allofus@researchallofus.org"
+      }
+    ],
+    "brain_tissue": [
+      {
+        "name": "Autism BrainNet",
+        "full_name": "Autism BrainNet Brain Tissue Repository",
+        "sample_types": [
+          "brain_tissue",
+          "frozen_tissue",
+          "fixed_tissue",
+          "rna"
+        ],
+        "autism_samples": 1800,
+        "adhd_samples": null,
+        "access_type": "controlled",
+        "application_url": "https://www.autismbrainnet.org/resources/request-tissue/",
+        "contact_email": "abn@psych.uic.edu",
+        "turnaround": "8-12 weeks"
+      },
+      {
+        "name": "NIH NeuroBioBank",
+        "full_name": "NIH NeuroBioBank Brain and Tissue Repository",
+        "sample_types": [
+          "brain_tissue",
+          "frozen_tissue",
+          "fixed_tissue",
+          "spinal_cord",
+          "csf"
+        ],
+        "autism_samples": 450,
+        "adhd_samples": 280,
+        "access_type": "controlled",
+        "application_url": "https://neurobiobank.nih.gov/researchers/",
+        "contact_email": "nbbinfo@nih.gov",
+        "turnaround": "6-8 weeks"
+      },
+      {
+        "name": "UK Brain Banks Network",
+        "full_name": "UK Brain Banks Network for Mental Health and Neurological Disorders",
+        "sample_types": [
+          "brain_tissue",
+          "frozen_tissue",
+          "fixed_tissue"
+        ],
+        "autism_samples": 200,
+        "adhd_samples": 50,
+        "access_type": "collaboration_only",
+        "application_url": "https://www.mrc.ac.uk/research/facilities-and-resources-for-researchers/brain-banks/",
+        "contact_email": "brainbanks@mrc.ac.uk",
+        "turnaround": "12-16 weeks"
+      },
+      {
+        "name": "Harvard Brain Bank",
+        "full_name": "Harvard Brain Tissue Resource Center",
+        "sample_types": [
+          "brain_tissue",
+          "frozen_tissue",
+          "fixed_tissue"
+        ],
+        "autism_samples": 120,
+        "adhd_samples": null,
+        "access_type": "controlled",
+        "application_url": "https://hbtrc.mclean.harvard.edu/request.html",
+        "contact_email": "btrc@mclean.harvard.edu",
+        "turnaround": "8-10 weeks"
+      },
+      {
+        "name": "NIMH Brain Collection",
+        "full_name": "NIMH Human Brain Collection Core",
+        "sample_types": [
+          "brain_tissue",
+          "frozen_tissue"
+        ],
+        "autism_samples": 80,
+        "adhd_samples": null,
+        "access_type": "controlled",
+        "application_url": "https://www.nimh.nih.gov/research/research-conducted-at-nimh/research-areas/research-support-services/hbcc",
+        "contact_email": "hbcc@mail.nih.gov",
+        "turnaround": "10-12 weeks"
+      }
+    ],
+    "dna_cell_lines": [
+      {
+        "name": "AGRE Biobank",
+        "full_name": "Autism Genetic Resource Exchange Biobank",
+        "sample_types": [
+          "dna",
+          "cell_lines",
+          "lymphoblastoid_cell_lines"
+        ],
+        "autism_samples": 3500,
+        "adhd_samples": null,
+        "access_type": "controlled",
+        "application_url": "https://research.agre.org/program/biorepository/",
+        "contact_email": "agre@autismspeaks.org",
+        "turnaround": "6-8 weeks"
+      },
+      {
+        "name": "SPARK Biobank",
+        "full_name": "SPARK Simons Foundation Biobank",
+        "sample_types": [
+          "dna",
+          "saliva"
+        ],
+        "autism_samples": 50000,
+        "adhd_samples": null,
+        "access_type": "controlled",
+        "application_url": "https://www.sfari.org/resource/sfari-base/",
+        "contact_email": "spark@simonsfoundation.org",
+        "turnaround": "8-12 weeks"
+      },
+      {
+        "name": "NIMH Repository",
+        "full_name": "NIMH Repository and Genomics Resource",
+        "sample_types": [
+          "dna",
+          "cell_lines",
+          "plasma",
+          "serum"
+        ],
+        "autism_samples": 12000,
+        "adhd_samples": 8000,
+        "access_type": "controlled",
+        "application_url": "https://www.nimhgenetics.org/resources/request-biosamples",
+        "contact_email": "nimhgenetics@rutgers.edu",
+        "turnaround": "4-6 weeks"
+      },
+      {
+        "name": "iPSYCH Biobank",
+        "full_name": "Integrative Psychiatric Research Biobank",
+        "sample_types": [
+          "dna",
+          "plasma",
+          "dried_blood_spots"
+        ],
+        "autism_samples": 18000,
+        "adhd_samples": 20000,
+        "access_type": "collaboration_only",
+        "application_url": "https://ipsych.dk/en/data-access/",
+        "contact_email": "ipsych@econ.au.dk",
+        "turnaround": "16-24 weeks"
+      },
+      {
+        "name": "Coriell",
+        "full_name": "Coriell Institute Biorepository",
+        "sample_types": [
+          "cell_lines",
+          "dna",
+          "lymphoblastoid_cell_lines",
+          "ipsc"
+        ],
+        "autism_samples": 2500,
+        "adhd_samples": 200,
+        "access_type": "open",
+        "application_url": "https://www.coriell.org/1/Online-Ordering",
+        "contact_email": "ccr@coriell.org",
+        "turnaround": "1-2 weeks"
+      },
+      {
+        "name": "UK Biobank Samples",
+        "full_name": "UK Biobank Biological Samples",
+        "sample_types": [
+          "dna",
+          "plasma",
+          "serum",
+          "urine",
+          "saliva"
+        ],
+        "autism_samples": 2000,
+        "adhd_samples": 4000,
+        "access_type": "controlled",
+        "application_url": "https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access",
+        "contact_email": "access@ukbiobank.ac.uk",
+        "turnaround": "3-4 weeks for data, 12-16 weeks for samples"
+      },
+      {
+        "name": "ABCD Biobank",
+        "full_name": "ABCD Study Biorepository",
+        "sample_types": [
+          "dna",
+          "saliva",
+          "blood",
+          "hair"
+        ],
+        "autism_samples": 300,
+        "adhd_samples": 2000,
+        "access_type": "controlled",
+        "application_url": "https://nda.nih.gov",
+        "contact_email": "ndahelp@mail.nih.gov",
+        "turnaround": "12-20 weeks"
+      }
+    ]
+  },
+  "access_procedures": {
+    "controlled_access": {
+      "description": "Requires formal application with research proposal and IRB approval",
+      "typical_requirements": [
+        "Completed research application form",
+        "Institutional IRB approval",
+        "Data Use Agreement or Material Transfer Agreement",
+        "Scientific review by committee",
+        "PI credentials verification"
+      ],
+      "typical_turnaround": "6-16 weeks",
+      "examples": [
+        "SPARK",
+        "SSC",
+        "NIH NeuroBioBank",
+        "UK Biobank"
+      ]
+    },
+    "open_access": {
+      "description": "Publicly available data or direct purchase",
+      "typical_requirements": [
+        "User registration",
+        "Acceptance of terms of use",
+        "Citation agreement"
+      ],
+      "typical_turnaround": "1-2 weeks",
+      "examples": [
+        "PGC ADHD summary statistics",
+        "Coriell cell lines (commercial)"
+      ]
+    },
+    "collaboration_only": {
+      "description": "Requires formal collaboration with data holders",
+      "typical_requirements": [
+        "Collaborative research proposal",
+        "Co-authorship agreement",
+        "Site approval",
+        "Data sharing agreement"
+      ],
+      "typical_turnaround": "12-24 weeks",
+      "examples": [
+        "IAN",
+        "EU-AIMS",
+        "iPSYCH",
+        "UK Brain Banks"
+      ]
+    }
+  },
+  "priority_targets": {
+    "largest_cohorts": [
+      {
+        "name": "UK Biobank",
+        "n": 500000,
+        "type": "multi-omics population cohort"
+      },
+      {
+        "name": "All of Us",
+        "n": 413000,
+        "type": "precision medicine with EHR"
+      },
+      {
+        "name": "PGC ADHD",
+        "n": 55374,
+        "type": "GWAS summary statistics (open)"
+      },
+      {
+        "name": "IAN",
+        "n": 52000,
+        "type": "autism phenotype registry"
+      },
+      {
+        "name": "SPARK",
+        "n": 50000,
+        "type": "autism genetics with WES"
+      }
+    ],
+    "brain_tissue_priority": [
+      {
+        "name": "Autism BrainNet",
+        "autism_samples": 1800,
+        "notes": "Premier autism brain tissue"
+      },
+      {
+        "name": "NIH NeuroBioBank",
+        "autism_samples": 450,
+        "notes": "ADHD samples available"
+      },
+      {
+        "name": "UK Brain Banks",
+        "autism_samples": 200,
+        "notes": "Requires UK collaboration"
+      }
+    ],
+    "genomics_priority": [
+      {
+        "name": "SPARK",
+        "n": 50000,
+        "data": "Whole exome sequencing"
+      },
+      {
+        "name": "iPSYCH",
+        "n": 38183,
+        "data": "Whole genome sequencing + registers"
+      },
+      {
+        "name": "MSSNG",
+        "n": 10000,
+        "data": "High-coverage WGS families"
+      },
+      {
+        "name": "SSC",
+        "n": 2600,
+        "data": "WES simplex families"
+      }
+    ]
+  }
+}
