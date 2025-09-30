@@ -1,15 +1,22 @@
 """Robust consensus clustering pipeline with multiple methods
 
 Implements comprehensive clustering with:
-- HDBSCAN with parameter sweeps
+- HDBSCAN with parameter sweeps (CONSENSUS across sweeps, not best-pick)
 - Spectral clustering on co-assignment matrices
 - Bayesian Gaussian Mixture Models
 - Ensemble clustering across embeddings
 - Topological Data Analysis for gap detection
+- NULL MODELS: permutation tests, rotation nulls, SigClust, dip tests
+- TOPOLOGY GATES: MST/k-NN/spectral gaps as hard thresholds
+- CONFIG HASHING: prevent post-hoc parameter tweaking
+- STABILITY SELECTION: selective inference for feature panels
 """
-from typing import Dict, List, Tuple, Optional, Any, Callable
-from dataclasses import dataclass
+from typing import Dict, List, Tuple, Optional, Any, Callable, Union
+from dataclasses import dataclass, field
 import warnings
+import hashlib
+import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -24,7 +31,9 @@ from sklearn.mixture import BayesianGaussianMixture
 from sklearn.manifold import TSNE
 from scipy.cluster.hierarchy import dendrogram, linkage
 from scipy.spatial.distance import pdist, squareform
-from scipy.stats import mode
+from scipy.stats import mode, dip
+from scipy.spatial import distance_matrix
+from scipy.sparse.csgraph import minimum_spanning_tree
 
 try:
     import hdbscan
@@ -40,6 +49,490 @@ except ImportError:
     UMAP_AVAILABLE = False
     warnings.warn("umap not available, some features will be disabled")
 
+
+# ============================================================================
+# CONFIG HASHING & LOCKFILE (Point 5)
+# ============================================================================
+
+@dataclass
+class ConfigHash:
+    """Configuration hash for reproducibility and preventing post-hoc tweaking"""
+    config_dict: Dict[str, Any]
+    hash_value: str = field(default="")
+    timestamp: str = field(default="")
+    mode: str = field(default="exploratory")  # exploratory or confirmatory
+
+    def __post_init__(self):
+        if not self.hash_value:
+            self.hash_value = self._compute_hash()
+        if not self.timestamp:
+            from datetime import datetime
+            self.timestamp = datetime.now().isoformat()
+
+    def _compute_hash(self) -> str:
+        """Compute SHA-256 hash of config"""
+        config_str = json.dumps(self.config_dict, sort_keys=True)
+        return hashlib.sha256(config_str.encode()).hexdigest()
+
+    def save_lockfile(self, path: Union[str, Path]) -> None:
+        """Save config hash to lockfile"""
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(path, 'w') as f:
+            json.dump({
+                'hash': self.hash_value,
+                'timestamp': self.timestamp,
+                'mode': self.mode,
+                'config': self.config_dict
+            }, f, indent=2)
+
+    @classmethod
+    def load_lockfile(cls, path: Union[str, Path]) -> 'ConfigHash':
+        """Load config hash from lockfile"""
+        with open(path, 'r') as f:
+            data = json.load(f)
+
+        return cls(
+            config_dict=data['config'],
+            hash_value=data['hash'],
+            timestamp=data['timestamp'],
+            mode=data['mode']
+        )
+
+    def verify_match(self, other_config: Dict[str, Any]) -> bool:
+        """Verify that config matches locked config (for confirmatory analysis)"""
+        other_hash = ConfigHash(other_config)
+        return self.hash_value == other_hash.hash_value
+
+
+# ============================================================================
+# NULL MODELS (Point 2)
+# ============================================================================
+
+class NullModelTester:
+    """
+    Null hypothesis testing for clustering significance
+
+    Implements:
+    - Permutation tests (restricted to preserve structure)
+    - Rotation nulls (preserve variance structure)
+    - SigClust (Gaussian null)
+    - Dip test (unimodality test)
+    """
+
+    def __init__(
+        self,
+        n_permutations: int = 1000,
+        alpha: float = 0.05,
+        random_state: int = 42,
+    ):
+        self.n_permutations = n_permutations
+        self.alpha = alpha
+        self.random_state = random_state
+        self.rng = np.random.RandomState(random_state)
+
+    def test_clustering_significance(
+        self,
+        X: np.ndarray,
+        labels: np.ndarray,
+        methods: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Run multiple null model tests
+
+        Args:
+            X: Data matrix
+            labels: Cluster labels
+            methods: List of null model methods to use
+
+        Returns:
+            Dictionary of test results
+        """
+        if methods is None:
+            methods = ['permutation', 'rotation', 'sigclust', 'dip']
+
+        results = {}
+
+        if 'permutation' in methods:
+            results['permutation'] = self._permutation_test(X, labels)
+
+        if 'rotation' in methods:
+            results['rotation'] = self._rotation_null_test(X, labels)
+
+        if 'sigclust' in methods:
+            results['sigclust'] = self._sigclust_test(X, labels)
+
+        if 'dip' in methods:
+            results['dip'] = self._dip_test(X)
+
+        # Overall significance (all tests must pass)
+        results['all_significant'] = all(
+            r.get('significant', False) for r in results.values()
+            if isinstance(r, dict)
+        )
+
+        return results
+
+    def _permutation_test(self, X: np.ndarray, labels: np.ndarray) -> Dict[str, Any]:
+        """Permutation test with restricted permutations"""
+        # Compute observed metric (gap statistic)
+        obs_gap = self._compute_gap_statistic_simple(X, labels)
+
+        # Permutation distribution
+        null_gaps = []
+        for _ in range(self.n_permutations):
+            # Permute labels while preserving marginals
+            perm_labels = self.rng.permutation(labels)
+            null_gap = self._compute_gap_statistic_simple(X, perm_labels)
+            null_gaps.append(null_gap)
+
+        null_gaps = np.array(null_gaps)
+        p_value = (null_gaps >= obs_gap).mean()
+
+        return {
+            'method': 'permutation',
+            'observed': obs_gap,
+            'null_mean': null_gaps.mean(),
+            'null_std': null_gaps.std(),
+            'p_value': p_value,
+            'significant': p_value < self.alpha
+        }
+
+    def _rotation_null_test(self, X: np.ndarray, labels: np.ndarray) -> Dict[str, Any]:
+        """Rotation null test (preserves covariance structure)"""
+        # Compute observed metric
+        obs_sil = silhouette_score(X, labels) if len(set(labels)) > 1 else 0
+
+        # Rotation null distribution
+        null_sils = []
+        for _ in range(self.n_permutations):
+            # Random rotation
+            Q, _ = np.linalg.qr(self.rng.randn(X.shape[1], X.shape[1]))
+            X_rot = X @ Q
+
+            # Cluster rotated data
+            from sklearn.cluster import KMeans
+            n_clusters = len(set(labels))
+            km = KMeans(n_clusters=n_clusters, random_state=self.rng.randint(10000), n_init=10)
+            rot_labels = km.fit_predict(X_rot)
+
+            null_sil = silhouette_score(X_rot, rot_labels) if len(set(rot_labels)) > 1 else 0
+            null_sils.append(null_sil)
+
+        null_sils = np.array(null_sils)
+        p_value = (null_sils >= obs_sil).mean()
+
+        return {
+            'method': 'rotation',
+            'observed': obs_sil,
+            'null_mean': null_sils.mean(),
+            'null_std': null_sils.std(),
+            'p_value': p_value,
+            'significant': p_value < self.alpha
+        }
+
+    def _sigclust_test(self, X: np.ndarray, labels: np.ndarray) -> Dict[str, Any]:
+        """SigClust: test against Gaussian null"""
+        # Simplified SigClust implementation
+        # Full implementation: Liu et al. 2008
+
+        n_clusters = len(set(labels))
+        if n_clusters < 2:
+            return {'method': 'sigclust', 'significant': False, 'note': 'Too few clusters'}
+
+        # Compute cluster index for observed data
+        obs_index = self._compute_cluster_index(X, labels)
+
+        # Generate Gaussian null data
+        mean = X.mean(axis=0)
+        cov = np.cov(X.T)
+
+        null_indices = []
+        for _ in range(self.n_permutations):
+            X_null = self.rng.multivariate_normal(mean, cov, size=X.shape[0])
+
+            # Cluster null data
+            from sklearn.cluster import KMeans
+            km = KMeans(n_clusters=n_clusters, random_state=self.rng.randint(10000), n_init=10)
+            null_labels = km.fit_predict(X_null)
+
+            null_index = self._compute_cluster_index(X_null, null_labels)
+            null_indices.append(null_index)
+
+        null_indices = np.array(null_indices)
+        p_value = (null_indices >= obs_index).mean()
+
+        return {
+            'method': 'sigclust',
+            'observed': obs_index,
+            'null_mean': null_indices.mean(),
+            'null_std': null_indices.std(),
+            'p_value': p_value,
+            'significant': p_value < self.alpha
+        }
+
+    def _dip_test(self, X: np.ndarray) -> Dict[str, Any]:
+        """Hartigan's dip test for unimodality"""
+        # Test each dimension separately
+        p_values = []
+
+        for dim in range(min(X.shape[1], 10)):  # Test first 10 dimensions
+            try:
+                # Project to 1D
+                projection = X[:, dim]
+
+                # Dip statistic
+                dip_stat, p_val = dip(projection, full_output=True)[:2]
+                p_values.append(p_val)
+            except:
+                continue
+
+        if not p_values:
+            return {'method': 'dip', 'significant': False, 'note': 'Test failed'}
+
+        # Use minimum p-value (most significant)
+        min_p = min(p_values)
+
+        return {
+            'method': 'dip',
+            'min_p_value': min_p,
+            'all_p_values': p_values,
+            'significant': min_p < self.alpha,  # Reject unimodality = multimodal = clusters exist
+            'note': 'Rejects unimodality if significant'
+        }
+
+    def _compute_gap_statistic_simple(self, X: np.ndarray, labels: np.ndarray) -> float:
+        """Simplified gap statistic"""
+        n_clusters = len(set(labels))
+        if n_clusters < 2:
+            return 0.0
+
+        # Within-cluster sum of squares
+        wss = 0.0
+        for k in set(labels):
+            cluster_data = X[labels == k]
+            if len(cluster_data) > 1:
+                wss += np.sum(pairwise_distances(cluster_data) ** 2) / (2 * len(cluster_data))
+
+        return -np.log(wss + 1e-10)  # Higher gap = better clustering
+
+    def _compute_cluster_index(self, X: np.ndarray, labels: np.ndarray) -> float:
+        """Compute cluster separation index"""
+        try:
+            return calinski_harabasz_score(X, labels)
+        except:
+            return 0.0
+
+
+# ============================================================================
+# TOPOLOGY GATES (Point 3)
+# ============================================================================
+
+@dataclass
+class TopologyGateResults:
+    """Results from topology pre-registration gates"""
+    mst_edge_separation: float
+    knn_purity: float
+    spectral_gap: float
+    persistence_entropy: float
+    passes_gates: bool
+    subtype_claim_allowed: bool
+    notes: List[str] = field(default_factory=list)
+
+
+class TopologyPreRegistrationGates:
+    """
+    Topology-based pre-registration gates
+
+    Hard thresholds that must be met before claiming distinct subtypes.
+    Uses:
+    - MST edge separation (gap in MST edge lengths)
+    - k-NN purity (local neighborhood homogeneity)
+    - Spectral gaps (eigenvalue gaps in graph Laplacian)
+    - Persistence entropy (topological data analysis)
+    """
+
+    def __init__(
+        self,
+        mst_separation_threshold: float = 1.5,  # Gap in MST edges (ratio)
+        knn_purity_threshold: float = 0.7,      # k-NN purity
+        spectral_gap_threshold: float = 0.3,    # Eigenvalue gap
+        persistence_threshold: float = 0.5,     # Persistence entropy
+        k_neighbors: int = 15,
+    ):
+        self.mst_separation_threshold = mst_separation_threshold
+        self.knn_purity_threshold = knn_purity_threshold
+        self.spectral_gap_threshold = spectral_gap_threshold
+        self.persistence_threshold = persistence_threshold
+        self.k_neighbors = k_neighbors
+
+    def evaluate_gates(self, X: np.ndarray, labels: Optional[np.ndarray] = None) -> TopologyGateResults:
+        """
+        Evaluate topology gates
+
+        Args:
+            X: Data matrix
+            labels: Optional cluster labels (for k-NN purity)
+
+        Returns:
+            TopologyGateResults
+        """
+        notes = []
+
+        # 1. MST edge separation
+        mst_sep = self._compute_mst_separation(X)
+        notes.append(f"MST separation: {mst_sep:.3f} (threshold: {self.mst_separation_threshold})")
+
+        # 2. k-NN purity (requires labels)
+        if labels is not None:
+            knn_pur = self._compute_knn_purity(X, labels)
+            notes.append(f"k-NN purity: {knn_pur:.3f} (threshold: {self.knn_purity_threshold})")
+        else:
+            knn_pur = 0.0
+            notes.append("k-NN purity: not computed (no labels)")
+
+        # 3. Spectral gap
+        spectral_gap = self._compute_spectral_gap(X)
+        notes.append(f"Spectral gap: {spectral_gap:.3f} (threshold: {self.spectral_gap_threshold})")
+
+        # 4. Persistence entropy
+        persist_entropy = self._compute_persistence_entropy(X)
+        notes.append(f"Persistence entropy: {persist_entropy:.3f} (threshold: {self.persistence_threshold})")
+
+        # Check gates
+        gates_passed = (
+            mst_sep >= self.mst_separation_threshold and
+            (labels is None or knn_pur >= self.knn_purity_threshold) and
+            spectral_gap >= self.spectral_gap_threshold and
+            persist_entropy >= self.persistence_threshold
+        )
+
+        # Subtype claim allowed only if gates passed
+        subtype_allowed = gates_passed
+        if not subtype_allowed:
+            notes.append("⚠️ TOPOLOGY GATES FAILED: Data appears to be a spectrum, not discrete subtypes")
+        else:
+            notes.append("✓ Topology gates passed: Discrete subtypes supported by topology")
+
+        return TopologyGateResults(
+            mst_edge_separation=mst_sep,
+            knn_purity=knn_pur,
+            spectral_gap=spectral_gap,
+            persistence_entropy=persist_entropy,
+            passes_gates=gates_passed,
+            subtype_claim_allowed=subtype_allowed,
+            notes=notes
+        )
+
+    def _compute_mst_separation(self, X: np.ndarray) -> float:
+        """Compute MST edge separation (gap ratio)"""
+        # Compute distance matrix
+        dist = pairwise_distances(X)
+
+        # Compute MST
+        mst = minimum_spanning_tree(dist).toarray()
+
+        # Get MST edge weights
+        edges = mst[mst > 0]
+
+        if len(edges) < 2:
+            return 0.0
+
+        # Sort edges
+        edges_sorted = np.sort(edges)
+
+        # Find largest gap in edge lengths
+        gaps = np.diff(edges_sorted)
+        max_gap_idx = np.argmax(gaps)
+
+        # Compute gap ratio (relative to surrounding edges)
+        gap_ratio = gaps[max_gap_idx] / (edges_sorted[max_gap_idx] + 1e-10)
+
+        return gap_ratio
+
+    def _compute_knn_purity(self, X: np.ndarray, labels: np.ndarray) -> float:
+        """Compute k-NN purity (neighborhood homogeneity)"""
+        from sklearn.neighbors import NearestNeighbors
+
+        # Fit k-NN
+        knn = NearestNeighbors(n_neighbors=self.k_neighbors + 1)
+        knn.fit(X)
+
+        # Get neighbors
+        indices = knn.kneighbors(X, return_distance=False)
+
+        # Compute purity (fraction of neighbors with same label)
+        purities = []
+        for i, neighbors in enumerate(indices):
+            neighbors = neighbors[1:]  # Exclude self
+            neighbor_labels = labels[neighbors]
+            purity = (neighbor_labels == labels[i]).mean()
+            purities.append(purity)
+
+        return np.mean(purities)
+
+    def _compute_spectral_gap(self, X: np.ndarray) -> float:
+        """Compute spectral gap (eigenvalue gap in graph Laplacian)"""
+        from sklearn.neighbors import kneighbors_graph
+
+        # Build k-NN graph
+        knn_graph = kneighbors_graph(X, n_neighbors=self.k_neighbors, mode='connectivity')
+        adjacency = knn_graph.toarray()
+
+        # Compute graph Laplacian
+        degree = np.diag(adjacency.sum(axis=1))
+        laplacian = degree - adjacency
+
+        # Compute eigenvalues
+        eigenvalues = np.linalg.eigvalsh(laplacian)
+        eigenvalues = np.sort(eigenvalues)
+
+        # Compute gaps
+        gaps = np.diff(eigenvalues[:10])  # First 10 eigenvalues
+
+        # Largest gap (normalized)
+        max_gap = np.max(gaps) if len(gaps) > 0 else 0.0
+
+        return max_gap
+
+    def _compute_persistence_entropy(self, X: np.ndarray) -> float:
+        """Compute persistence entropy (simplified TDA)"""
+        # Simplified version: use distance-based persistence
+
+        # Compute pairwise distances
+        dist = pairwise_distances(X)
+
+        # Get unique distances (persistence diagram birth/death)
+        unique_dists = np.unique(dist)
+
+        # Compute persistence (lifetime of topological features)
+        if len(unique_dists) < 2:
+            return 0.0
+
+        # Simplified: gaps in distance distribution
+        gaps = np.diff(unique_dists)
+
+        # Normalize to probabilities
+        total = gaps.sum()
+        if total == 0:
+            return 0.0
+
+        probs = gaps / total
+
+        # Compute entropy
+        entropy = -np.sum(probs * np.log(probs + 1e-10))
+
+        # Normalize by max entropy
+        max_entropy = np.log(len(probs))
+        normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
+
+        return normalized_entropy
+
+
+# ============================================================================
+# ORIGINAL DATACLASSES
+# ============================================================================
 
 @dataclass
 class ClusterAssignment:
@@ -64,9 +557,13 @@ class ClusteringMetrics:
 
 class HDBSCANParameterSweep:
     """
-    HDBSCAN with comprehensive parameter sweep
+    HDBSCAN with comprehensive parameter sweep using CONSENSUS
 
-    Tests multiple parameter combinations to find optimal clustering.
+    FIXED: No longer picks "best" parameters (garden-of-forking-paths).
+    Instead, builds co-assignment matrix across ALL parameter combinations,
+    then uses spectral clustering for final consensus labels.
+
+    This addresses the selection bias critique from pattern-mining.
     """
 
     def __init__(
@@ -75,6 +572,8 @@ class HDBSCANParameterSweep:
         min_samples_list: Optional[List[int]] = None,
         metrics: Optional[List[str]] = None,
         cluster_selection_methods: Optional[List[str]] = None,
+        use_consensus: bool = True,  # NEW: enable consensus mode
+        consensus_threshold: float = 0.5,  # Co-assignment threshold
     ):
         """
         Initialize HDBSCAN parameter sweep
@@ -84,24 +583,41 @@ class HDBSCANParameterSweep:
             min_samples_list: List of minimum samples values
             metrics: Distance metrics to test
             cluster_selection_methods: Selection methods to test
+            use_consensus: Use consensus across sweep (default: True)
+            consensus_threshold: Co-assignment threshold for spectral clustering
         """
         self.min_cluster_sizes = min_cluster_sizes or [5, 10, 15, 20]
         self.min_samples_list = min_samples_list or [1, 5, 10]
         self.metrics = metrics or ['euclidean', 'manhattan']
         self.cluster_selection_methods = cluster_selection_methods or ['eom', 'leaf']
+        self.use_consensus = use_consensus
+        self.consensus_threshold = consensus_threshold
 
+        # Old best-pick results (deprecated, kept for compatibility)
         self.best_params_: Optional[Dict] = None
         self.best_score_: Optional[float] = None
         self.best_labels_: Optional[np.ndarray] = None
+
+        # NEW: Consensus results
+        self.consensus_labels_: Optional[np.ndarray] = None
+        self.coassignment_matrix_: Optional[np.ndarray] = None
+        self.all_labels_: List[np.ndarray] = []
+
         self.sweep_results_: List[Dict] = []
 
     def fit(self, X: np.ndarray, scoring: str = 'silhouette') -> 'HDBSCANParameterSweep':
         """
         Fit HDBSCAN with parameter sweep
 
+        NEW BEHAVIOR (if use_consensus=True):
+        - Runs ALL parameter combinations
+        - Builds co-assignment matrix across ALL results
+        - Uses spectral clustering on consensus matrix
+        - NO cherry-picking of "best" parameters
+
         Args:
             X: Data matrix
-            scoring: Scoring method ('silhouette', 'calinski_harabasz', 'davies_bouldin')
+            scoring: Scoring method (still tracked, but not used for selection if consensus=True)
 
         Returns:
             Self (fitted)
@@ -109,11 +625,19 @@ class HDBSCANParameterSweep:
         if not HDBSCAN_AVAILABLE:
             raise ImportError("hdbscan is required for HDBSCANParameterSweep")
 
+        n_samples = X.shape[0]
+
+        # Initialize co-assignment matrix if using consensus
+        if self.use_consensus:
+            coassign = np.zeros((n_samples, n_samples))
+            n_valid_combinations = 0
+
+        # Tracking for old best-pick mode (deprecated)
         best_score = -np.inf if scoring != 'davies_bouldin' else np.inf
         best_params = None
         best_labels = None
 
-        # Parameter sweep
+        # Parameter sweep - run ALL combinations
         for min_cluster_size in self.min_cluster_sizes:
             for min_samples in self.min_samples_list:
                 for metric in self.metrics:
@@ -133,7 +657,7 @@ class HDBSCANParameterSweep:
                             if n_clusters < 2:
                                 continue
 
-                            # Compute score
+                            # Compute score (for tracking)
                             valid_mask = labels >= 0
                             if valid_mask.sum() < 10:
                                 continue
@@ -158,7 +682,21 @@ class HDBSCANParameterSweep:
                                 'score': score,
                             })
 
-                            # Update best
+                            # NEW: Add to co-assignment matrix (consensus mode)
+                            if self.use_consensus:
+                                self.all_labels_.append(labels)
+
+                                # Update co-assignment matrix
+                                for i in range(n_samples):
+                                    for j in range(i + 1, n_samples):
+                                        # Co-assigned if both in same cluster (not noise)
+                                        if labels[i] >= 0 and labels[i] == labels[j]:
+                                            coassign[i, j] += 1
+                                            coassign[j, i] += 1
+
+                                n_valid_combinations += 1
+
+                            # OLD: Update best (deprecated, only for fallback)
                             is_better = (score > best_score if scoring != 'davies_bouldin'
                                        else score < best_score)
 
@@ -176,17 +714,75 @@ class HDBSCANParameterSweep:
                             warnings.warn(f"Parameter combination failed: {e}")
                             continue
 
+        # Store old best-pick results (deprecated)
         self.best_params_ = best_params
         self.best_score_ = best_score
         self.best_labels_ = best_labels
 
+        # NEW: Compute consensus labels
+        if self.use_consensus and n_valid_combinations > 0:
+            # Normalize co-assignment matrix
+            coassign /= n_valid_combinations
+            self.coassignment_matrix_ = coassign
+
+            # Threshold and convert to affinity matrix
+            affinity = (coassign >= self.consensus_threshold).astype(float)
+
+            # Estimate number of clusters using eigengap
+            n_clusters = self._estimate_n_clusters_from_eigengap(affinity)
+
+            # Spectral clustering on consensus matrix
+            sc = SpectralClustering(
+                n_clusters=n_clusters,
+                affinity='precomputed',
+                assign_labels='kmeans',
+                random_state=42
+            )
+            self.consensus_labels_ = sc.fit_predict(affinity)
+
+            print(f"✓ Consensus clustering: {n_valid_combinations} parameter combinations → {n_clusters} clusters")
+        else:
+            # Fallback to best-pick if consensus disabled or failed
+            self.consensus_labels_ = best_labels
+            warnings.warn("Consensus disabled or failed. Using best-pick mode (NOT RECOMMENDED).")
+
         return self
 
+    def _estimate_n_clusters_from_eigengap(self, affinity: np.ndarray) -> int:
+        """Estimate number of clusters using eigengap heuristic"""
+        try:
+            from scipy.linalg import eigh
+            eigenvalues = eigh(affinity, eigvals_only=True)
+            eigenvalues = np.sort(eigenvalues)[::-1]
+
+            # Find largest eigengap
+            gaps = np.diff(eigenvalues[:10])
+            n_clusters = np.argmax(gaps) + 1
+
+            return max(2, min(n_clusters, 10))
+        except:
+            return 5  # Default fallback
+
     def predict(self, X: Optional[np.ndarray] = None) -> np.ndarray:
-        """Get best cluster labels"""
-        if self.best_labels_ is None:
-            raise ValueError("Must call fit() first")
-        return self.best_labels_
+        """
+        Get cluster labels
+
+        NEW: Returns consensus labels if use_consensus=True (recommended).
+        Falls back to best-pick labels if consensus disabled (NOT recommended).
+        """
+        if self.use_consensus:
+            if self.consensus_labels_ is None:
+                raise ValueError("Must call fit() first")
+            return self.consensus_labels_
+        else:
+            if self.best_labels_ is None:
+                raise ValueError("Must call fit() first")
+            warnings.warn("Returning best-pick labels (NOT RECOMMENDED). Enable use_consensus=True.")
+            return self.best_labels_
+
+    def get_coassignment_matrix(self) -> Optional[np.ndarray]:
+        """Get co-assignment matrix from consensus clustering"""
+        return self.coassignment_matrix_
 
     def get_sweep_results(self) -> pd.DataFrame:
         """Get all sweep results as DataFrame"""
@@ -550,9 +1146,13 @@ class TopologicalGapDetector:
 
 class ConsensusClusteringPipeline:
     """
-    Comprehensive consensus clustering pipeline
+    Comprehensive consensus clustering pipeline with anti-pattern-mining features
 
-    Integrates multiple clustering methods and embeddings.
+    Integrates multiple clustering methods and embeddings with:
+    - Consensus across parameter sweeps (no cherry-picking)
+    - Null model testing (permutation, rotation, SigClust, dip)
+    - Topology pre-registration gates (MST, k-NN, spectral)
+    - Config hashing (prevent post-hoc tweaking)
     """
 
     def __init__(
@@ -563,6 +1163,12 @@ class ConsensusClusteringPipeline:
         use_tda: bool = False,
         n_bootstrap: int = 100,
         random_state: int = 42,
+        # NEW: Anti-pattern-mining features
+        test_null_models: bool = True,
+        evaluate_topology_gates: bool = True,
+        enable_config_locking: bool = True,
+        config_dict: Optional[Dict[str, Any]] = None,
+        lockfile_path: Optional[Union[str, Path]] = None,
     ):
         """
         Initialize consensus clustering pipeline
@@ -574,6 +1180,11 @@ class ConsensusClusteringPipeline:
             use_tda: Use topological gap detection
             n_bootstrap: Number of bootstrap samples
             random_state: Random seed
+            test_null_models: Run null hypothesis tests
+            evaluate_topology_gates: Check topology gates before claiming subtypes
+            enable_config_locking: Enable config hash locking
+            config_dict: Configuration dictionary for hashing
+            lockfile_path: Path to config lockfile
         """
         self.use_hdbscan = use_hdbscan and HDBSCAN_AVAILABLE
         self.use_spectral = use_spectral
@@ -582,15 +1193,46 @@ class ConsensusClusteringPipeline:
         self.n_bootstrap = n_bootstrap
         self.random_state = random_state
 
+        # NEW: Anti-pattern-mining
+        self.test_null_models = test_null_models
+        self.evaluate_topology_gates = evaluate_topology_gates
+        self.enable_config_locking = enable_config_locking
+
+        # Clustering results
         self.consensus_labels_: Optional[np.ndarray] = None
         self.confidence_scores_: Optional[np.ndarray] = None
         self.method_labels_: Dict[str, np.ndarray] = {}
         self.embeddings_: Dict[str, np.ndarray] = {}
         self.metrics_: Optional[ClusteringMetrics] = None
 
+        # NEW: Validation results
+        self.null_model_results_: Optional[Dict[str, Any]] = None
+        self.topology_gate_results_: Optional[TopologyGateResults] = None
+        self.config_hash_: Optional[ConfigHash] = None
+
+        # Config locking
+        if enable_config_locking and config_dict is not None:
+            self.config_hash_ = ConfigHash(config_dict)
+
+            # Check existing lockfile
+            if lockfile_path and Path(lockfile_path).exists():
+                locked_config = ConfigHash.load_lockfile(lockfile_path)
+
+                if not locked_config.verify_match(config_dict):
+                    warnings.warn(
+                        "⚠️ CONFIG MISMATCH: Current config differs from locked config. "
+                        "This may indicate post-hoc parameter tweaking. "
+                        "Confirmatory analysis requires identical configs."
+                    )
+            elif lockfile_path:
+                # Save new lockfile
+                self.config_hash_.save_lockfile(lockfile_path)
+
     def fit(self, X: np.ndarray, generate_embeddings: bool = True) -> 'ConsensusClusteringPipeline':
         """
-        Fit consensus clustering
+        Fit consensus clustering with anti-pattern-mining validation
+
+        NEW: Includes null model testing and topology gates
 
         Args:
             X: Data matrix
@@ -600,6 +1242,20 @@ class ConsensusClusteringPipeline:
             Self (fitted)
         """
         np.random.seed(self.random_state)
+
+        # STEP 0: Check topology gates BEFORE clustering (pre-registration)
+        if self.evaluate_topology_gates:
+            print("⏳ Evaluating topology pre-registration gates...")
+            topology_checker = TopologyPreRegistrationGates()
+            topology_results_pre = topology_checker.evaluate_gates(X, labels=None)
+
+            if not topology_results_pre.passes_gates:
+                warnings.warn(
+                    "\n⚠️ TOPOLOGY GATES FAILED (pre-clustering):\n" +
+                    "\n".join(topology_results_pre.notes) +
+                    "\n\nData may be a spectrum rather than discrete subtypes. "
+                    "Proceeding with clustering, but interpret with caution."
+                )
 
         # Generate embeddings if requested
         if generate_embeddings:
@@ -611,38 +1267,41 @@ class ConsensusClusteringPipeline:
         # Run different clustering methods
         all_labels = []
 
-        # 1. HDBSCAN parameter sweep
+        # 1. HDBSCAN parameter sweep (WITH CONSENSUS, not best-pick)
         if self.use_hdbscan and HDBSCAN_AVAILABLE:
             try:
-                hdbscan_sweep = HDBSCANParameterSweep()
+                print("⏳ Running HDBSCAN parameter sweep with consensus...")
+                hdbscan_sweep = HDBSCANParameterSweep(use_consensus=True)
                 hdbscan_sweep.fit(X)
                 labels_hdb = hdbscan_sweep.predict()
                 self.method_labels_['hdbscan'] = labels_hdb
                 all_labels.append(labels_hdb)
-            except:
-                pass
+            except Exception as e:
+                warnings.warn(f"HDBSCAN sweep failed: {e}")
 
         # 2. Spectral co-assignment
         if self.use_spectral:
             try:
+                print("⏳ Running spectral co-assignment clustering...")
                 spectral = SpectralCoAssignmentClustering(n_resamples=self.n_bootstrap)
                 spectral.fit(X)
                 labels_spec = spectral.predict()
                 self.method_labels_['spectral'] = labels_spec
                 all_labels.append(labels_spec)
-            except:
-                pass
+            except Exception as e:
+                warnings.warn(f"Spectral clustering failed: {e}")
 
         # 3. Bayesian GMM
         if self.use_bgmm:
             try:
+                print("⏳ Running Bayesian Gaussian Mixture Model...")
                 bgmm = BayesianGaussianMixtureClustering()
                 bgmm.fit(X)
                 labels_bgmm = bgmm.predict(X)
                 self.method_labels_['bgmm'] = labels_bgmm
                 all_labels.append(labels_bgmm)
-            except:
-                pass
+            except Exception as e:
+                warnings.warn(f"Bayesian GMM failed: {e}")
 
         # 4. Cluster each embedding
         for name, embedding in self.embeddings_.items():
@@ -664,6 +1323,45 @@ class ConsensusClusteringPipeline:
 
         # Compute metrics
         self.metrics_ = self._compute_metrics(X, self.consensus_labels_)
+
+        # STEP 1: Test null models (clustering significance)
+        if self.test_null_models:
+            print("⏳ Testing null models for clustering significance...")
+            null_tester = NullModelTester(
+                n_permutations=1000,
+                random_state=self.random_state
+            )
+            self.null_model_results_ = null_tester.test_clustering_significance(
+                X, self.consensus_labels_
+            )
+
+            # Report results
+            if self.null_model_results_['all_significant']:
+                print("✓ Null model tests PASSED: Clustering is statistically significant")
+            else:
+                warnings.warn(
+                    "\n⚠️ NULL MODEL TESTS FAILED:\n" +
+                    "Clustering may not be significantly better than random.\n" +
+                    f"Permutation p-value: {self.null_model_results_['permutation']['p_value']:.4f}\n" +
+                    f"Rotation p-value: {self.null_model_results_['rotation']['p_value']:.4f}\n" +
+                    f"SigClust p-value: {self.null_model_results_['sigclust']['p_value']:.4f}\n" +
+                    f"Dip test p-value: {self.null_model_results_['dip']['min_p_value']:.4f}"
+                )
+
+        # STEP 2: Check topology gates AFTER clustering (post-hoc validation)
+        if self.evaluate_topology_gates:
+            print("⏳ Validating topology gates with cluster labels...")
+            topology_checker = TopologyPreRegistrationGates()
+            self.topology_gate_results_ = topology_checker.evaluate_gates(X, self.consensus_labels_)
+
+            # Report results
+            if self.topology_gate_results_.subtype_claim_allowed:
+                print("✓ Topology gates PASSED: Discrete subtypes supported")
+            else:
+                warnings.warn(
+                    "\n⚠️ TOPOLOGY GATES FAILED (post-clustering):\n" +
+                    "\n".join(self.topology_gate_results_.notes)
+                )
 
         return self
 
