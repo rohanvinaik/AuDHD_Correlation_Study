@@ -1,15 +1,3 @@
-# Master configuration - compose all sub-configs
-defaults:
-  - data: spark
-  - features: full
-  - preprocess: standard
-  - integrate: mofa2
-  - cluster: hdbscan
-  - validate: comprehensive
-  - causal: full
-  - viz: interactive
-  - report: clinical
-
 # Global settings
 seed: 42
 n_jobs: 4
@@ -17,24 +5,320 @@ verbose: true
 
 # Paths
 data_root: data/
-raw_data_dir: ${data_root}/raw
-interim_data_dir: ${data_root}/interim
-processed_data_dir: ${data_root}/processed
-external_data_dir: ${data_root}/external
-output_dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+output_dir: outputs/
 
-# Logging
-log_level: INFO
-log_file: ${output_dir}/pipeline.log
+# Data configuration
+data:
+  roots:
+    raw: "data/raw"
+    interim: "data/interim"
+    processed: "data/processed"
+    external: "data/external"
+  datasets: ["SPARK", "SSC", "ABCD"]
+  context_fields:
+    - fasting
+    - collection_clock_time
+    - last_dose_hours
+    - storage_days
+    - fever_72h
+    - menstrual_phase
+    - recent_illness
+    - antibiotics_30d
+  ancestry_cols: ["PC1", "PC2", "PC3", "PC4", "PC5"]
+  dua_required: true
 
-# Experiment tracking
-experiment_name: audhd_subtyping
-run_name: ${now:%Y%m%d_%H%M%S}
+# Feature configuration
+features:
+  genetics:
+    neurotransmitter_synthesis:
+      - TPH1
+      - TPH2
+      - TH
+      - DDC
+      - GAD1
+      - GAD2
+      - COMT
+      - MAOA
+      - MAOB
+    neurotransmitter_transport:
+      - SLC6A4
+      - SLC6A3
+      - SLC6A1
+    receptor_genes:
+      - DRD1
+      - DRD2
+      - DRD3
+      - DRD4
+      - DRD5
+      - HTR1A
+      - HTR2A
+    prs_sets:
+      - PRS_autism
+      - PRS_ADHD
+      - PRS_depression
+      - PRS_CRP
+      - PRS_BMI
+      - PRS_sleep
+    structural_variants:
+      - CNV_burden
+      - SV_burden
+      - repeat_expansions
+    rare_variants:
+      - LoF_burden
+      - missense_burden
+      - de_novo_variants
+    mitochondrial:
+      - mtDNA_CN
+      - OXPHOS_gene_sets
+    epigenetic:
+      - HLA_types
+      - imprinted_loci
 
-# Hydra settings
-hydra:
-  run:
-    dir: ${output_dir}
-  sweep:
-    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
-    subdir: ${hydra.job.num}
+  metabolomics:
+    neurotransmitters:
+      - serotonin
+      - 5-HIAA
+      - dopamine
+      - DOPAC
+      - HVA
+      - GABA
+      - glutamate
+      - glutamine
+    kynurenine_pathway:
+      - kynurenine
+      - kynurenic_acid
+      - quinolinic_acid
+      - 3-hydroxykynurenine
+    acyl_carnitines:
+      - C0
+      - C2
+      - C3
+      - C4
+      - C5
+      - C8
+      - C14
+      - C16
+      - C18
+    bile_acids:
+      - CA
+      - CDCA
+      - DCA
+      - LCA
+      - UDCA
+    gut_metabolites:
+      - SCFA_acetate
+      - SCFA_butyrate
+      - SCFA_propionate
+      - indoles
+      - p_cresol
+    micrometabolites:
+      - TMAO
+      - indoxyl_sulfate
+      - p_cresyl_sulfate
+    inflammatory_markers:
+      - IL1b
+      - IL6
+      - IL10
+      - TNFalpha
+      - CRP
+      - neopterin
+    steroids:
+      - cortisol
+      - cortisone
+      - DHEA_S
+
+  clinical:
+    core_instruments:
+      - ADOS_score
+      - ADI_R_scores
+      - SRS_score
+      - ADHD_RS_inattentive
+      - ADHD_RS_hyperactive
+      - Conners_scores
+      - CBCL_scores
+      - RBS_R
+    cognitive:
+      - IQ_full
+      - IQ_verbal
+      - IQ_nonverbal
+    sleep:
+      - PSQI
+      - actigraphy_TST
+      - sleep_variability
+    endocrine:
+      - TSH
+      - FT4
+      - ferritin
+      - vitD_25OH
+      - B12
+      - folate
+    medications:
+      - stimulant_type
+      - stimulant_dose_mg
+      - last_dose_hours
+      - SSRI_use
+      - antipsychotic_use
+      - antibiotics_30d
+    comorbidities:
+      - tics
+      - OCD
+      - anxiety
+      - depression
+      - POTS
+      - MCAS
+
+  microbiome:
+    diversity:
+      - alpha_diversity
+      - beta_diversity
+    outputs:
+      - SCFA_production
+      - p_cresol_production
+      - indole_production
+      - TMAO_production
+
+  imaging:
+    EEG:
+      - aperiodic_1f_slope
+      - alpha_peak_frequency
+    MRI_structural:
+      - thalamocortical_connectivity
+      - cerebellar_volume
+
+# Preprocessing configuration
+preprocess:
+  imputation: mice_delta
+  batch_method: combat
+  scaling:
+    genetic: standard
+    metabolomic: robust
+    clinical: standard
+    microbiome: clr
+  adjust_covariates:
+    - age
+    - sex
+    - BMI
+    - pubertal_stage
+    - site
+    - PC1
+    - PC2
+    - PC3
+    - fasting
+    - collection_clock_time
+    - last_dose_hours
+    - storage_days
+  outlier_method: robust_mahalanobis
+  outlier_action: winsorize
+  missing_threshold: 0.5
+
+# Integration configuration
+integrate:
+  method: stack
+  weights:
+    genetic: 0.30
+    metabolomic: 0.40
+    clinical: 0.20
+    microbiome: 0.10
+  n_factors: 50
+  split_by:
+    - family_id
+    - site
+  test_size: 0.2
+
+# Clustering configuration
+cluster:
+  embeddings:
+    umap:
+      n_neighbors: [15, 30, 50]
+      min_dist: [0.1, 0.25, 0.5]
+      n_components: 2
+    tsne:
+      perplexity: [10, 30, 50]
+      n_components: 2
+      n_iter: 2000
+  clusterers:
+    hdbscan:
+      min_cluster_size: 50
+      min_samples: 10
+    lca:
+      n_components: 10
+      weight_concentration_prior_type: dirichlet_process
+  consensus:
+    n_resamples: 100
+    agreement_threshold: 65
+  topology_enabled: true
+  min_gap_score: 1.5
+  min_stability: 0.7
+
+# Validation configuration
+validate:
+  stability_bootstrap: 100
+  external_cohorts:
+    - UKB_subset
+    - ABCD_holdout
+  sensitivity_scenarios:
+    - no_meds
+    - fasting_only
+    - morning_only
+    - leave_site_out
+    - mnar_sensitivity
+    - within_family
+  leave_site_out: true
+  cross_ancestry: true
+  biological_validation: true
+
+# Causal inference configuration
+causal:
+  mr_instruments:
+    - PRS_CRP
+    - PRS_BMI
+    - PRS_smoking
+    - PRS_sleep
+  mediation_triplets:
+    - exposure: PRS_ADHD
+      mediator: kynurenine
+      outcome: ADHD_RS_hyperactive
+    - exposure: PRS_autism
+      mediator: p_cresyl_sulfate
+      outcome: SRS_score
+    - exposure: rare_variants
+      mediator: serotonin
+      outcome: symptom_severity
+  gxe_pairs:
+    - genetic: TPH2
+      environment: maternal_SSRI
+    - genetic: PRS_autism
+      environment: prenatal_infection
+    - genetic: rare_variants
+      environment: early_life_stress
+  dag_enabled: true
+  e_value_enabled: true
+
+# Visualization configuration
+viz:
+  library: plotly
+  overlays:
+    - cluster
+    - diagnosis
+    - serotonin_level
+    - dopamine_level
+    - genetic_burden
+    - GI_issues
+    - medication_response
+  output_formats:
+    - html
+    - png
+  dpi: 300
+  theme: colorblind_safe
+
+# Report configuration
+report:
+  types:
+    - executive_summary
+    - technical_report
+    - clinician_card
+  output_formats:
+    - markdown
+    - html
+  include_code: false
+  decision_support_enabled: true
