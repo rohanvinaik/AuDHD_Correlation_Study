@@ -49,12 +49,51 @@ python scripts/scrape_papers.py \
     --query "autism metabolomics" \
     --query "ADHD gene expression" \
     --query "autism transcriptome" \
+    --query "ADHD proteomics" \
+    --query "autism proteomics" \
     --query "maternal immune activation autism" \
     --query "prenatal infection autism ADHD" \
     --query "preterm birth autism ADHD" \
     --query "pregnancy complications neurodevelopment" \
     --query "maternal SSRI autism" \
     --query "birth outcomes autism ADHD" \
+    --query "maternal fever pregnancy autism" \
+    --query "gestational diabetes autism ADHD" \
+    --query "valproate pregnancy autism" \
+    --query "gene environment interaction autism ADHD" \
+    --query "G×E neurodevelopment" \
+    --query "critical period neurodevelopment autism" \
+    --query "developmental window autism" \
+    --query "autism heterogeneity subtypes" \
+    --query "ADHD subtypes clustering" \
+    --query "autism endophenotypes" \
+    --query "multimodal integration autism" \
+    --query "multi-omics neurodevelopment" \
+    --query "autonomic dysregulation autism ADHD" \
+    --query "heart rate variability autism" \
+    --query "circadian rhythm autism ADHD" \
+    --query "melatonin autism sleep" \
+    --query "cortisol autism ADHD stress" \
+    --query "sensory processing autism" \
+    --query "interoception autism ADHD" \
+    --query "voice prosody autism" \
+    --query "speech acoustics autism" \
+    --query "inflammatory markers autism ADHD" \
+    --query "cytokines neurodevelopment" \
+    --query "oxidative stress autism" \
+    --query "mitochondrial dysfunction autism" \
+    --query "epigenetics autism ADHD" \
+    --query "DNA methylation neurodevelopment" \
+    --query "polygenic risk score autism ADHD" \
+    --query "causal inference neurodevelopment" \
+    --query "mediation analysis autism" \
+    --query "mixtures environmental autism" \
+    --query "multiple exposures neurodevelopment" \
+    --query "air pollution autism ADHD" \
+    --query "pesticides neurodevelopment" \
+    --query "heavy metals autism" \
+    --query "lead mercury autism ADHD" \
+    --query "phthalates neurodevelopment" \
     --max-papers 100 \
     --output data/papers/ \
     2>&1 | tee logs/downloads/paper_scraping.log &
@@ -68,11 +107,20 @@ log "PART 2: Downloading GEO gene expression datasets..."
 
 # Download priority GEO datasets
 GEO_DATASETS=(
+    # Transcriptomics
     "GSE28521"  # Autism brain cortex
     "GSE28475"  # Autism temporal cortex
-    "GSE64018"  # Autism brain regions
-    "GSE98793"  # ADHD blood
+    "GSE64018"  # Autism brain regions (12 ASD, 12 controls)
+    "GSE98793"  # ADHD blood gene expression
     "GSE18123"  # Autism cells
+    "GSE80655"  # Autism brain RNA-seq
+    "GSE113834" # Autism cortex development
+    "GSE42133"  # Autism postmortem brain
+    # Proteomics/Multi-omics (if available)
+    "GSE147314" # Multi-omics autism
+    # Methylation/Epigenetics
+    "GSE50759"  # DNA methylation autism
+    "GSE53162"  # Autism brain methylation
 )
 
 for gse in "${GEO_DATASETS[@]}"; do
@@ -196,14 +244,17 @@ echo "  Papers + Supplements: $PAPERS_SIZE"
 echo "  GWAS Catalog (ASD/ADHD): $GWAS_SIZE"
 echo "  Prenatal data sources: prepared"
 echo ""
-echo "Paper topics downloaded:"
-echo "  - Microbiome (ADHD/Autism)"
-echo "  - Metabolomics"
-echo "  - Gene expression / Transcriptomics"
-echo "  - Maternal immune activation (MIA)"
-echo "  - Prenatal infections"
-echo "  - Pregnancy complications"
-echo "  - Birth outcomes"
+echo "Paper topics downloaded (50 queries):"
+echo "  - Multi-omics: Microbiome, Metabolomics, Transcriptomics, Proteomics"
+echo "  - Prenatal/Maternal: MIA, infections, medications, complications, birth outcomes"
+echo "  - G×E interactions and critical periods"
+echo "  - Subtypes, clustering, endophenotypes"
+echo "  - Autonomic, circadian, sensory, interoception"
+echo "  - Voice/speech analysis"
+echo "  - Inflammatory, oxidative stress, mitochondrial"
+echo "  - Epigenetics, DNA methylation"
+echo "  - Environmental toxicants: heavy metals, pesticides, phthalates, air pollution"
+echo "  - Causal inference, mediation analysis"
 echo ""
 echo "Next steps:"
 echo "  1. Process raw data: python scripts/process_all_data.py"
