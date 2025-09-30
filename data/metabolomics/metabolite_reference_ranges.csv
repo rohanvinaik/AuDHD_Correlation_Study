@@ -1,0 +1,52 @@
+hmdb_id,metabolite_name,chemical_formula,biofluid,concentration_mean,concentration_sd,concentration_min,concentration_max,units,age_range,sex,adhd_relevant,autism_relevant,pathway,clinical_significance
+HMDB0000148,Glutamate,C5H9NO4,Plasma,50.5,12.3,30.0,80.0,uM,Adult,Both,TRUE,TRUE,Glutamate metabolism,Primary excitatory neurotransmitter
+HMDB0000123,Glutamine,C5H10N2O3,Plasma,525.0,85.0,400.0,650.0,uM,Adult,Both,TRUE,TRUE,Glutamate metabolism,Glutamate precursor
+HMDB0000168,GABA,C4H9NO2,Plasma,0.085,0.020,0.050,0.120,uM,Adult,Both,TRUE,TRUE,GABA synthesis,Primary inhibitory neurotransmitter
+HMDB0000168,GABA,C4H9NO2,CSF,0.035,0.008,0.020,0.050,uM,Adult,Both,TRUE,TRUE,GABA synthesis,Primary inhibitory neurotransmitter
+HMDB0000073,Serotonin,C10H12N2O,Plasma,0.65,0.15,0.40,1.00,uM,Adult,Both,TRUE,TRUE,Serotonin biosynthesis,Mood regulation
+HMDB0000073,Serotonin,C10H12N2O,Serum,0.55,0.12,0.35,0.85,uM,Adult,Both,TRUE,TRUE,Serotonin biosynthesis,Mood regulation
+HMDB0000062,Tryptophan,C11H12N2O2,Plasma,55.0,10.5,40.0,75.0,uM,Adult,Both,TRUE,TRUE,Tryptophan metabolism,Serotonin precursor
+HMDB0000062,Tryptophan,C11H12N2O2,Serum,48.5,9.2,35.0,65.0,uM,Adult,Both,TRUE,TRUE,Tryptophan metabolism,Serotonin precursor
+HMDB0000158,Tyrosine,C9H11NO3,Plasma,62.0,14.0,45.0,90.0,uM,Adult,Both,TRUE,FALSE,Tyrosine metabolism,Catecholamine precursor
+HMDB0000158,Tyrosine,C9H11NO3,Serum,58.5,12.5,42.0,80.0,uM,Adult,Both,TRUE,FALSE,Tyrosine metabolism,Catecholamine precursor
+HMDB0000159,Phenylalanine,C9H11NO2,Plasma,58.0,11.0,42.0,78.0,uM,Adult,Both,TRUE,FALSE,Phenylalanine metabolism,Tyrosine precursor
+HMDB0000159,Phenylalanine,C9H11NO2,Serum,55.5,10.2,40.0,72.0,uM,Adult,Both,TRUE,FALSE,Phenylalanine metabolism,Tyrosine precursor
+HMDB0000097,Dopamine,C8H11NO2,Plasma,0.025,0.008,0.012,0.045,uM,Adult,Both,TRUE,FALSE,Dopamine metabolism,Reward and attention
+HMDB0000216,HVA,C9H10O4,Urine,4.8,1.2,2.5,7.5,mg/24h,Adult,Both,TRUE,FALSE,Dopamine metabolism,Dopamine metabolite
+HMDB0000291,VMA,C9H10O5,Urine,4.2,1.0,2.2,6.5,mg/24h,Adult,Both,TRUE,FALSE,Catecholamine metabolism,Norepinephrine metabolite
+HMDB0000687,Leucine,C6H13NO2,Plasma,125.0,22.0,95.0,165.0,uM,Adult,Both,FALSE,TRUE,BCAA metabolism,Branched-chain amino acid
+HMDB0000172,Isoleucine,C6H13NO2,Plasma,65.0,12.5,48.0,88.0,uM,Adult,Both,FALSE,TRUE,BCAA metabolism,Branched-chain amino acid
+HMDB0000883,Valine,C5H11NO2,Plasma,235.0,42.0,180.0,300.0,uM,Adult,Both,FALSE,TRUE,BCAA metabolism,Branched-chain amino acid
+HMDB0000161,Alanine,C3H7NO2,Plasma,385.0,65.0,285.0,500.0,uM,Adult,Both,TRUE,TRUE,Alanine metabolism,Energy metabolism
+HMDB0000161,Alanine,C3H7NO2,Serum,360.0,58.0,270.0,465.0,uM,Adult,Both,TRUE,TRUE,Alanine metabolism,Energy metabolism
+HMDB0000191,Glycine,C2H5NO2,Plasma,245.0,48.0,175.0,330.0,uM,Adult,Both,TRUE,TRUE,Glycine metabolism,Inhibitory neurotransmitter
+HMDB0000191,Glycine,C2H5NO2,Serum,225.0,42.0,160.0,300.0,uM,Adult,Both,TRUE,TRUE,Glycine metabolism,Inhibitory neurotransmitter
+HMDB0000187,Aspartate,C4H7NO4,Plasma,12.5,3.5,7.0,20.0,uM,Adult,Both,TRUE,TRUE,Aspartate metabolism,Excitatory neurotransmitter
+HMDB0000687,Homocysteine,C4H9NO2S,Plasma,10.5,3.2,5.0,15.0,uM,Adult,Both,FALSE,TRUE,Methionine metabolism,Methylation marker
+HMDB0000687,Homocysteine,C4H9NO2S,Serum,9.8,2.9,4.5,14.0,uM,Adult,Both,FALSE,TRUE,Methionine metabolism,Methylation marker
+HMDB0001873,SAM,C15H22N6O5S,Plasma,95.0,18.0,65.0,125.0,nM,Adult,Both,FALSE,TRUE,One-carbon metabolism,Methyl donor
+HMDB0001185,SAH,C14H20N6O5S,Plasma,32.0,8.5,18.0,48.0,nM,Adult,Both,FALSE,TRUE,One-carbon metabolism,Methylation product
+HMDB0000122,Glucose,C6H12O6,Plasma,5100.0,450.0,4200.0,6000.0,uM,Adult,Both,TRUE,TRUE,Glycolysis,Energy substrate
+HMDB0000122,Glucose,C6H12O6,Serum,4900.0,420.0,4100.0,5800.0,uM,Adult,Both,TRUE,TRUE,Glycolysis,Energy substrate
+HMDB0000190,Lactate,C3H6O3,Plasma,1250.0,285.0,800.0,1800.0,uM,Adult,Both,TRUE,TRUE,Glycolysis,Anaerobic metabolism marker
+HMDB0000190,Lactate,C3H6O3,CSF,1650.0,320.0,1150.0,2200.0,uM,Adult,Both,TRUE,TRUE,Glycolysis,Mitochondrial function marker
+HMDB0000243,Pyruvate,C3H4O3,Plasma,85.0,18.0,55.0,120.0,uM,Adult,Both,TRUE,TRUE,Glycolysis,Energy metabolism
+HMDB0000094,Citrate,C6H8O7,Plasma,125.0,28.0,85.0,175.0,uM,Adult,Both,TRUE,TRUE,TCA cycle,Energy metabolism
+HMDB0000134,3-Hydroxybutyrate,C4H8O3,Plasma,85.0,42.0,30.0,180.0,uM,Adult,Both,TRUE,TRUE,Ketone metabolism,Alternative energy source
+HMDB0000060,Acetoacetate,C4H6O3,Plasma,42.0,22.0,15.0,90.0,uM,Adult,Both,TRUE,TRUE,Ketone metabolism,Ketogenesis
+HMDB0000064,Creatine,C4H9N3O2,Plasma,55.0,12.5,35.0,78.0,uM,Adult,Both,TRUE,TRUE,Creatine metabolism,Energy storage
+HMDB0000064,Creatine,C4H9N3O2,Urine,1200.0,285.0,750.0,1800.0,mg/24h,Adult,M,TRUE,TRUE,Creatine metabolism,Muscle metabolism
+HMDB0000064,Creatine,C4H9N3O2,Urine,950.0,220.0,600.0,1400.0,mg/24h,Adult,F,TRUE,TRUE,Creatine metabolism,Muscle metabolism
+HMDB0000562,Creatinine,C4H7N3O,Plasma,82.0,15.5,58.0,110.0,uM,Adult,M,TRUE,TRUE,Creatine metabolism,Kidney function marker
+HMDB0000562,Creatinine,C4H7N3O,Plasma,68.0,12.8,48.0,92.0,uM,Adult,F,TRUE,TRUE,Creatine metabolism,Kidney function marker
+HMDB0000062,DHA,C22H32O2,Plasma,185.0,42.0,120.0,260.0,ug/mL,Adult,Both,TRUE,FALSE,Fatty acid metabolism,Neuronal membrane
+HMDB0001999,EPA,C20H30O2,Plasma,68.0,18.5,38.0,105.0,ug/mL,Adult,Both,TRUE,FALSE,Fatty acid metabolism,Anti-inflammatory
+HMDB0000207,Linoleic acid,C18H32O2,Plasma,2850.0,485.0,2100.0,3800.0,ug/mL,Adult,Both,TRUE,FALSE,Fatty acid metabolism,Essential fatty acid
+HMDB0000673,Cholesterol,C27H46O,Plasma,5100.0,950.0,3500.0,6800.0,uM,Adult,Both,FALSE,TRUE,Cholesterol metabolism,Membrane component
+HMDB0000673,Cholesterol,C27H46O,Serum,4900.0,890.0,3400.0,6500.0,uM,Adult,Both,FALSE,TRUE,Cholesterol metabolism,Membrane component
+HMDB0000643,Taurine,C2H7NO3S,Plasma,52.0,14.5,30.0,80.0,uM,Adult,Both,TRUE,TRUE,Taurine metabolism,Neuromodulator
+HMDB0000043,Carnitine,C7H15NO3,Plasma,48.0,10.5,30.0,68.0,uM,Adult,Both,TRUE,TRUE,Fatty acid oxidation,Mitochondrial function
+HMDB0000097,Choline,C5H14NO,Plasma,9.5,2.2,6.0,14.0,uM,Adult,Both,FALSE,TRUE,Choline metabolism,Acetylcholine precursor
+HMDB0000043,Betaine,C5H11NO2,Plasma,38.0,8.5,24.0,55.0,uM,Adult,Both,FALSE,TRUE,Choline metabolism,Methyl donor
+HMDB0003072,GlycA,NA,Serum,380.0,65.0,280.0,500.0,umol/L,Adult,Both,TRUE,TRUE,Inflammation,Systemic inflammation marker
+HMDB0000574,CRP,NA,Serum,1.8,2.5,0.1,8.0,mg/L,Adult,Both,TRUE,TRUE,Inflammation,Acute phase reactant
