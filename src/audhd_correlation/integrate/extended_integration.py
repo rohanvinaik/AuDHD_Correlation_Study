@@ -21,6 +21,12 @@ from typing import Dict, List, Optional, Tuple, Any, Union
 import logging
 import warnings
 
+from .adaptive_weights import (
+    LiteratureBasedWeights,
+    AdaptiveWeightOptimizer,
+    load_adaptive_weights
+)
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -482,20 +488,39 @@ def integrate_extended_multiomics(
     """
     logger.info("Starting extended multi-omics integration...")
 
-    # Define feature importance weights based on proximity to phenotype
-    weights = {
-        'genetic': 0.15,           # Distal (genetic predisposition)
-        'environmental': 0.08,     # Distal modifier
-        'toxicant': 0.07,         # Distal modifier
-        'microbiome': 0.08,       # Intermediate
-        'metabolomic': 0.20,      # Proximal (biological state)
-        'autonomic': 0.12,        # Proximal (physiological state)
-        'circadian': 0.10,        # Proximal (regulatory state)
-        'sensory': 0.07,          # Intermediate (processing differences)
-        'interoception': 0.06,    # Intermediate (awareness)
-        'voice': 0.05,            # Intermediate (expression)
-        'clinical': 0.02          # Direct phenotype (outcome, not predictor)
-    }
+    # Use literature-based weights with evidence from meta-analyses and diagnostic studies
+    # See: adaptive_weights.py for full literature references and constraints
+    literature_weights = LiteratureBasedWeights()
+
+    # Get initial weights (can be optimized later with adaptive feedback loop)
+    weights = literature_weights.get_initial_weights()
+
+    # Add domains not in base literature constraints (combine sensory + interoception + voice)
+    if 'interoception' not in weights:
+        weights['interoception'] = 0.02  # Subset of sensory
+    if 'voice' not in weights:
+        weights['voice'] = 0.01  # Emerging biomarker
+
+    # Normalize to sum to 1
+    total_weight = sum(weights.values())
+    weights = {k: v / total_weight for k, v in weights.items()}
+
+    logger.info("Using literature-based weights:")
+    for domain, weight in sorted(weights.items(), key=lambda x: x[1], reverse=True):
+        logger.info(f"  {domain}: {weight:.3f}")
+
+    # OLD HARDCODED WEIGHTS (replaced with literature-based):
+    # weights = {
+    #     'genetic': 0.15,           # NOW: 0.30 (h²=0.74-0.80, strong evidence)
+    #     'environmental': 0.08,     # NOW: 0.10 (25% G×E + 3% direct, strong evidence)
+    #     'toxicant': 0.07,         # NOW: 0.08 (synergistic effects, moderate evidence)
+    #     'microbiome': 0.08,       # NOW: 0.07 (gut-brain axis, moderate evidence)
+    #     'metabolomic': 0.20,      # NOW: 0.22 (AUC 0.90-0.96, strong evidence)
+    #     'autonomic': 0.12,        # NOW: 0.10 (AUC 0.736, distinct patterns)
+    #     'circadian': 0.10,        # NOW: 0.08 (53-93% prevalence, causal)
+    #     'sensory': 0.07,          # NOW: 0.04 (core features, weak quantitative data)
+    #     'clinical': 0.02          # NOW: 0.01 (outcome, not predictor)
+    # }
 
     # Collect available data
     data_dict = {}
