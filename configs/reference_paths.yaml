@@ -1,0 +1,377 @@
+# Reference Database Configuration
+# Paths and settings for ontologies, pathways, and interaction databases
+
+version: "1.0"
+last_updated: "2025-09-30"
+
+# Base directories
+base_dirs:
+  references: "data/references"
+  ontologies: "data/references/ontologies"
+  pathways: "data/references/pathways"
+  interactions: "data/references/interactions"
+  downloads: "data/references/downloads"
+  cache: "data/references/cache"
+
+# Ontology files
+ontologies:
+  hpo:
+    path: "data/references/ontologies/hp.obo"
+    annotations: "data/references/ontologies/phenotype.hpoa"
+    format: "obo"
+    update_url: "https://purl.obolibrary.org/obo/hp.obo"
+    required: true
+    priority: 1
+
+  go:
+    path: "data/references/ontologies/go.obo"
+    annotations: "data/references/ontologies/goa_human.gaf"
+    format: "obo"
+    update_url: "http://purl.obolibrary.org/obo/go.obo"
+    required: true
+    priority: 1
+
+  mondo:
+    path: "data/references/ontologies/mondo.obo"
+    format: "obo"
+    update_url: "https://purl.obolibrary.org/obo/mondo.obo"
+    required: true
+    priority: 2
+
+  do:
+    path: "data/references/ontologies/doid.obo"
+    format: "obo"
+    update_url: "https://purl.obolibrary.org/obo/doid.obo"
+    required: false
+    priority: 3
+
+  chebi:
+    path: "data/references/ontologies/chebi.obo"
+    format: "obo"
+    update_url: "https://purl.obolibrary.org/obo/chebi.obo"
+    required: true
+    priority: 2
+    size_mb: 156
+
+  uberon:
+    path: "data/references/ontologies/uberon.obo"
+    format: "obo"
+    update_url: "https://purl.obolibrary.org/obo/uberon.obo"
+    required: false
+    priority: 3
+
+# Clinical databases
+clinical:
+  clinvar:
+    path: "data/references/clinical/variant_summary.txt"
+    format: "tsv"
+    update_url: "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
+    required: false
+    priority: 3
+    size_mb: 1823
+    compressed: true
+
+  orphanet:
+    path: "data/references/clinical/orphanet_diseases.xml"
+    format: "xml"
+    update_url: "https://www.orphadata.com/data/xml/en_product1.xml"
+    required: false
+    priority: 3
+
+  sfari_gene:
+    path: "data/references/clinical/sfari_genes.csv"
+    format: "csv"
+    update_url: "https://gene.sfari.org/database/human-gene/"
+    required: true
+    priority: 1
+    manual_download: true
+    notes: "Download from web interface"
+
+# Drug/medication databases
+drugs:
+  rxnorm:
+    path: "data/references/drugs/rxnorm"
+    format: "rrf"
+    update_url: "https://download.nlm.nih.gov/umls/kss/rxnorm/RxNorm_full_current.zip"
+    required: false
+    priority: 3
+    requires_license: true
+    license_url: "https://uts.nlm.nih.gov/uts/signup-login"
+
+  atc:
+    path: "data/references/drugs/atc_codes.txt"
+    format: "text"
+    update_url: "https://www.whocc.no/atc_ddd_index/"
+    required: false
+    priority: 3
+    manual_download: true
+
+  dgidb:
+    path: "data/references/drugs/dgidb_interactions.tsv"
+    format: "tsv"
+    update_url: "https://www.dgidb.org/data/monthly_tsvs/2024-Jan/interactions.tsv"
+    required: true
+    priority: 2
+
+# Nutrition databases
+nutrition:
+  fndds:
+    path: "data/references/nutrition/fdc"
+    format: "csv"
+    update_url: "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_csv_2024-10-31.zip"
+    required: false
+    priority: 3
+    size_mb: 842
+
+# Pathway databases
+pathways:
+  reactome:
+    uniprot_mapping: "data/references/pathways/UniProt2Reactome.txt"
+    pathway_names: "data/references/pathways/ReactomePathways.txt"
+    pathway_hierarchy: "data/references/pathways/ReactomePathwaysRelation.txt"
+    format: "tsv"
+    update_url: "https://reactome.org/download/current/"
+    required: true
+    priority: 1
+
+  wikipathways:
+    path: "data/references/pathways/wikipathways-human.gmt"
+    format: "gmt"
+    update_url: "http://data.wikipathways.org/current/gmt/wikipathways-20240810-gmt-Homo_sapiens.gmt"
+    required: false
+    priority: 3
+
+  kegg:
+    api_base: "https://rest.kegg.jp"
+    cache_dir: "data/references/pathways/kegg_cache"
+    format: "api"
+    required: false
+    priority: 3
+    notes: "Academic use only; uses REST API with caching"
+
+# Interaction databases
+interactions:
+  string:
+    protein_links: "data/references/interactions/9606.protein.links.v12.0.txt"
+    protein_info: "data/references/interactions/9606.protein.info.v12.0.txt"
+    format: "tsv"
+    update_url: "https://stringdb-downloads.org/download/"
+    required: true
+    priority: 1
+    size_mb: 1847
+    confidence_threshold: 400
+
+  biogrid:
+    path: "data/references/interactions/BIOGRID-ORGANISM-Homo_sapiens.tab3.txt"
+    format: "tsv"
+    update_url: "https://downloads.thebiogrid.org/Download/BioGRID/Release-Archive/"
+    required: false
+    priority: 3
+
+  stitch:
+    path: "data/references/interactions/9606.protein_chemical.links.v5.0.txt"
+    format: "tsv"
+    update_url: "http://stitch.embl.de/download/"
+    required: false
+    priority: 3
+
+# Unified database
+database:
+  pathway_db:
+    path: "data/references/pathway_database.db"
+    format: "sqlite3"
+    tables:
+      - pathways
+      - pathway_genes
+      - protein_interactions
+      - drug_gene_interactions
+      - pathway_hierarchy
+      - database_metadata
+    indices:
+      - idx_pathway_genes
+      - idx_pathway_id
+      - idx_protein_a
+      - idx_protein_b
+      - idx_drug_gene
+
+# Metadata
+metadata:
+  versions_file: "data/references/ontology_versions.json"
+  download_log: "data/references/download_log.json"
+  checksums_file: "data/references/checksums.md5"
+
+# Update settings
+update:
+  check_frequency_days: 30
+  auto_update: false
+  backup_old_versions: true
+  backup_dir: "data/references/backups"
+
+# API settings
+apis:
+  ncbi:
+    email: "your.email@institution.edu"
+    api_key: null
+    rate_limit_per_second: 3
+
+  kegg:
+    base_url: "https://rest.kegg.jp"
+    rate_limit_per_second: 1
+
+  bioportal:
+    api_key: null
+    base_url: "https://data.bioontology.org"
+
+# Gene identifier mappings
+gene_mapping:
+  primary: "hgnc_symbol"
+  secondary:
+    - "entrez_id"
+    - "ensembl_id"
+    - "uniprot_id"
+  mapping_file: "data/references/gene_id_mappings.tsv"
+
+# ADHD/Autism specific configurations
+disease_specific:
+  adhd:
+    hpo_terms:
+      - "HP:0007018"  # ADHD
+      - "HP:0000752"  # Hyperactivity
+      - "HP:0000731"  # Impulsivity
+    mondo_id: "MONDO:0007743"
+    icd10_code: "F90"
+    medications:
+      stimulants:
+        - "methylphenidate"
+        - "amphetamine"
+        - "dextroamphetamine"
+        - "lisdexamfetamine"
+      non_stimulants:
+        - "atomoxetine"
+        - "guanfacine"
+        - "clonidine"
+    pathways:
+      - "Dopaminergic synapse"
+      - "Attention and executive function"
+
+  autism:
+    hpo_terms:
+      - "HP:0000717"  # Autism
+      - "HP:0000729"  # Autistic behavior
+      - "HP:0010526"  # Stereotypy
+      - "HP:0000723"  # Restrictive behavior
+    mondo_id: "MONDO:0005258"
+    icd10_code: "F84"
+    medications:
+      - "risperidone"
+      - "aripiprazole"
+    pathways:
+      - "Serotonergic synapse"
+      - "GABAergic synapse"
+      - "Oxytocin signaling"
+    gene_sets:
+      sfari_score_1: "high confidence autism genes"
+      sfari_score_2: "strong candidate genes"
+
+# Pathway categories
+pathway_categories:
+  neurotransmitter:
+    - "Dopaminergic synapse"
+    - "Serotonergic synapse"
+    - "GABAergic synapse"
+    - "Glutamatergic synapse"
+    - "Cholinergic synapse"
+
+  synaptic:
+    - "Synaptic vesicle cycle"
+    - "Long-term potentiation"
+    - "Long-term depression"
+    - "Neurotransmitter release cycle"
+
+  neurodevelopment:
+    - "Axon guidance"
+    - "Neurotrophin signaling"
+    - "Synaptogenesis"
+    - "Neuronal migration"
+
+  signaling:
+    - "MAPK signaling"
+    - "PI3K-Akt signaling"
+    - "Calcium signaling"
+    - "cAMP signaling"
+    - "Wnt signaling"
+
+  metabolism:
+    - "Tryptophan metabolism"
+    - "Tyrosine metabolism"
+    - "Phenylalanine metabolism"
+    - "Folate metabolism"
+    - "One-carbon metabolism"
+
+  inflammation:
+    - "Cytokine signaling"
+    - "TNF signaling"
+    - "NF-kappa B signaling"
+
+# Quality control
+qc:
+  validate_checksums: true
+  check_file_sizes: true
+  validate_formats: true
+  log_downloads: true
+
+# Storage and performance
+storage:
+  max_cache_size_gb: 10
+  compression: true
+  use_symbolic_links: false
+
+performance:
+  parallel_downloads: 3
+  chunk_size_mb: 8
+  timeout_seconds: 600
+  retry_attempts: 3
+
+# Integration settings
+integration:
+  # Link to other data types
+  genetics:
+    gene_annotation: true
+    pathway_enrichment: true
+    variant_annotation: true
+
+  metabolomics:
+    metabolite_mapping: true
+    pathway_mapping: true
+    chebi_ids: true
+
+  microbiome:
+    metabolite_pathways: true
+    bacterial_functions: true
+
+  clinical:
+    phenotype_mapping: true
+    medication_mapping: true
+    diagnosis_codes: true
+
+# Export formats
+export:
+  formats:
+    - "json"
+    - "csv"
+    - "tsv"
+    - "gmt"
+    - "obo"
+  default_format: "csv"
+
+# Documentation
+documentation:
+  readme: "scripts/references/README.md"
+  api_docs: "docs/reference_databases_api.md"
+  examples: "examples/reference_database_usage.ipynb"
+
+# Contact and support
+support:
+  maintainer: "AuDHD Correlation Study Team"
+  issue_tracker: "https://github.com/rohanvinaik/AuDHD_Correlation_Study/issues"
+  documentation_url: "https://github.com/rohanvinaik/AuDHD_Correlation_Study/tree/main/scripts/references"
