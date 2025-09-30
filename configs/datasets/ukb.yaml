@@ -1,0 +1,332 @@
+# UK Biobank Configuration
+# Dataset size: 500,000 participants (ages 40-69)
+# Data types: genomic, metabolomics (NMR), clinical, neuroimaging
+# Access: Application required (fee: £2,500-6,000)
+
+dataset:
+  name: "UK_Biobank"
+  version: "latest"  # Check ukbiobank.ac.uk for latest release
+  description: "UK Biobank - Large-scale health resource"
+  access_type: "application"
+  dua_required: true
+  cost: "£2,500-6,000 GBP"
+
+  # Data paths
+  data_root: "data/raw/ukbiobank"
+
+  paths:
+    # Genomic data
+    imputed_genotypes: "${data_root}/genomics/ukb_imp_chr{1..22}_v3.bgen"
+    genotyped_variants: "${data_root}/genomics/ukb_cal_chr{1..22}_v2.bed"
+
+    # Phenotype data (downloaded via ukbconv)
+    phenotypes: "${data_root}/phenotypes/ukb_phenotypes.csv"
+    phenotype_dict: "${data_root}/phenotypes/Data_Dictionary_Showcase.csv"
+
+    # Metabolomics (NMR)
+    metabolomics_nmr: "${data_root}/metabolomics/ukb_nmr_metabolomics.csv"
+
+    # Neuroimaging (subset with imaging, n~40,000)
+    mri_structural: "${data_root}/imaging/structural/"
+    mri_functional: "${data_root}/imaging/functional/"
+    mri_derived: "${data_root}/imaging/derived_measures.csv"
+
+# UK Biobank Field IDs (update based on your application)
+field_ids:
+  # Core demographics
+  eid: "eid"  # Participant ID
+  age: "21003"  # Age at recruitment
+  sex: "31"  # Sex (0=female, 1=male)
+  ethnicity: "21000"  # Ethnic background
+
+  # Mental health
+  adhd_selfreport: "20002"  # Self-reported ADHD (code 1117)
+  autism_selfreport: "20002"  # Self-reported autism (code 1111)
+  mental_health_questionnaire: "20126"  # Mental health MHQ
+  depression_score: "20126"  # PHQ-9 depression score
+  anxiety_score: "20506"  # GAD-7 anxiety score
+
+  # ICD-10 diagnoses
+  icd10_diagnoses: "41270"  # ICD-10 diagnoses
+  # F90 = ADHD, F84 = Autism
+
+  # Medications
+  medications: "20003"  # Current medications
+  # ADHD medications: methylphenidate, amphetamine, atomoxetine
+
+  # Metabolomics (NMR, 249 biomarkers)
+  # Fields 23400-23649
+  metabolomics_start: "23400"
+  metabolomics_end: "23649"
+
+  # Genomics
+  genetic_pcs: "22009"  # Genetic principal components (1-40)
+  genetic_kinship: "22021"  # Genetic kinship
+  genotype_batch: "22000"  # Genotyping array batch
+
+  # Imaging (subset)
+  total_brain_volume: "25010"  # T1 MRI volume
+  grey_matter_volume: "25011"
+  white_matter_volume: "25012"
+
+# Phenotype mapping
+phenotype_mapping:
+  sample_id: "eid"
+
+  # Demographics
+  age: "21003-0.0"  # Instance 0, array 0
+  sex: "31-0.0"
+  ethnicity: "21000-0.0"
+
+  # ADHD identification (multiple sources)
+  adhd_selfreport: "adhd_self_report"  # Derived from field 20002
+  adhd_icd10: "adhd_icd10"  # F90.x codes from field 41270
+  adhd_medication: "adhd_medication"  # Derived from field 20003
+  adhd_any: "adhd_any"  # Combined: any evidence of ADHD
+
+  # Autism identification
+  autism_selfreport: "autism_self_report"
+  autism_icd10: "autism_icd10"  # F84.x codes
+  autism_any: "autism_any"
+
+  # Mental health
+  depression_score: "20126-0.0"
+  anxiety_score: "20506-0.0"
+
+  # Metabolomics (abbreviated - see full list in documentation)
+  # Lipids
+  total_cholesterol: "23400-0.0"
+  hdl_cholesterol: "23401-0.0"
+  ldl_cholesterol: "23402-0.0"
+  triglycerides: "23403-0.0"
+
+  # Amino acids
+  alanine: "23406-0.0"
+  glutamine: "23407-0.0"
+  glycine: "23408-0.0"
+  histidine: "23409-0.0"
+  leucine: "23410-0.0"
+
+  # Inflammation
+  crp: "30710-0.0"  # C-reactive protein
+
+# ADHD/Autism case definition
+case_definition:
+  adhd:
+    # Include if ANY of the following:
+    criteria:
+      - self_report: true  # Field 20002 includes code 1117
+      - icd10_codes: ["F90.0", "F90.1", "F90.8", "F90.9"]
+      - medications: ["methylphenidate", "atomoxetine", "lisdexamfetamine"]
+
+  autism:
+    criteria:
+      - self_report: true  # Field 20002 includes code 1111
+      - icd10_codes: ["F84.0", "F84.1", "F84.5", "F84.8", "F84.9"]
+
+  # Controls
+  controls:
+    exclude_any_psychiatric: true  # Exclude any psychiatric diagnosis
+    exclude_medications: true  # Exclude psychotropic medications
+
+# Genomic configuration
+genomics:
+  reference_build: "GRCh38"
+
+  # Use imputed data (higher density)
+  use_imputed: true
+  imputation_panel: "HRC + UK10K + 1000G"
+
+  qc:
+    sample_call_rate: 0.95
+    snp_call_rate: 0.95
+    maf_threshold: 0.01
+    hwe_pvalue: 1e-6
+    info_score: 0.8  # For imputed variants
+
+  # Population stratification
+  population_stratification:
+    use_provided_pcs: true  # UKB provides PCs (field 22009)
+    n_pcs: 10
+
+# Metabolomics configuration
+metabolomics:
+  # NMR metabolomics (249 biomarkers)
+  platform: "Nightingale Health NMR"
+  n_biomarkers: 249
+
+  # Biomarker categories
+  categories:
+    - lipids
+    - fatty_acids
+    - amino_acids
+    - glycolysis
+    - ketone_bodies
+    - inflammation
+
+  # QC
+  qc:
+    remove_outliers: true
+    outlier_sd_threshold: 5
+
+  # Normalization
+  normalization:
+    method: "log_transform"  # Many metabolites are log-normal
+    scaling: "standard"
+
+# Clinical configuration
+clinical:
+  missing_codes: [-1, -3]  # UKB missing codes
+
+  # Age restriction for ADHD/autism analysis
+  # Note: UKB participants are 40-69, adult-onset unlikely
+  # Focus on childhood-onset cases
+  inclusion:
+    age_range: [40, 69]
+    has_genomic_data: true
+    has_metabolomics_data: true  # Key for this study
+
+  # Exclusion
+  exclusion:
+    neurodegenerative: true  # Exclude Alzheimer's, Parkinson's
+    stroke: true
+
+# Preprocessing
+preprocessing:
+  # Imputation
+  imputation_strategy: "knn"
+
+  # Outlier detection
+  outlier_detection:
+    enabled: true
+    method: "isolation_forest"
+
+  # Harmonization
+  harmonization:
+    enabled: true
+    batch_variable: "genotype_batch"  # Field 22000
+    method: "combat"
+
+# Integration
+integration:
+  modalities:
+    - genomic
+    - metabolomic
+    - clinical
+
+  method: "mofa"
+  n_factors: 20
+
+  # Prioritize metabolomics (unique strength of UKB)
+  modality_weights:
+    genomic: 0.3
+    metabolomic: 0.5  # Higher weight
+    clinical: 0.2
+
+# Clustering
+clustering:
+  method: "hdbscan"
+  min_cluster_size: 20  # Smaller due to limited ADHD/autism cases
+  min_samples: 10
+
+  # Stratified analysis
+  stratified:
+    by_diagnosis: true  # Separate ADHD, autism, comorbid
+
+# Validation
+validation:
+  n_bootstrap: 100
+  n_permutations: 1000
+
+  # External validation
+  external_validation:
+    enabled: true
+    label_variable: "adhd_any"
+
+# Output
+output:
+  base_dir: "outputs/ukbiobank"
+
+  directories:
+    preprocessed: "${base_dir}/preprocessed"
+    integrated: "${base_dir}/integrated"
+    clusters: "${base_dir}/clusters"
+    validation: "${base_dir}/validation"
+    figures: "${base_dir}/figures"
+    reports: "${base_dir}/reports"
+
+# Reporting
+report:
+  title: "UK Biobank Analysis - Adult ADHD/Autism Metabolic Subtypes"
+  author: "AuDHD Correlation Study"
+  include_metadata: true
+
+  # UKB-specific
+  sections:
+    - cohort_characteristics
+    - metabolomics_profiles
+    - genetic_risk_scores
+    - cluster_assignments
+    - metabolic_pathways
+
+# Reproducibility
+reproducibility:
+  seed: 42
+  save_checkpoints: true
+
+# Compute
+compute:
+  n_cores: 16
+  memory_gb: 128  # UKB genomics are memory-intensive
+  use_gpu: false
+
+# Special considerations
+notes: |
+  UK Biobank: Largest biobank with comprehensive metabolomics.
+
+  Strengths:
+  - 249 NMR metabolomics biomarkers (lipids, amino acids, glycolysis)
+  - 500,000 participants with genomics
+  - Subset with neuroimaging (~40,000)
+  - Well-characterized phenotypes
+
+  Limitations for ADHD/Autism:
+  - Small number of diagnosed cases (~5,000 ADHD, ~2,000 autism)
+  - Adult-only (ages 40-69) - childhood phenotypes unavailable
+  - Self-report and ICD-10 codes may miss cases
+  - No formal diagnostic assessments (ADOS, ADHD rating scales)
+
+  Metabolomics platform:
+  - Nightingale Health NMR platform
+  - Quantifies lipoproteins, fatty acids, amino acids, glycolysis, ketones
+  - Proven associations with cardiometabolic disease
+  - Excellent for systems biology
+
+  Case ascertainment strategy:
+  1. Self-report (field 20002): Codes 1117 (ADHD), 1111 (autism)
+  2. ICD-10 diagnoses (field 41270): F90.x (ADHD), F84.x (autism)
+  3. Medications (field 20003): ADHD medications as proxy
+
+  Recommended use:
+  - Focus on metabolic subtypes (unique dataset)
+  - Calculate polygenic risk scores
+  - Explore metabolite-gene interactions
+  - Validate findings from other cohorts
+
+  Access process:
+  1. Register at ukbiobank.ac.uk/register-apply
+  2. Draft research proposal (10-15 pages)
+  3. Specify data fields needed (use Data Showcase)
+  4. Pay application fee (£2,500-6,000)
+  5. Execute Material Transfer Agreement
+  6. Approval timeline: 8-12 weeks
+
+  Data extraction:
+  - Use ukbconv tool to extract phenotypes
+  - Use bgenix to extract genomic regions
+  - Download via ukbfetch or AWS
+
+  Citation:
+  Sudlow, C., et al. (2015). UK Biobank: An Open Access Resource for
+  Identifying the Causes of a Wide Range of Complex Diseases of Middle
+  and Old Age. PLoS Medicine, 12(3), e1001779.

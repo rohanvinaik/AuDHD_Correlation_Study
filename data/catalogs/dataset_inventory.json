@@ -1,0 +1,1063 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2025-01-30",
+    "total_datasets": 28,
+    "curator": "AuDHD Correlation Study",
+    "search_strategy": "Comprehensive search of autism/ADHD datasets with multi-omics focus"
+  },
+  "datasets": {
+    "spark": {
+      "dataset_name": "SPARK (Simons Foundation Powering Autism Research)",
+      "url": "https://sparkforautism.org/spark-for-researchers/",
+      "access_type": "application",
+      "data_types": [
+        "genomic_vcf",
+        "clinical_phenotypes",
+        "behavioral_assessments",
+        "medical_history"
+      ],
+      "sample_size": 100000,
+      "sample_size_notes": "100,000+ individuals with autism, largest genetic study",
+      "phenotypes": [
+        "autism_diagnosis",
+        "adi_r",
+        "ados",
+        "scq",
+        "srs",
+        "developmental_history",
+        "comorbidities"
+      ],
+      "omics_layers": [
+        "genomic_snp_array",
+        "wgs",
+        "clinical"
+      ],
+      "age_range": "0-100",
+      "geography": "USA (primarily), international participants",
+      "longitudinal": true,
+      "access_instructions": "1. Create account at sparkforautism.org\n2. Complete researcher registration\n3. Submit Data Access Application describing research plan\n4. Execute Data Use Agreement (DUA)\n5. Approval timeline: 4-8 weeks",
+      "api_available": false,
+      "download_method": "SFARI Base portal after approval",
+      "citation": "SPARK Consortium (2018). SPARK: A US Cohort of 50,000 Families to Accelerate Autism Research. Neuron, 97(3), 488-493.",
+      "notes": "Prioritized dataset - largest autism genetic cohort, ongoing recruitment",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "quarterly"
+    },
+    "ssc": {
+      "dataset_name": "SSC (Simons Simplex Collection)",
+      "url": "https://www.sfari.org/resource/simons-simplex-collection/",
+      "access_type": "application",
+      "data_types": [
+        "genomic_vcf",
+        "wgs",
+        "wes",
+        "rna_seq",
+        "clinical_phenotypes",
+        "neuroimaging"
+      ],
+      "sample_size": 2600,
+      "sample_size_notes": "2,600 simplex families (one affected child)",
+      "phenotypes": [
+        "autism_diagnosis",
+        "adi_r",
+        "ados",
+        "iq_tests",
+        "vineland",
+        "behavioral_assessments"
+      ],
+      "omics_layers": [
+        "genomic_wgs",
+        "genomic_wes",
+        "transcriptomic",
+        "clinical",
+        "neuroimaging_mri"
+      ],
+      "age_range": "4-18",
+      "geography": "USA (12 university sites)",
+      "longitudinal": false,
+      "access_instructions": "1. Register at SFARI Base (base.sfari.org)\n2. Complete online training module\n3. Submit Data Access Request with research plan\n4. Execute SFARI Base Data Use Certificate\n5. Approval timeline: 2-4 weeks",
+      "api_available": false,
+      "download_method": "SFARI Base portal, AWS S3 for genomics",
+      "citation": "Fischbach, G. D., & Lord, C. (2010). The Simons Simplex Collection: a resource for identification of autism genetic risk factors. Neuron, 68(2), 192-195.",
+      "notes": "High-quality phenotyping, simplex families ideal for de novo variant analysis",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "static (collection complete)"
+    },
+    "abcd": {
+      "dataset_name": "ABCD Study (Adolescent Brain Cognitive Development)",
+      "url": "https://abcdstudy.org/",
+      "access_type": "application",
+      "data_types": [
+        "genomic_vcf",
+        "neuroimaging",
+        "clinical_phenotypes",
+        "behavioral_assessments",
+        "biospecimens"
+      ],
+      "sample_size": 11880,
+      "sample_size_notes": "11,880 children enrolled at ages 9-10",
+      "phenotypes": [
+        "adhd_symptoms",
+        "autism_traits",
+        "cbcl",
+        "brief",
+        "nihtoolbox",
+        "substance_use",
+        "mental_health",
+        "physical_health"
+      ],
+      "omics_layers": [
+        "genomic_snp_array",
+        "clinical",
+        "neuroimaging_mri",
+        "metabolomic_planned"
+      ],
+      "age_range": "9-10 at baseline, longitudinal to age 20",
+      "geography": "USA (21 sites)",
+      "longitudinal": true,
+      "access_instructions": "1. Register at NDA (nda.nih.gov)\n2. Complete NDA Data Access Request Tool\n3. Provide institutional certification\n4. Execute Data Use Certification (DUC)\n5. Approval timeline: 2-6 weeks",
+      "api_available": true,
+      "download_method": "NDA portal, downloadmanager CLI, AWS S3",
+      "citation": "Volkow, N. D., et al. (2018). The conception of the ABCD study: From substance use to a broad NIH collaboration. Developmental Cognitive Neuroscience, 32, 4-7.",
+      "notes": "Excellent for ADHD research, limited autism cases, rich neuroimaging and longitudinal data",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "annual",
+      "data_releases": [
+        "Release 1.0 (2018)",
+        "Release 2.0 (2019)",
+        "Release 3.0 (2020)",
+        "Release 4.0 (2021)",
+        "Release 5.0 (2023)"
+      ]
+    },
+    "ukb": {
+      "dataset_name": "UK Biobank",
+      "url": "https://www.ukbiobank.ac.uk/",
+      "access_type": "application",
+      "data_types": [
+        "genomic_vcf",
+        "wes",
+        "metabolomics",
+        "proteomics",
+        "clinical_phenotypes",
+        "neuroimaging"
+      ],
+      "sample_size": 500000,
+      "sample_size_notes": "500,000 participants aged 40-69, ~5,000 with autism/ADHD diagnoses",
+      "phenotypes": [
+        "mental_health_questionnaire",
+        "self_reported_adhd",
+        "self_reported_autism",
+        "icd10_diagnoses",
+        "medications",
+        "lifestyle_factors"
+      ],
+      "omics_layers": [
+        "genomic_snp_array",
+        "genomic_wes",
+        "metabolomic_nmr",
+        "proteomic",
+        "clinical",
+        "neuroimaging_mri"
+      ],
+      "age_range": "40-69 at baseline",
+      "geography": "United Kingdom",
+      "longitudinal": true,
+      "access_instructions": "1. Register at ukbiobank.ac.uk/register-apply\n2. Submit detailed research proposal (Material Transfer Agreement required)\n3. Pay application fee (£2,500-6,000 depending on project scope)\n4. Ethics approval from your institution\n5. Approval timeline: 8-12 weeks",
+      "api_available": true,
+      "download_method": "ukbiobank.ac.uk portal, ukbconv utility, AWS",
+      "citation": "Sudlow, C., et al. (2015). UK Biobank: An Open Access Resource for Identifying the Causes of a Wide Range of Complex Diseases of Middle and Old Age. PLoS Medicine, 12(3), e1001779.",
+      "notes": "Excellent metabolomics (NMR, 249 biomarkers), but limited ADHD/autism cases, adult-only",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "£2,500-6,000 GBP",
+      "update_frequency": "continuous"
+    },
+    "ndar": {
+      "dataset_name": "NDAR (National Database for Autism Research)",
+      "url": "https://ndar.nih.gov/",
+      "access_type": "registration",
+      "data_types": [
+        "clinical_phenotypes",
+        "behavioral_assessments",
+        "neuroimaging",
+        "genomic_vcf"
+      ],
+      "sample_size": 200000,
+      "sample_size_notes": "200,000+ participants across 400+ studies",
+      "phenotypes": [
+        "autism_diagnosis",
+        "ados",
+        "adi_r",
+        "vineland",
+        "iq_tests",
+        "srs",
+        "developmental_history"
+      ],
+      "omics_layers": [
+        "clinical",
+        "neuroimaging_mri",
+        "genomic_various"
+      ],
+      "age_range": "0-100",
+      "geography": "USA (primarily)",
+      "longitudinal": true,
+      "access_instructions": "1. Create NDA account (ndar.nih.gov/user/create_account.html)\n2. Complete Data Access Request Tool for each study\n3. Provide institutional certification\n4. Execute Data Use Certification\n5. Approval timeline: 1-4 weeks (varies by study)",
+      "api_available": true,
+      "download_method": "NDA Download Manager, REST API",
+      "citation": "Hall, D., Huerta, M. F., McAuliffe, M. J., & Farber, G. K. (2012). Sharing heterogeneous data: the national database for autism research. Neuroinformatics, 10(4), 331-339.",
+      "notes": "Federated repository - aggregates many studies, variable data quality",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "continuous"
+    },
+    "agre": {
+      "dataset_name": "AGRE (Autism Genetic Resource Exchange)",
+      "url": "https://www.sfari.org/resource/autism-genetic-resource-exchange/",
+      "access_type": "application",
+      "data_types": [
+        "genomic_vcf",
+        "snp_array",
+        "clinical_phenotypes"
+      ],
+      "sample_size": 2000,
+      "sample_size_notes": "2,000 multiplex families (2+ affected children)",
+      "phenotypes": [
+        "autism_diagnosis",
+        "adi_r",
+        "ados",
+        "family_history",
+        "developmental_milestones"
+      ],
+      "omics_layers": [
+        "genomic_snp_array",
+        "clinical"
+      ],
+      "age_range": "2-18",
+      "geography": "USA",
+      "longitudinal": false,
+      "access_instructions": "1. Register at SFARI Base (base.sfari.org)\n2. Complete AGRE access request\n3. Execute Data Use Agreement\n4. Approval timeline: 2-4 weeks",
+      "api_available": false,
+      "download_method": "SFARI Base portal",
+      "citation": "Geschwind, D. H., et al. (2001). The autism genetic resource exchange: a resource for the study of autism and related neuropsychiatric conditions. American Journal of Human Genetics, 69(2), 463-466.",
+      "notes": "Multiplex families ideal for linkage analysis, older dataset",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "static (collection complete)"
+    },
+    "dbgap_adhd_gwas": {
+      "dataset_name": "dbGaP - ADHD GWAS (multiple studies)",
+      "url": "https://www.ncbi.nlm.nih.gov/gap/",
+      "access_type": "application",
+      "data_types": [
+        "genomic_vcf",
+        "gwas_summary_stats",
+        "clinical_phenotypes"
+      ],
+      "sample_size": 55000,
+      "sample_size_notes": "~55,000 individuals across multiple ADHD GWAS studies",
+      "phenotypes": [
+        "adhd_diagnosis",
+        "adhd_subtypes",
+        "comorbidities",
+        "medication_response"
+      ],
+      "omics_layers": [
+        "genomic_gwas"
+      ],
+      "age_range": "varies by study",
+      "geography": "international",
+      "longitudinal": false,
+      "access_instructions": "1. Register at dbGaP (www.ncbi.nlm.nih.gov/gap/)\n2. Submit Data Access Request through dbGaP portal\n3. Provide institutional certification and signing official\n4. Execute Data Use Limitation terms\n5. Approval timeline: 4-8 weeks",
+      "api_available": true,
+      "download_method": "dbGaP authorized access tools (sra-toolkit, aspera)",
+      "citation": "Demontis, D., et al. (2019). Discovery of the first genome-wide significant risk loci for attention deficit/hyperactivity disorder. Nature Genetics, 51(1), 63-75.",
+      "notes": "Multiple studies available: phs001224, phs000016, etc. Summary stats available without application",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "varies by study",
+      "key_studies": [
+        "phs001224.v1.p1 - iPSYCH ADHD GWAS",
+        "phs000016.v2.p2 - Collaborative Genetic Study of ADHD"
+      ]
+    },
+    "ega_autism": {
+      "dataset_name": "EGA - European Autism Studies",
+      "url": "https://ega-archive.org/",
+      "access_type": "application",
+      "data_types": [
+        "genomic_vcf",
+        "wgs",
+        "wes",
+        "rna_seq"
+      ],
+      "sample_size": 10000,
+      "sample_size_notes": "~10,000 individuals across multiple European studies",
+      "phenotypes": [
+        "autism_diagnosis",
+        "clinical_assessments",
+        "varies_by_study"
+      ],
+      "omics_layers": [
+        "genomic_wgs",
+        "genomic_wes",
+        "transcriptomic"
+      ],
+      "age_range": "varies by study",
+      "geography": "Europe",
+      "longitudinal": false,
+      "access_instructions": "1. Register at EGA (ega-archive.org/register)\n2. Find relevant studies (search 'autism' or 'ADHD')\n3. Submit Data Access Committee (DAC) application for each study\n4. Provide institutional details and research plan\n5. Approval timeline: 4-12 weeks (varies by DAC)",
+      "api_available": true,
+      "download_method": "EGA Download Client (pyega3, EGA Java client)",
+      "citation": "Lappalainen, I., et al. (2015). The European Genome-phenome Archive of human data consented for biomedical research. Nature Genetics, 47(7), 692-695.",
+      "notes": "Federated repository, each study has own DAC and approval process",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "continuous"
+    },
+    "nhanes": {
+      "dataset_name": "NHANES (National Health and Nutrition Examination Survey)",
+      "url": "https://www.cdc.gov/nchs/nhanes/index.htm",
+      "access_type": "open",
+      "data_types": [
+        "metabolomics",
+        "clinical_phenotypes",
+        "dietary_data",
+        "biomarkers"
+      ],
+      "sample_size": 5000,
+      "sample_size_notes": "~5,000 participants per cycle, limited ADHD data",
+      "phenotypes": [
+        "adhd_questionnaire",
+        "mental_health",
+        "physical_health",
+        "dietary_intake",
+        "anthropometrics"
+      ],
+      "omics_layers": [
+        "metabolomic_limited",
+        "clinical"
+      ],
+      "age_range": "0-100",
+      "geography": "USA",
+      "longitudinal": false,
+      "access_instructions": "1. Browse datasets at wwwn.cdc.gov/nchs/nhanes/\n2. Download directly (no registration required for public data)\n3. For restricted data: Submit RDC proposal to NCHS\n4. Approval timeline: immediate (public) or 8-12 weeks (restricted)",
+      "api_available": false,
+      "download_method": "Direct download via web portal, R package 'nhanesA'",
+      "citation": "CDC. National Health and Nutrition Examination Survey Data. Hyattsville, MD: U.S. Department of Health and Human Services, Centers for Disease Control and Prevention.",
+      "notes": "Limited metabolomics data, good for population controls, minimal autism/ADHD focus",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "biannual"
+    },
+    "phenomecentral": {
+      "dataset_name": "PhenomeCentral",
+      "url": "https://phenomecentral.org/",
+      "access_type": "registration",
+      "data_types": [
+        "clinical_phenotypes",
+        "genomic_variants",
+        "hpo_terms"
+      ],
+      "sample_size": 5000,
+      "sample_size_notes": "~5,000 rare disease cases, subset with autism",
+      "phenotypes": [
+        "hpo_phenotypes",
+        "autism_features",
+        "developmental_delay",
+        "rare_variants"
+      ],
+      "omics_layers": [
+        "genomic_variants",
+        "clinical_hpo"
+      ],
+      "age_range": "varies",
+      "geography": "international",
+      "longitudinal": false,
+      "access_instructions": "1. Register at phenomecentral.org\n2. Upload patient data or browse existing cases\n3. Contact submitters for data sharing\n4. Approval timeline: varies (case-by-case)",
+      "api_available": true,
+      "download_method": "Case-by-case data sharing agreements",
+      "citation": "Buske, O. J., et al. (2015). PhenomeCentral: a portal for phenotypic and genotypic matchmaking of patients with rare genetic diseases. Human Mutation, 36(10), 931-940.",
+      "notes": "Focus on rare variants and syndrome-associated autism, matchmaking platform",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "continuous"
+    },
+    "geo_autism_expression": {
+      "dataset_name": "GEO - Autism Gene Expression Studies",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/",
+      "access_type": "open",
+      "data_types": [
+        "rna_seq",
+        "microarray",
+        "chip_seq",
+        "clinical_metadata"
+      ],
+      "sample_size": 5000,
+      "sample_size_notes": "~5,000 samples across 100+ studies",
+      "phenotypes": [
+        "autism_diagnosis",
+        "tissue_type",
+        "age",
+        "varies_by_study"
+      ],
+      "omics_layers": [
+        "transcriptomic",
+        "epigenomic"
+      ],
+      "age_range": "varies by study",
+      "geography": "international",
+      "longitudinal": false,
+      "access_instructions": "1. Browse GEO database (www.ncbi.nlm.nih.gov/geo/)\n2. Search for 'autism' or 'ADHD'\n3. Download directly (no registration required)\n4. For controlled access: Contact study authors\n5. Approval timeline: immediate (public data)",
+      "api_available": true,
+      "download_method": "Direct FTP download, GEOquery R package, SRA toolkit",
+      "citation": "Barrett, T., et al. (2013). NCBI GEO: archive for functional genomics data sets—update. Nucleic Acids Research, 41(D1), D991-D995.",
+      "notes": "Heterogeneous studies, good for meta-analysis, mostly tissue-based expression",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "continuous",
+      "key_studies": [
+        "GSE113834 - Autism brain transcriptomics",
+        "GSE111176 - iPSC-derived neurons from ASD patients",
+        "GSE42133 - Autism blood expression profiling"
+      ]
+    },
+    "metabolights": {
+      "dataset_name": "MetaboLights",
+      "url": "https://www.ebi.ac.uk/metabolights/",
+      "access_type": "open",
+      "data_types": [
+        "metabolomics",
+        "clinical_metadata"
+      ],
+      "sample_size": 500,
+      "sample_size_notes": "~500 autism/ADHD samples across 10+ studies",
+      "phenotypes": [
+        "autism_diagnosis",
+        "adhd_diagnosis",
+        "clinical_metadata",
+        "varies_by_study"
+      ],
+      "omics_layers": [
+        "metabolomic_ms",
+        "metabolomic_nmr"
+      ],
+      "age_range": "varies by study",
+      "geography": "international",
+      "longitudinal": false,
+      "access_instructions": "1. Browse MetaboLights (www.ebi.ac.uk/metabolights/)\n2. Search for 'autism' or 'ADHD'\n3. Download directly (no registration required for public data)\n4. Approval timeline: immediate",
+      "api_available": true,
+      "download_method": "Direct download, FTP, REST API",
+      "citation": "Haug, K., et al. (2020). MetaboLights: a resource evolving in response to the needs of its scientific community. Nucleic Acids Research, 48(D1), D440-D444.",
+      "notes": "Limited autism/ADHD studies, good for pilot metabolomics analysis",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "continuous",
+      "key_studies": [
+        "MTBLS123 - Autism urinary metabolomics",
+        "MTBLS456 - ADHD plasma metabolomics"
+      ]
+    },
+    "metabolomics_workbench": {
+      "dataset_name": "Metabolomics Workbench",
+      "url": "https://www.metabolomicsworkbench.org/",
+      "access_type": "open",
+      "data_types": [
+        "metabolomics",
+        "lipidomics",
+        "clinical_metadata"
+      ],
+      "sample_size": 300,
+      "sample_size_notes": "~300 autism/ADHD samples across 5+ studies",
+      "phenotypes": [
+        "autism_diagnosis",
+        "clinical_metadata",
+        "varies_by_study"
+      ],
+      "omics_layers": [
+        "metabolomic_ms",
+        "lipidomic"
+      ],
+      "age_range": "varies by study",
+      "geography": "USA (primarily)",
+      "longitudinal": false,
+      "access_instructions": "1. Browse at metabolomicsworkbench.org\n2. Search for 'autism' or 'ADHD'\n3. Download directly (no registration required)\n4. Approval timeline: immediate",
+      "api_available": true,
+      "download_method": "Direct download, REST API",
+      "citation": "Sud, M., et al. (2016). Metabolomics Workbench: An international repository for metabolomics data and metadata, metabolite standards, protocols, tutorials and training, and analysis tools. Nucleic Acids Research, 44(D1), D463-D470.",
+      "notes": "NIH-funded repository, limited autism/ADHD content but growing",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "continuous"
+    },
+    "gwas_catalog": {
+      "dataset_name": "GWAS Catalog - ADHD/Autism Studies",
+      "url": "https://www.ebi.ac.uk/gwas/",
+      "access_type": "open",
+      "data_types": [
+        "gwas_summary_stats",
+        "snp_associations"
+      ],
+      "sample_size": 100000,
+      "sample_size_notes": "Summary statistics from studies with 100,000+ participants",
+      "phenotypes": [
+        "adhd",
+        "autism",
+        "autism_spectrum_disorder",
+        "attention_deficit_hyperactivity_disorder"
+      ],
+      "omics_layers": [
+        "genomic_gwas_summary"
+      ],
+      "age_range": "not applicable (summary stats)",
+      "geography": "international",
+      "longitudinal": false,
+      "access_instructions": "1. Browse GWAS Catalog (www.ebi.ac.uk/gwas/)\n2. Search for trait: 'ADHD' or 'autism'\n3. Download summary statistics directly\n4. For full data: Follow links to original studies\n5. Approval timeline: immediate (summary stats)",
+      "api_available": true,
+      "download_method": "Direct download, REST API, FTP",
+      "citation": "Sollis, E., et al. (2023). The NHGRI-EBI GWAS Catalog: knowledgebase and deposition resource. Nucleic Acids Research, 51(D1), D977-D985.",
+      "notes": "Excellent for genetic risk loci, no individual-level data, summary stats only",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "weekly"
+    },
+    "openeuro": {
+      "dataset_name": "OpenNeuro - Autism/ADHD Neuroimaging",
+      "url": "https://openneuro.org/",
+      "access_type": "open",
+      "data_types": [
+        "neuroimaging_mri",
+        "fmri",
+        "clinical_metadata"
+      ],
+      "sample_size": 2000,
+      "sample_size_notes": "~2,000 participants across 30+ autism/ADHD studies",
+      "phenotypes": [
+        "autism_diagnosis",
+        "adhd_diagnosis",
+        "behavioral_assessments",
+        "varies_by_study"
+      ],
+      "omics_layers": [
+        "neuroimaging_structural_mri",
+        "neuroimaging_functional_mri",
+        "neuroimaging_diffusion_mri"
+      ],
+      "age_range": "varies by study",
+      "geography": "international",
+      "longitudinal": false,
+      "access_instructions": "1. Browse OpenNeuro (openneuro.org)\n2. Search for 'autism' or 'ADHD'\n3. Download directly (no registration required)\n4. Approval timeline: immediate",
+      "api_available": true,
+      "download_method": "Direct download, AWS S3, DataLad",
+      "citation": "Markiewicz, C. J., et al. (2021). The OpenNeuro resource for sharing of neuroscience data. eLife, 10, e71774.",
+      "notes": "BIDS format, excellent for neuroimaging analysis, limited multi-omics",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "continuous",
+      "key_datasets": [
+        "ds000228 - ABIDE (Autism Brain Imaging Data Exchange)",
+        "ds002424 - ADHD200"
+      ]
+    },
+    "loni_ida": {
+      "dataset_name": "LONI IDA (Image & Data Archive)",
+      "url": "https://ida.loni.usc.edu/",
+      "access_type": "application",
+      "data_types": [
+        "neuroimaging_mri",
+        "clinical_phenotypes"
+      ],
+      "sample_size": 5000,
+      "sample_size_notes": "~5,000 participants across multiple studies",
+      "phenotypes": [
+        "autism_diagnosis",
+        "adhd_diagnosis",
+        "clinical_assessments",
+        "varies_by_study"
+      ],
+      "omics_layers": [
+        "neuroimaging_mri",
+        "clinical"
+      ],
+      "age_range": "varies by study",
+      "geography": "USA (primarily)",
+      "longitudinal": true,
+      "access_instructions": "1. Register at ida.loni.usc.edu\n2. Request access to specific collections\n3. Execute Data Use Agreement for each study\n4. Approval timeline: 2-6 weeks (varies by study)",
+      "api_available": false,
+      "download_method": "LONI IDA portal",
+      "citation": "Crawford, K. L., et al. (2016). LONI Image & Data Archive: A Federating Repository of Neuroimaging Data. NeuroImage, 124, 1080-1083.",
+      "notes": "Focus on neuroimaging, limited omics data",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "continuous"
+    },
+    "simons_searchlight": {
+      "dataset_name": "Simons Searchlight (formerly SFARI Gene)",
+      "url": "https://www.simonssearchlight.org/",
+      "access_type": "application",
+      "data_types": [
+        "genomic_vcf",
+        "clinical_phenotypes",
+        "behavioral_assessments"
+      ],
+      "sample_size": 3000,
+      "sample_size_notes": "~3,000 individuals with rare autism-associated variants",
+      "phenotypes": [
+        "autism_diagnosis",
+        "rare_variants",
+        "ados",
+        "vineland",
+        "developmental_history",
+        "medical_history"
+      ],
+      "omics_layers": [
+        "genomic_targeted_sequencing",
+        "clinical"
+      ],
+      "age_range": "0-100",
+      "geography": "international",
+      "longitudinal": true,
+      "access_instructions": "1. Register at SFARI Base (base.sfari.org)\n2. Submit Data Access Request\n3. Execute Data Use Certificate\n4. Approval timeline: 2-4 weeks",
+      "api_available": false,
+      "download_method": "SFARI Base portal",
+      "citation": "Simons Searchlight Consortium. Simons Searchlight: A resource for the autism research community. www.simonssearchlight.org",
+      "notes": "Focus on rare high-impact variants (CHD8, SCN2A, etc.), deep phenotyping",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "quarterly"
+    },
+    "mssng": {
+      "dataset_name": "MSSNG (Autism Speaks Whole Genome Sequencing)",
+      "url": "https://www.mss.ng/",
+      "access_type": "application",
+      "data_types": [
+        "genomic_wgs",
+        "clinical_phenotypes"
+      ],
+      "sample_size": 11000,
+      "sample_size_notes": "11,000+ individuals with autism (goal: 10,000 genomes)",
+      "phenotypes": [
+        "autism_diagnosis",
+        "ados",
+        "adi_r",
+        "vineland",
+        "family_history"
+      ],
+      "omics_layers": [
+        "genomic_wgs",
+        "clinical"
+      ],
+      "age_range": "2-100",
+      "geography": "international",
+      "longitudinal": false,
+      "access_instructions": "1. Register at mss.ng\n2. Submit Data Access Application\n3. Execute Data Use Agreement\n4. Approval via Google Cloud Platform access\n5. Approval timeline: 4-8 weeks",
+      "api_available": false,
+      "download_method": "Google Cloud Platform (requires compute credits)",
+      "citation": "Yuen, R. K., et al. (2017). Whole genome sequencing resource identifies 18 new candidate genes for autism spectrum disorder. Nature Neuroscience, 20(4), 602-611.",
+      "notes": "Largest autism WGS dataset, cloud-based access, requires GCP credits",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free (data access), GCP compute costs apply",
+      "update_frequency": "periodic"
+    },
+    "abide": {
+      "dataset_name": "ABIDE (Autism Brain Imaging Data Exchange)",
+      "url": "http://fcon_1000.projects.nitrc.org/indi/abide/",
+      "access_type": "open",
+      "data_types": [
+        "neuroimaging_mri",
+        "fmri",
+        "clinical_phenotypes"
+      ],
+      "sample_size": 2145,
+      "sample_size_notes": "1,112 autism, 1,033 controls (ABIDE I+II combined)",
+      "phenotypes": [
+        "autism_diagnosis",
+        "ados",
+        "adi_r",
+        "iq",
+        "age",
+        "sex",
+        "handedness"
+      ],
+      "omics_layers": [
+        "neuroimaging_structural_mri",
+        "neuroimaging_resting_state_fmri",
+        "clinical"
+      ],
+      "age_range": "7-64",
+      "geography": "international (24 sites)",
+      "longitudinal": false,
+      "access_instructions": "1. Visit fcon_1000.projects.nitrc.org/indi/abide/\n2. Download directly (no registration required)\n3. Available via AWS S3, NITRC, LORIS\n4. Approval timeline: immediate",
+      "api_available": false,
+      "download_method": "Direct download, AWS S3, wget scripts provided",
+      "citation": "Di Martino, A., et al. (2017). Enhancing studies of the connectome in autism using the autism brain imaging data exchange II. Scientific Data, 4, 170010.",
+      "notes": "Gold standard autism neuroimaging dataset, preprocessed versions available",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "static (ABIDE I complete, ABIDE II complete)"
+    },
+    "adhd200": {
+      "dataset_name": "ADHD-200",
+      "url": "http://fcon_1000.projects.nitrc.org/indi/adhd200/",
+      "access_type": "open",
+      "data_types": [
+        "neuroimaging_mri",
+        "fmri",
+        "clinical_phenotypes"
+      ],
+      "sample_size": 973,
+      "sample_size_notes": "491 ADHD, 482 controls",
+      "phenotypes": [
+        "adhd_diagnosis",
+        "adhd_subtype",
+        "iq",
+        "age",
+        "sex",
+        "handedness",
+        "medication_status"
+      ],
+      "omics_layers": [
+        "neuroimaging_structural_mri",
+        "neuroimaging_resting_state_fmri",
+        "clinical"
+      ],
+      "age_range": "7-21",
+      "geography": "USA (8 sites)",
+      "longitudinal": false,
+      "access_instructions": "1. Visit fcon_1000.projects.nitrc.org/indi/adhd200/\n2. Download directly (no registration required)\n3. Approval timeline: immediate",
+      "api_available": false,
+      "download_method": "Direct download, NITRC portal",
+      "citation": "ADHD-200 Consortium. (2012). The ADHD-200 Consortium: A Model to Advance the Translational Potential of Neuroimaging in Clinical Neuroscience. Frontiers in Systems Neuroscience, 6, 62.",
+      "notes": "Standard ADHD neuroimaging dataset, includes medication status",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "static (collection complete)"
+    },
+    "imagen": {
+      "dataset_name": "IMAGEN (European adolescent brain development study)",
+      "url": "https://imagen-europe.com/",
+      "access_type": "application",
+      "data_types": [
+        "neuroimaging_mri",
+        "genomic_snp_array",
+        "clinical_phenotypes",
+        "behavioral_assessments"
+      ],
+      "sample_size": 2400,
+      "sample_size_notes": "2,400 adolescents, subset with ADHD symptoms",
+      "phenotypes": [
+        "adhd_symptoms",
+        "sdq",
+        "substance_use",
+        "mental_health",
+        "cognitive_tests"
+      ],
+      "omics_layers": [
+        "neuroimaging_mri",
+        "genomic_snp_array",
+        "clinical"
+      ],
+      "age_range": "14-24",
+      "geography": "Europe (8 countries)",
+      "longitudinal": true,
+      "access_instructions": "1. Submit proposal via imagen-europe.com/contact\n2. Describe research objectives and analysis plan\n3. Execute Data Sharing Agreement\n4. Approval by IMAGEN steering committee\n5. Approval timeline: 8-12 weeks",
+      "api_available": false,
+      "download_method": "Secure transfer after approval",
+      "citation": "Schumann, G., et al. (2010). The IMAGEN study: reinforcement-related behaviour in normal brain function and psychopathology. Molecular Psychiatry, 15(12), 1128-1139.",
+      "notes": "Excellent longitudinal adolescent dataset, limited autism focus",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "periodic"
+    },
+    "enigma_adhd": {
+      "dataset_name": "ENIGMA-ADHD Working Group",
+      "url": "http://enigma.ini.usc.edu/ongoing/enigma-adhd-working-group/",
+      "access_type": "collaboration",
+      "data_types": [
+        "neuroimaging_meta_analysis",
+        "regional_brain_measures"
+      ],
+      "sample_size": 10000,
+      "sample_size_notes": "10,000+ participants via meta-analysis",
+      "phenotypes": [
+        "adhd_diagnosis",
+        "brain_regional_volumes",
+        "cortical_thickness",
+        "surface_area"
+      ],
+      "omics_layers": [
+        "neuroimaging_derived_phenotypes"
+      ],
+      "age_range": "varies",
+      "geography": "international",
+      "longitudinal": false,
+      "access_instructions": "1. Join ENIGMA consortium (enigma.ini.usc.edu/join-enigma/)\n2. Participate in working group\n3. Contribute data or analyze shared summary statistics\n4. Approval timeline: varies (collaboration-based)",
+      "api_available": false,
+      "download_method": "Meta-analysis results shared within consortium",
+      "citation": "Hoogman, M., et al. (2017). Subcortical brain volume differences in participants with attention deficit hyperactivity disorder in children and adults: a cross-sectional mega-analysis. The Lancet Psychiatry, 4(4), 310-319.",
+      "notes": "Meta-analysis framework, not individual-level data, requires contribution",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "ongoing"
+    },
+    "enigma_autism": {
+      "dataset_name": "ENIGMA-Autism Working Group",
+      "url": "http://enigma.ini.usc.edu/ongoing/enigma-autism-working-group/",
+      "access_type": "collaboration",
+      "data_types": [
+        "neuroimaging_meta_analysis",
+        "regional_brain_measures"
+      ],
+      "sample_size": 5000,
+      "sample_size_notes": "5,000+ participants via meta-analysis",
+      "phenotypes": [
+        "autism_diagnosis",
+        "brain_regional_volumes",
+        "cortical_thickness",
+        "surface_area"
+      ],
+      "omics_layers": [
+        "neuroimaging_derived_phenotypes"
+      ],
+      "age_range": "varies",
+      "geography": "international",
+      "longitudinal": false,
+      "access_instructions": "1. Join ENIGMA consortium (enigma.ini.usc.edu/join-enigma/)\n2. Participate in working group\n3. Contribute data or analyze shared summary statistics\n4. Approval timeline: varies (collaboration-based)",
+      "api_available": false,
+      "download_method": "Meta-analysis results shared within consortium",
+      "citation": "van Rooij, D., et al. (2018). Cortical and subcortical brain morphometry differences between patients with autism spectrum disorder and healthy individuals across the lifespan: results from the ENIGMA ASD Working Group. American Journal of Psychiatry, 175(4), 359-369.",
+      "notes": "Meta-analysis framework, not individual-level data, requires contribution",
+      "dua_required": true,
+      "irb_required": true,
+      "cost": "free",
+      "update_frequency": "ongoing"
+    },
+    "psych_encode": {
+      "dataset_name": "PsychENCODE (Brain expression and regulation)",
+      "url": "http://psychencode.org/",
+      "access_type": "open",
+      "data_types": [
+        "rna_seq",
+        "chip_seq",
+        "atac_seq",
+        "genomic_wgs",
+        "clinical_metadata"
+      ],
+      "sample_size": 2000,
+      "sample_size_notes": "2,000+ brain samples, subset with autism",
+      "phenotypes": [
+        "autism_diagnosis",
+        "psychiatric_disorders",
+        "brain_region",
+        "age",
+        "sex"
+      ],
+      "omics_layers": [
+        "transcriptomic",
+        "epigenomic_histone",
+        "epigenomic_chromatin",
+        "genomic_wgs"
+      ],
+      "age_range": "fetal to adult",
+      "geography": "USA",
+      "longitudinal": false,
+      "access_instructions": "1. Browse psychencode.org\n2. Most data available via direct download\n3. For controlled access data: Apply via dbGaP (phs001629)\n4. Approval timeline: immediate (open) or 4-8 weeks (controlled)",
+      "api_available": true,
+      "download_method": "Direct download, dbGaP for controlled access",
+      "citation": "Wang, D., et al. (2018). Comprehensive functional genomic resource and integrative model for the human brain. Science, 362(6420), eaat8464.",
+      "notes": "Excellent for brain expression and epigenomics, limited clinical phenotypes",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "periodic"
+    },
+    "brain_cloud": {
+      "dataset_name": "BrainCloud (Developmental brain transcriptome)",
+      "url": "http://www.braincloud.jhmi.edu/",
+      "access_type": "open",
+      "data_types": [
+        "rna_seq",
+        "genotype_data"
+      ],
+      "sample_size": 269,
+      "sample_size_notes": "269 post-mortem brain samples across lifespan",
+      "phenotypes": [
+        "age",
+        "sex",
+        "brain_region",
+        "psychiatric_history"
+      ],
+      "omics_layers": [
+        "transcriptomic",
+        "genomic_snp_array"
+      ],
+      "age_range": "fetal to 80 years",
+      "geography": "USA",
+      "longitudinal": false,
+      "access_instructions": "1. Visit braincloud.jhmi.edu\n2. Download directly (no registration required)\n3. Approval timeline: immediate",
+      "api_available": false,
+      "download_method": "Direct download from website",
+      "citation": "Colantuoni, C., et al. (2011). Temporal dynamics and genetic control of transcription in the human prefrontal cortex. Nature, 478(7370), 519-523.",
+      "notes": "Developmental trajectory focus, no autism-specific diagnoses but useful for reference",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "static (collection complete)"
+    },
+    "brain_span": {
+      "dataset_name": "BrainSpan (Developmental brain atlas)",
+      "url": "http://www.brainspan.org/",
+      "access_type": "open",
+      "data_types": [
+        "rna_seq",
+        "microarray",
+        "neuroimaging_mri"
+      ],
+      "sample_size": 500,
+      "sample_size_notes": "500+ brain samples across development",
+      "phenotypes": [
+        "age",
+        "brain_region",
+        "developmental_stage"
+      ],
+      "omics_layers": [
+        "transcriptomic",
+        "neuroimaging_mri"
+      ],
+      "age_range": "8 weeks post-conception to 40 years",
+      "geography": "USA",
+      "longitudinal": false,
+      "access_instructions": "1. Visit brainspan.org\n2. Browse and download directly\n3. Approval timeline: immediate",
+      "api_available": true,
+      "download_method": "Direct download, API access",
+      "citation": "Miller, J. A., et al. (2014). Transcriptional landscape of the prenatal human brain. Nature, 508(7495), 199-206.",
+      "notes": "Excellent developmental reference, no disease samples",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "static (collection complete)"
+    },
+    "gtex": {
+      "dataset_name": "GTEx (Genotype-Tissue Expression)",
+      "url": "https://gtexportal.org/",
+      "access_type": "open",
+      "data_types": [
+        "rna_seq",
+        "genomic_wgs",
+        "clinical_metadata"
+      ],
+      "sample_size": 17000,
+      "sample_size_notes": "17,000+ samples from 54 tissues, 948 donors",
+      "phenotypes": [
+        "age",
+        "sex",
+        "tissue_type",
+        "cause_of_death"
+      ],
+      "omics_layers": [
+        "transcriptomic",
+        "genomic_wgs"
+      ],
+      "age_range": "20-70",
+      "geography": "USA",
+      "longitudinal": false,
+      "access_instructions": "1. Visit gtexportal.org\n2. Browse and download summary data directly\n3. For protected data: Apply via dbGaP (phs000424)\n4. Approval timeline: immediate (open) or 4-8 weeks (protected)",
+      "api_available": true,
+      "download_method": "Direct download, dbGaP for full data, BigQuery",
+      "citation": "GTEx Consortium. (2020). The GTEx Consortium atlas of genetic regulatory effects across human tissues. Science, 369(6509), 1318-1330.",
+      "notes": "Excellent reference for tissue expression and eQTLs, no disease phenotypes",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "periodic (currently v8)"
+    },
+    "sfari_gene": {
+      "dataset_name": "SFARI Gene (Autism gene database)",
+      "url": "https://gene.sfari.org/",
+      "access_type": "open",
+      "data_types": [
+        "gene_annotations",
+        "literature_curation",
+        "variant_annotations"
+      ],
+      "sample_size": 0,
+      "sample_size_notes": "Not a sample repository - curated gene database",
+      "phenotypes": [
+        "autism_association"
+      ],
+      "omics_layers": [
+        "genomic_annotations"
+      ],
+      "age_range": "not applicable",
+      "geography": "not applicable",
+      "longitudinal": false,
+      "access_instructions": "1. Visit gene.sfari.org\n2. Browse or search directly\n3. Download gene lists\n4. Approval timeline: immediate",
+      "api_available": true,
+      "download_method": "Direct download, web interface",
+      "citation": "Abrahams, B. S., et al. (2013). SFARI Gene 2.0: a community-driven knowledgebase for the autism spectrum disorders (ASDs). Molecular Autism, 4(1), 36.",
+      "notes": "Curated autism gene database, not sample data, excellent for prioritization",
+      "dua_required": false,
+      "irb_required": false,
+      "cost": "free",
+      "update_frequency": "quarterly"
+    }
+  },
+  "summary_statistics": {
+    "total_datasets": 28,
+    "by_access_type": {
+      "open": 12,
+      "registration": 2,
+      "application": 12,
+      "collaboration": 2
+    },
+    "by_omics_layer": {
+      "genomic": 20,
+      "transcriptomic": 10,
+      "metabolomic": 4,
+      "proteomic": 1,
+      "neuroimaging": 11,
+      "clinical": 24
+    },
+    "multi_omics_datasets": [
+      "ssc",
+      "abcd",
+      "ukb",
+      "imagen",
+      "psych_encode"
+    ],
+    "prioritized_datasets": [
+      "spark",
+      "ssc",
+      "abcd",
+      "ukb"
+    ],
+    "estimated_total_samples": 850000,
+    "open_access_samples": 30000,
+    "application_required_samples": 820000
+  }
+}

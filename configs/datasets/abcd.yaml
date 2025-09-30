@@ -1,0 +1,278 @@
+# ABCD Study (Adolescent Brain Cognitive Development) Configuration
+# Dataset size: 11,880 children (ages 9-10 at baseline)
+# Data types: genomic, neuroimaging, clinical, behavioral
+# Access: Application via NDA (nda.nih.gov)
+
+dataset:
+  name: "ABCD"
+  version: "Release_5.0"  # Update to latest release
+  description: "Adolescent Brain Cognitive Development Study"
+  access_type: "application"
+  dua_required: true
+
+  # Data paths (update after download from NDA)
+  data_root: "data/raw/abcd"
+
+  paths:
+    # Genomic data
+    vcf: "${data_root}/genomics/abcd_genotypes.vcf.gz"
+    bfile_prefix: "${data_root}/genomics/abcd_plink"
+
+    # Neuroimaging (structural MRI)
+    mri_structural: "${data_root}/imaging/structural/"
+    mri_functional: "${data_root}/imaging/functional/"
+    mri_diffusion: "${data_root}/imaging/diffusion/"
+    mri_derived: "${data_root}/imaging/derived_measures/"
+
+    # Clinical/behavioral data
+    phenotypes: "${data_root}/phenotypes/abcd_phenotypes.csv"
+    demographics: "${data_root}/phenotypes/demographics.csv"
+    assessments: "${data_root}/phenotypes/assessments.csv"
+    cbcl: "${data_root}/phenotypes/cbcl.csv"
+    mental_health: "${data_root}/phenotypes/mental_health.csv"
+
+    # Longitudinal data
+    followup_1year: "${data_root}/phenotypes/followup_1year.csv"
+    followup_2year: "${data_root}/phenotypes/followup_2year.csv"
+
+# Phenotype variable mappings
+phenotype_mapping:
+  sample_id: "src_subject_id"
+  family_id: "rel_family_id"
+  site: "site_id_l"
+
+  # Demographics
+  age: "interview_age"  # In months
+  sex: "sex"  # M/F
+  race: "race_ethnicity"
+
+  # ADHD measures
+  adhd_diagnosis: "adhd_dx"
+  adhd_inattentive: "cbcl_adhd_i"
+  adhd_hyperactive: "cbcl_adhd_h"
+  adhd_combined: "cbcl_adhd_c"
+  adhd_medication: "med_adhd"
+
+  # Autism measures
+  autism_diagnosis: "asd_dx"
+  autism_traits_srs: "srs_total"
+  autism_traits_scq: "scq_total"
+
+  # Behavioral/mental health (CBCL)
+  cbcl_anxious_depressed: "cbcl_scr_syn_anxdep_t"
+  cbcl_withdrawn: "cbcl_scr_syn_withdep_t"
+  cbcl_somatic: "cbcl_scr_syn_somatic_t"
+  cbcl_social_problems: "cbcl_scr_syn_social_t"
+  cbcl_thought_problems: "cbcl_scr_syn_thought_t"
+  cbcl_attention: "cbcl_scr_syn_attention_t"
+  cbcl_rule_breaking: "cbcl_scr_syn_rulebreak_t"
+  cbcl_aggressive: "cbcl_scr_syn_aggressive_t"
+
+  # Executive function (BRIEF)
+  brief_inhibit: "brief_inhibit_t"
+  brief_shift: "brief_shift_t"
+  brief_emotional_control: "brief_emo_t"
+  brief_working_memory: "brief_wm_t"
+  brief_planning: "brief_plan_t"
+
+  # Cognition (NIH Toolbox)
+  nih_cognition_total: "nihtbx_totalcomp_fc"
+  nih_fluid_intelligence: "nihtbx_fluidcomp_fc"
+  nih_crystallized: "nihtbx_cryst_fc"
+
+  # Imaging-derived phenotypes
+  total_brain_volume: "smri_vol_cdk_total"
+  cortical_thickness_mean: "smri_thick_cdk_mean"
+
+# Genomic configuration
+genomics:
+  reference_build: "GRCh38"
+
+  qc:
+    sample_call_rate: 0.95
+    snp_call_rate: 0.95
+    maf_threshold: 0.01
+    hwe_pvalue: 1e-6
+
+  # Population stratification
+  population_stratification:
+    enabled: true
+    n_pcs: 10
+    reference_panel: "1000G Phase 3"
+
+# Neuroimaging configuration
+neuroimaging:
+  # Use derived measures (already preprocessed)
+  use_derived_measures: true
+
+  # Structural MRI features
+  structural_features:
+    - cortical_thickness
+    - cortical_surface_area
+    - subcortical_volumes
+    - total_brain_volume
+    - white_matter_volume
+
+  # Quality control
+  qc:
+    exclude_poor_quality: true
+    qc_threshold: 1  # Include if QC score >= 1
+    motion_threshold: 0.9  # Exclude if mean motion > 0.9mm
+
+  # Harmonization
+  harmonization:
+    enabled: true
+    method: "combat"
+    site_variable: "site_id_l"
+    scanner_variable: "mri_info_deviceserialnumber"
+
+# Clinical configuration
+clinical:
+  missing_codes: [777, 999, "NA", ""]
+
+  # Focus on ADHD/autism-relevant phenotypes
+  key_phenotypes:
+    - adhd_diagnosis
+    - autism_diagnosis
+    - cbcl_attention
+    - cbcl_social_problems
+    - brief_working_memory
+    - nih_fluid_intelligence
+
+  # Inclusion criteria
+  inclusion:
+    age_range: [9, 12]  # Baseline + 1-2 year followups
+    has_genomic_data: true
+    has_mri_data: true  # Optional: remove if not using imaging
+
+# Preprocessing
+preprocessing:
+  # Imputation
+  imputation_strategy: "knn"
+
+  # Handle longitudinal data
+  longitudinal:
+    use_baseline_only: false  # Set to true for cross-sectional
+    timepoints: ["baseline", "1_year_followup", "2_year_followup"]
+    method: "linear_mixed_models"  # For longitudinal analysis
+
+  # Scaling
+  scaling_method: "robust"  # Robust to outliers
+
+# Integration
+integration:
+  modalities:
+    - genomic
+    - neuroimaging
+    - clinical
+
+  method: "mofa"
+  n_factors: 20  # More factors for multi-modal integration
+
+  # Modality-specific weights
+  modality_weights:
+    genomic: 0.3
+    neuroimaging: 0.4
+    clinical: 0.3
+
+# Clustering
+clustering:
+  method: "hdbscan"
+  min_cluster_size: 30
+  min_samples: 10
+
+  # Separate analysis for ADHD-enriched subset
+  adhd_subset:
+    enabled: true
+    filter: "adhd_diagnosis == 1 or cbcl_attention > 65"
+
+# Validation
+validation:
+  n_bootstrap: 100
+  n_permutations: 1000
+
+  # External validation with diagnoses
+  external_validation:
+    enabled: true
+    label_variable: "adhd_diagnosis"
+    metrics: ["ari", "ami", "v_measure"]
+
+  # Longitudinal stability (if using longitudinal data)
+  longitudinal_stability:
+    enabled: false
+    timepoints: ["baseline", "2_year_followup"]
+
+# Output
+output:
+  base_dir: "outputs/abcd"
+
+  directories:
+    preprocessed: "${base_dir}/preprocessed"
+    integrated: "${base_dir}/integrated"
+    clusters: "${base_dir}/clusters"
+    validation: "${base_dir}/validation"
+    figures: "${base_dir}/figures"
+    reports: "${base_dir}/reports"
+
+# Reporting
+report:
+  title: "ABCD Study Analysis - ADHD Subtypes"
+  author: "AuDHD Correlation Study"
+  include_metadata: true
+
+  # ABCD-specific sections
+  sections:
+    - demographics
+    - cluster_assignments
+    - adhd_symptom_profiles
+    - brain_imaging_signatures
+    - genetic_associations
+    - longitudinal_trajectories
+
+# Reproducibility
+reproducibility:
+  seed: 42
+  save_checkpoints: true
+
+# Compute
+compute:
+  n_cores: 16  # Imaging analysis can be compute-intensive
+  memory_gb: 64
+  use_gpu: true  # For deep learning on imaging data (optional)
+
+# Special considerations
+notes: |
+  ABCD Study: Largest longitudinal child brain development study.
+
+  Strengths:
+  - Excellent ADHD representation (~1,500 ADHD cases)
+  - Rich neuroimaging data (structural, functional, diffusion)
+  - Longitudinal design (track development)
+  - Population-based recruitment
+
+  Limitations:
+  - Limited autism cases (~200 diagnosed)
+  - No metabolomics (yet)
+  - Participants are 9-10 at baseline (no early childhood data)
+
+  Key variables for ADHD analysis:
+  - CBCL Attention Problems scale (cbcl_scr_syn_attention_t)
+  - BRIEF executive function measures
+  - Parent-reported ADHD diagnosis (ksads_adhd_dx)
+
+  Neuroimaging quality:
+  - Use QC flags (imgincl_* variables)
+  - Check motion parameters (dmri_dti_meanmotion)
+  - Site effects are significant - use Combat harmonization
+
+  Access:
+  1. Register at nda.nih.gov
+  2. Complete NDA training
+  3. Submit Data Access Request
+  4. Execute Data Use Certification
+  5. Download via NDA Download Manager
+
+  Citation:
+  Volkow, N. D., et al. (2018). The conception of the ABCD study:
+  From substance use to a broad NIH collaboration.
+  Developmental Cognitive Neuroscience, 32, 4-7.
