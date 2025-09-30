@@ -91,7 +91,7 @@ docs = [
 ]
 
 [project.scripts]
-audhd-omics = "audhd_correlation.cli:app"
+audhd-pipeline = "audhd_correlation.config.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/rohanvinaik/AuDHD_Correlation_Study"
