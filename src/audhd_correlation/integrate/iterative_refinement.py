@@ -36,6 +36,16 @@ from .adaptive_weights import (
     WeightConstraints
 )
 
+# Import enhanced discriminative analysis methods
+from .iterative_refinement_enhanced import (
+    evaluate_subtype_specific_discriminative_power,
+    identify_discriminative_features_within_domain,
+    calculate_nonlinear_discriminative_power,
+    evaluate_domain_interactions,
+    bootstrap_discriminative_power,
+    calculate_subtype_homogeneity
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -49,6 +59,13 @@ class DomainDiscriminativePower:
     correlation_with_clustering: float  # How well domain predicts cluster labels
     composite_score: float  # Weighted combination of above metrics
     is_discriminative: bool  # Above threshold?
+
+    # Enhanced metrics (optional, computed if enabled)
+    subtype_specific_scores: Optional[Dict[int, float]] = None  # Per-subtype AUC scores
+    nonlinear_score: Optional[float] = None  # Non-linear discrimination via kernel methods
+    confidence_interval: Optional[Tuple[float, float]] = None  # Bootstrap CI (lower, upper)
+    top_features: Optional[List[str]] = None  # Most discriminative features within domain
+    interaction_partners: Optional[List[Tuple[str, float]]] = None  # Synergistic domains
 
     def __repr__(self):
         return (f"DomainDiscriminativePower(domain={self.domain}, "
@@ -114,7 +131,15 @@ class IterativeRefinementEngine:
         convergence_threshold: float = 0.01,
         optimization_metric: str = 'silhouette',
         preserve_strong_evidence_domains: bool = True,
-        verbose: bool = True
+        verbose: bool = True,
+        # Enhanced discriminative analysis options
+        use_subtype_specific: bool = True,
+        use_nonlinear: bool = True,
+        use_bootstrap_ci: bool = True,
+        use_feature_selection: bool = True,
+        use_interaction_effects: bool = True,
+        n_bootstrap: int = 100,
+        top_features_per_domain: int = 10
     ):
         """
         Initialize iterative refinement engine.
@@ -137,6 +162,20 @@ class IterativeRefinementEngine:
             Never remove domains with 'strong' evidence strength
         verbose : bool, default=True
             Print progress information
+        use_subtype_specific : bool, default=True
+            Evaluate per-subtype discriminative power (one-vs-rest AUC)
+        use_nonlinear : bool, default=True
+            Include non-linear discrimination via kernel methods
+        use_bootstrap_ci : bool, default=True
+            Calculate bootstrap confidence intervals for stability
+        use_feature_selection : bool, default=True
+            Identify most discriminative features within each domain
+        use_interaction_effects : bool, default=True
+            Detect synergistic domain pairs
+        n_bootstrap : int, default=100
+            Number of bootstrap samples for CI estimation
+        top_features_per_domain : int, default=10
+            Number of top features to identify per domain
         """
         self.literature_weights = literature_weights or LiteratureBasedWeights()
         self.discriminative_threshold = discriminative_threshold
@@ -147,15 +186,28 @@ class IterativeRefinementEngine:
         self.preserve_strong_evidence = preserve_strong_evidence_domains
         self.verbose = verbose
 
+        # Enhanced analysis options
+        self.use_subtype_specific = use_subtype_specific
+        self.use_nonlinear = use_nonlinear
+        self.use_bootstrap_ci = use_bootstrap_ci
+        self.use_feature_selection = use_feature_selection
+        self.use_interaction_effects = use_interaction_effects
+        self.n_bootstrap = n_bootstrap
+        self.top_features_per_domain = top_features_per_domain
+
         # Track results across iterations
         self.iteration_results: List[IterationResult] = []
         self.convergence_reason: Optional[str] = None
+        self.domain_interactions: Optional[List[Tuple[str, str, float]]] = None
 
         logger.info(f"Initialized IterativeRefinementEngine:")
         logger.info(f"  Discriminative threshold: {discriminative_threshold}")
         logger.info(f"  Min domains: {min_domains}")
         logger.info(f"  Max iterations: {max_iterations}")
         logger.info(f"  Preserve strong evidence: {preserve_strong_evidence}")
+        logger.info(f"  Enhanced analysis: subtype={use_subtype_specific}, "
+                   f"nonlinear={use_nonlinear}, bootstrap={use_bootstrap_ci}, "
+                   f"feature_selection={use_feature_selection}, interactions={use_interaction_effects}")
 
     def evaluate_domain_discriminative_power(
         self,
@@ -283,13 +335,28 @@ class IterativeRefinementEngine:
             anova_norm = np.clip(between_cluster_var / 10, 0, 1)  # F-stats can be large
             corr_norm = correlation  # Already 0-1
 
-            # Weighted composite (can adjust weights)
-            composite = (
+            # Base composite (linear metrics)
+            composite_base = (
                 0.35 * sil_norm +
                 0.30 * rf_norm +
                 0.20 * anova_norm +
                 0.15 * corr_norm
             )
+
+            composite = composite_base  # Will be enhanced below if options enabled
+
+            # ENHANCEMENT 1: Add non-linear discrimination score
+            nonlinear_score = None
+            if self.use_nonlinear:
+                try:
+                    nonlinear_score = calculate_nonlinear_discriminative_power(
+                        df, cluster_labels
+                    )
+                    # Weight non-linear component at 20%, reduce linear to 80%
+                    composite = 0.8 * composite_base + 0.2 * nonlinear_score
+                    logger.debug(f"  {domain} nonlinear score: {nonlinear_score:.3f}")
+                except Exception as e:
+                    logger.debug(f"Nonlinear scoring failed for {domain}: {e}")
 
             # Check if discriminative
             is_discriminative = composite >= self.discriminative_threshold
@@ -301,6 +368,30 @@ class IterativeRefinementEngine:
                     is_discriminative = True  # Never remove strong evidence domains
                     logger.debug(f"Domain {domain} protected by strong evidence")
 
+            # ENHANCEMENT 2: Subtype-specific scores (computed globally after loop)
+            # ENHANCEMENT 3: Bootstrap confidence intervals
+            confidence_interval = None
+            if self.use_bootstrap_ci:
+                try:
+                    _, lower_ci, upper_ci = bootstrap_discriminative_power(
+                        df, cluster_labels, n_bootstrap=self.n_bootstrap
+                    )
+                    confidence_interval = (lower_ci, upper_ci)
+                    logger.debug(f"  {domain} CI: [{lower_ci:.3f}, {upper_ci:.3f}]")
+                except Exception as e:
+                    logger.debug(f"Bootstrap failed for {domain}: {e}")
+
+            # ENHANCEMENT 4: Feature-level selection
+            top_features = None
+            if self.use_feature_selection:
+                try:
+                    top_features = identify_discriminative_features_within_domain(
+                        df, cluster_labels, top_k=self.top_features_per_domain
+                    )
+                    logger.debug(f"  {domain} top features: {top_features[:3]}...")
+                except Exception as e:
+                    logger.debug(f"Feature selection failed for {domain}: {e}")
+
             domain_powers[domain] = DomainDiscriminativePower(
                 domain=domain,
                 silhouette_contribution=sil,
@@ -308,13 +399,62 @@ class IterativeRefinementEngine:
                 between_cluster_variance=between_cluster_var,
                 correlation_with_clustering=correlation,
                 composite_score=composite,
-                is_discriminative=is_discriminative
+                is_discriminative=is_discriminative,
+                nonlinear_score=nonlinear_score,
+                confidence_interval=confidence_interval,
+                top_features=top_features
             )
 
             if self.verbose:
                 logger.info(f"Domain {domain:15s}: composite={composite:.3f}, "
                           f"sil={sil:.2f}, rf_imp={domain_importance:.2f}, "
                           f"discriminative={is_discriminative}")
+
+        # ENHANCEMENT 5: Subtype-specific discriminative power (global analysis)
+        if self.use_subtype_specific:
+            logger.info("Evaluating subtype-specific discriminative power...")
+            try:
+                subtype_scores = evaluate_subtype_specific_discriminative_power(
+                    domain_features, cluster_labels
+                )
+                # Add subtype scores to each domain
+                for domain, scores_dict in subtype_scores.items():
+                    if domain in domain_powers:
+                        domain_powers[domain].subtype_specific_scores = scores_dict
+                        # Log best subtype for this domain
+                        if scores_dict:
+                            best_subtype = max(scores_dict.items(), key=lambda x: x[1])
+                            logger.info(f"  {domain:15s}: best subtype {best_subtype[0]} "
+                                      f"(AUC={best_subtype[1]:.3f})")
+            except Exception as e:
+                logger.warning(f"Subtype-specific analysis failed: {e}")
+
+        # ENHANCEMENT 6: Domain interaction effects (global analysis)
+        if self.use_interaction_effects:
+            logger.info("Evaluating domain interaction effects...")
+            try:
+                interactions = evaluate_domain_interactions(
+                    domain_features, cluster_labels, max_pairs=10
+                )
+                # Store for use in pruning logic
+                self.domain_interactions = interactions
+                # Add interaction partners to each domain
+                for d1, d2, strength in interactions:
+                    if d1 in domain_powers:
+                        if domain_powers[d1].interaction_partners is None:
+                            domain_powers[d1].interaction_partners = []
+                        domain_powers[d1].interaction_partners.append((d2, strength))
+                    if d2 in domain_powers:
+                        if domain_powers[d2].interaction_partners is None:
+                            domain_powers[d2].interaction_partners = []
+                        domain_powers[d2].interaction_partners.append((d1, strength))
+
+                if interactions:
+                    logger.info(f"Found {len(interactions)} strong domain interactions:")
+                    for d1, d2, strength in interactions[:5]:  # Top 5
+                        logger.info(f"  {d1} ↔ {d2}: {strength:.3f}")
+            except Exception as e:
+                logger.warning(f"Interaction analysis failed: {e}")
 
         return domain_powers
 
@@ -360,6 +500,26 @@ class IterativeRefinementEngine:
         # Don't remove more than would take us below min_domains
         max_removable = len(current_domains) - self.min_domains
         remove_domains = remove_candidates[:max_removable]
+
+        # ENHANCEMENT: Check for strong interactions and preserve domains with synergy
+        if self.use_interaction_effects and self.domain_interactions and remove_domains:
+            logger.info("Checking for strong interactions before pruning...")
+            strong_interaction_domains = set()
+
+            for d1, d2, strength in self.domain_interactions:
+                if strength > 0.1:  # Threshold for strong interaction
+                    if d1 in remove_domains:
+                        strong_interaction_domains.add(d1)
+                        logger.info(f"  Preserving {d1} due to interaction with {d2} (strength={strength:.3f})")
+                    if d2 in remove_domains:
+                        strong_interaction_domains.add(d2)
+                        logger.info(f"  Preserving {d2} due to interaction with {d1} (strength={strength:.3f})")
+
+            # Update removal list to exclude domains with strong interactions
+            if strong_interaction_domains:
+                final_remove = [d for d in remove_domains if d not in strong_interaction_domains]
+                logger.info(f"Protected {len(strong_interaction_domains)} domains due to interactions")
+                remove_domains = final_remove
 
         keep_domains = [d for d in current_domains if d not in remove_domains]
 

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-30T12:01:25.912187",
+  "timestamp": "2025-09-30T12:45:52.777441",
   "sources": {
     "GEO_Expression": {
       "status": "\u2713 Complete (8/8)",
@@ -8,9 +8,9 @@
       "size_mb": 2570.0306901931763
     },
     "SRA_Microbiome": {
-      "status": "\u27f3 Downloading ETA: 8.6 min",
-      "samples": 68,
-      "size_mb": 7936.119660377502
+      "status": "\u27f3 Downloading",
+      "samples": 72,
+      "size_mb": 12149.336152076721
     },
     "Paper_Scraping": {
       "status": "\u2713 Complete",

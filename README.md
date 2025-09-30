@@ -688,6 +688,18 @@ pip install tslearn
 - ✅ Confidence scoring (section weight + context + validation)
 - ✅ 8-stage pipeline: Ingest → Structure → Extract → Normalize → Validate → Classify → Score → Cite
 
+**Iterative Refinement System (1,500 lines) - Enhanced!**
+- ✅ Automatic domain pruning based on discriminative power
+- ✅ **Subtype-specific analysis**: Per-subtype discriminative power (one-vs-rest AUC)
+  - Different domains may discriminate different subtypes (e.g., genetic for one, autonomic for another)
+- ✅ **Non-linear detection**: Kernel SVM and Gaussian Process for non-linear relationships
+- ✅ **Feature-level refinement**: Identifies most discriminative features within each domain (MI + RFECV)
+- ✅ **Domain interaction effects**: Detects synergistic domain pairs and preserves them during pruning
+- ✅ **Bootstrap stability**: Confidence intervals for discriminative scores
+- ✅ **Subtype homogeneity metrics**: Within-cluster consistency measures
+- ✅ Literature-based domain protection (never removes strong evidence domains)
+- ✅ Comprehensive export (summary, metrics CSVs, multi-panel visualizations)
+
 **Literature-Based Adaptive Weighting (850 lines + docs)**
 - ✅ Evidence-based weights from 2023-2024 meta-analyses and diagnostic studies
 - ✅ Major weight updates: Genetics 0.15→0.30 (h²=0.74-0.80), Metabolomics 0.20→0.22 (AUC 0.90-0.96)

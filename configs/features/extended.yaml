@@ -375,6 +375,17 @@ pipeline_integration:
       between_cluster_variance: 0.20  # ANOVA F-statistic
       correlation_with_clustering: 0.15  # Correlation with cluster labels
 
+    # Enhanced discriminative analysis (NEW)
+    enhanced_analysis:
+      use_subtype_specific: true  # Per-subtype discriminative power (one-vs-rest AUC)
+      use_nonlinear: true  # Non-linear discrimination via kernel methods (SVM, GP)
+      use_bootstrap_ci: true  # Bootstrap confidence intervals for stability assessment
+      use_feature_selection: true  # Identify most discriminative features per domain
+      use_interaction_effects: true  # Detect synergistic domain pairs
+      n_bootstrap: 100  # Number of bootstrap samples for CI estimation
+      top_features_per_domain: 10  # Number of top features to identify
+      interaction_strength_threshold: 0.1  # Minimum interaction strength to preserve domain
+
     # Convergence criteria (any satisfied = stop)
     convergence_criteria:
       - no_domains_to_remove

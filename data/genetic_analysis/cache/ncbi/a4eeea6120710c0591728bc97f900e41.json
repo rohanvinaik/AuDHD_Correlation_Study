@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-09-30T13:03:41.228322",
+  "data": {
+    "gene_id": "85358",
+    "symbol": "SHANK3",
+    "description": "SH3 and multiple ankyrin repeat domains 3",
+    "chromosome": "22",
+    "summary": "This gene is a member of the Shank gene family. Shank proteins are multidomain scaffold proteins of the postsynaptic density that connect neurotransmitter receptors, ion channels, and other membrane proteins to the actin cytoskeleton and G-protein-coupled signaling pathways. Shank proteins also play a role in synapse formation and dendritic spine maturation. Mutations in this gene are a cause of autism spectrum disorder (ASD), which is characterized by impairments in social interaction and communication, and restricted behavioral patterns and interests. Mutations in this gene also cause schizophrenia type 15, and are a major causative factor in the neurological symptoms of 22q13.3 deletion syndrome, which is also known as Phelan-McDermid syndrome. Additional isoforms have been described for this gene but they have not yet been experimentally verified. [provided by RefSeq, Mar 2012]",
+    "gene_type": "genomic"
+  }
+}

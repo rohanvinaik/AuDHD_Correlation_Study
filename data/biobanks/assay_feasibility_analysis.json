@@ -1,0 +1,279 @@
+{
+  "NIMH_Repository": {
+    "biobank": "NIMH_Repository",
+    "n_participants": 100,
+    "assays": {
+      "cortisol_hair": {
+        "feasible": false,
+        "reason": "Required sample types ['hair'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "heavy_metals_ICP-MS": {
+        "feasible": false,
+        "reason": "Required sample types ['hair', 'nail', 'blood', 'urine'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "proteomics_somascan": {
+        "feasible": true,
+        "sample_types_available": [
+          "serum",
+          "plasma"
+        ],
+        "cost_total": 75000,
+        "cost_per_sample": 750,
+        "vendor": "SomaLogic",
+        "considerations": "Check sample quality"
+      },
+      "metabolomics_broad": {
+        "feasible": true,
+        "sample_types_available": [
+          "serum",
+          "plasma"
+        ],
+        "cost_total": 40000,
+        "cost_per_sample": 400,
+        "vendor": "Broad Institute, Metabolon",
+        "considerations": "Check sample quality"
+      },
+      "inflammatory_markers": {
+        "feasible": true,
+        "sample_types_available": [
+          "serum",
+          "plasma"
+        ],
+        "cost_total": 15000,
+        "cost_per_sample": 150,
+        "vendor": "R&D Systems, Meso Scale Discovery",
+        "considerations": "Check sample quality"
+      }
+    }
+  },
+  "Autism_BrainNet": {
+    "biobank": "Autism_BrainNet",
+    "n_participants": 100,
+    "assays": {
+      "cortisol_hair": {
+        "feasible": false,
+        "reason": "Required sample types ['hair'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "heavy_metals_ICP-MS": {
+        "feasible": true,
+        "sample_types_available": [
+          "blood",
+          "urine"
+        ],
+        "cost_total": 15000,
+        "cost_per_sample": 150,
+        "vendor": "Mayo Clinic Labs, LabCorp",
+        "considerations": "Check sample quality"
+      },
+      "proteomics_somascan": {
+        "feasible": true,
+        "sample_types_available": [
+          "csf"
+        ],
+        "cost_total": 75000,
+        "cost_per_sample": 750,
+        "vendor": "SomaLogic",
+        "considerations": "Check sample quality"
+      },
+      "metabolomics_broad": {
+        "feasible": true,
+        "sample_types_available": [
+          "urine"
+        ],
+        "cost_total": 40000,
+        "cost_per_sample": 400,
+        "vendor": "Broad Institute, Metabolon",
+        "considerations": "Check sample quality"
+      },
+      "inflammatory_markers": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      }
+    }
+  },
+  "NICHD_DASH": {
+    "biobank": "NICHD_DASH",
+    "n_participants": 100,
+    "assays": {
+      "cortisol_hair": {
+        "feasible": false,
+        "reason": "Required sample types ['hair'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "heavy_metals_ICP-MS": {
+        "feasible": false,
+        "reason": "Required sample types ['hair', 'nail', 'blood', 'urine'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "proteomics_somascan": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma', 'csf'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "metabolomics_broad": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma', 'urine'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "inflammatory_markers": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      }
+    }
+  },
+  "NeuroBioBank": {
+    "biobank": "NeuroBioBank",
+    "n_participants": 100,
+    "assays": {
+      "cortisol_hair": {
+        "feasible": false,
+        "reason": "Required sample types ['hair'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "heavy_metals_ICP-MS": {
+        "feasible": false,
+        "reason": "Required sample types ['hair', 'nail', 'blood', 'urine'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "proteomics_somascan": {
+        "feasible": true,
+        "sample_types_available": [
+          "csf"
+        ],
+        "cost_total": 75000,
+        "cost_per_sample": 750,
+        "vendor": "SomaLogic",
+        "considerations": "Check sample quality"
+      },
+      "metabolomics_broad": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma', 'urine'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "inflammatory_markers": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      }
+    }
+  },
+  "SPARK_Biobank": {
+    "biobank": "SPARK_Biobank",
+    "n_participants": 100,
+    "assays": {
+      "cortisol_hair": {
+        "feasible": false,
+        "reason": "Required sample types ['hair'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "heavy_metals_ICP-MS": {
+        "feasible": false,
+        "reason": "Required sample types ['hair', 'nail', 'blood', 'urine'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "proteomics_somascan": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma', 'csf'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "metabolomics_broad": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma', 'urine'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "inflammatory_markers": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      }
+    }
+  },
+  "ABCD_Biospecimens": {
+    "biobank": "ABCD_Biospecimens",
+    "n_participants": 100,
+    "assays": {
+      "cortisol_hair": {
+        "feasible": true,
+        "sample_types_available": [
+          "hair"
+        ],
+        "cost_total": 5000,
+        "cost_per_sample": 50,
+        "vendor": "Multiple labs",
+        "considerations": "Check sample quality"
+      },
+      "heavy_metals_ICP-MS": {
+        "feasible": true,
+        "sample_types_available": [
+          "hair"
+        ],
+        "cost_total": 15000,
+        "cost_per_sample": 150,
+        "vendor": "Mayo Clinic Labs, LabCorp",
+        "considerations": "Check sample quality"
+      },
+      "proteomics_somascan": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma', 'csf'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "metabolomics_broad": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma', 'urine'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "inflammatory_markers": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      }
+    }
+  },
+  "All_of_Us_Biobank": {
+    "biobank": "All_of_Us_Biobank",
+    "n_participants": 100,
+    "assays": {
+      "cortisol_hair": {
+        "feasible": false,
+        "reason": "Required sample types ['hair'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "heavy_metals_ICP-MS": {
+        "feasible": true,
+        "sample_types_available": [
+          "blood",
+          "urine"
+        ],
+        "cost_total": 15000,
+        "cost_per_sample": 150,
+        "vendor": "Mayo Clinic Labs, LabCorp",
+        "considerations": "Check sample quality"
+      },
+      "proteomics_somascan": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma', 'csf'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      },
+      "metabolomics_broad": {
+        "feasible": true,
+        "sample_types_available": [
+          "urine"
+        ],
+        "cost_total": 40000,
+        "cost_per_sample": 400,
+        "vendor": "Broad Institute, Metabolon",
+        "considerations": "Check sample quality"
+      },
+      "inflammatory_markers": {
+        "feasible": false,
+        "reason": "Required sample types ['serum', 'plasma'] not available",
+        "alternatives": "Consider different biobank or sample type"
+      }
+    }
+  }
+}
