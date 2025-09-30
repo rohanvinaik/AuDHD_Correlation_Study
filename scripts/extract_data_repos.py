@@ -31,16 +31,21 @@ class DataRepositoryExtractor:
             'User-Agent': 'Mozilla/5.0 (Academic Research Bot)'
         })
 
-        # Data repository patterns
+        # Data repository patterns - expanded
         self.repo_patterns = {
-            'github': re.compile(r'github\.com/[\w\-]+/[\w\-]+', re.IGNORECASE),
-            'zenodo': re.compile(r'zenodo\.org/record/\d+', re.IGNORECASE),
-            'dryad': re.compile(r'datadryad\.org/stash/dataset/doi:[^\s<>"\']+', re.IGNORECASE),
-            'figshare': re.compile(r'figshare\.com/articles/[^\s<>"\']+', re.IGNORECASE),
+            'github': re.compile(r'github\.com/[\w\-]+/[\w\-\.]+', re.IGNORECASE),
+            'zenodo': re.compile(r'zenodo\.org/(?:record|records)/\d+', re.IGNORECASE),
+            'dryad': re.compile(r'datadryad\.org/(?:stash/dataset/)?doi:[^\s<>"\']+', re.IGNORECASE),
+            'figshare': re.compile(r'figshare\.com/(?:articles|s)/[^\s<>"\']+', re.IGNORECASE),
             'osf': re.compile(r'osf\.io/[\w]+', re.IGNORECASE),
-            'mendeley': re.compile(r'data\.mendeley\.com/datasets/[\w]+', re.IGNORECASE),
+            'mendeley': re.compile(r'data\.mendeley\.com/datasets/[\w\-/]+', re.IGNORECASE),
             'ncbi_geo': re.compile(r'GSE\d+', re.IGNORECASE),
-            'ncbi_sra': re.compile(r'SRP\d+|PRJNA\d+|PRJEB\d+', re.IGNORECASE),
+            'ncbi_sra': re.compile(r'SRP\d+|PRJNA\d+|PRJEB\d+|PRJDB\d+|ERP\d+', re.IGNORECASE),
+            'synapse': re.compile(r'synapse\.org/\#!Synapse:syn\d+', re.IGNORECASE),
+            'arrayexpress': re.compile(r'E-[A-Z]+-\d+', re.IGNORECASE),
+            'dataverse': re.compile(r'dataverse\.[\w\.]+/dataset\.xhtml\?persistentId=doi:[^\s<>"\']+', re.IGNORECASE),
+            'openneuro': re.compile(r'openneuro\.org/datasets/ds\d+', re.IGNORECASE),
+            'neurovault': re.compile(r'neurovault\.org/collections/\d+', re.IGNORECASE),
         }
 
         # Track what we've found

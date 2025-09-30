@@ -730,6 +730,25 @@ pip install tslearn
 - ✅ Comprehensive multi-omics source catalog (20+ repositories)
 - ✅ Integration with genetic lookup system via shared caching
 
+**Advanced Analysis Modules (9,500+ lines) - NEW!**
+- ✅ **Single-Cell RNA-seq Integration (750 lines)**: Cell-type identification, GWAS enrichment, trajectory analysis, baseline-deviation integration
+- ✅ **Microbiome Gut-Brain Axis (700 lines)**: 16S rRNA analysis, alpha/beta diversity, differential abundance (MaAsLin2-style), brain correlations
+- ✅ **EEG/MEG Neurophysiology (720 lines)**: Spectral power, functional connectivity (PLI, coherence), ERPs, network metrics
+- ✅ **EHR Integration (680 lines)**: Longitudinal features, comorbidity patterns, medication trajectories, diagnostic progression
+- ✅ **Wearables & Digital Phenotyping (850 lines)**: Activity patterns, sleep quality, circadian rhythms (M10/L5), HRV, anomaly detection
+- ✅ **Environmental Exposures Database (500 lines)**: Geocoding, air quality (PM2.5/NO2/O3), SES indicators, built environment
+- ✅ **Federated Learning (600 lines)**: Multi-site collaboration, differential privacy, secure aggregation, federated meta-analysis
+- ✅ **Graph Neural Networks (680 lines)**: Biological network analysis, node classification, link prediction, attention mechanisms
+- ✅ **Uncertainty Quantification (700 lines)**: Conformal prediction, bootstrap CI, Bayesian credible intervals, calibration assessment
+- ✅ **Interactive Dashboard (1,000 lines)**: Dash/Plotly visualization, real-time results, 10+ analysis views
+
+**Integrated Analysis Pipeline (800 lines) - NEW!**
+- ✅ Complete pipeline orchestration (`scripts/run_integrated_analysis.py`)
+- ✅ Unified interface for all 16 analysis modules
+- ✅ Configuration-driven execution with JSON/YAML support
+- ✅ Automatic results aggregation and export
+- ✅ Baseline-deviation framework + advanced methods integration
+
 **Paper Scraping System (1,400 lines)**
 - ✅ Comprehensive data lead extraction from scientific papers (PDF/HTML)
 - ✅ Pattern library for 20+ repository types (GEO, SRA, PRIDE, HMDB, OpenNeuro, etc.)

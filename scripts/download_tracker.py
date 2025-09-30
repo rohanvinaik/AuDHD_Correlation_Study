@@ -129,6 +129,84 @@ def get_sra_progress():
 
     return 0, 0
 
+def get_data_extraction_progress():
+    """Get data extraction progress"""
+    # Check all extraction logs
+    extraction_log = project_root / "logs/downloads/data_extraction.log"
+    top50_log = project_root / "logs/downloads/data_extraction_top50.log"
+    high_impact_log = project_root / "logs/downloads/data_extraction_high_impact.log"
+    high_impact_part2_log = project_root / "logs/downloads/data_extraction_high_impact_part2.log"
+    part3_log = project_root / "logs/downloads/data_extraction_part3.log"
+
+    # Prioritize part3 > part2 > high_impact > top50 > regular
+    active_log = None
+    total_expected = 0
+
+    if part3_log.exists() and part3_log.stat().st_size > 0:
+        active_log = part3_log
+        total_expected = 150  # Part 3 is 101-150, display as /150 total
+    elif high_impact_part2_log.exists() and high_impact_part2_log.stat().st_size > 0:
+        active_log = high_impact_part2_log
+        total_expected = 100  # Part 2 is 51-100, display as /100 total
+    elif high_impact_log.exists() and high_impact_log.stat().st_size > 0:
+        active_log = high_impact_log
+        total_expected = 100
+    elif top50_log.exists() and top50_log.stat().st_size > 0:
+        active_log = top50_log
+        total_expected = 50
+    elif extraction_log.exists():
+        active_log = extraction_log
+
+    if not active_log:
+        return 0, 0, 0, 0
+
+    try:
+        # Aggregate counts from all previous parts
+        prior_processed = 0
+        prior_repos = 0
+        prior_files = 0
+
+        # If part3, count part1 + part2
+        if active_log == part3_log:
+            for log_file in [high_impact_log, high_impact_part2_log]:
+                if log_file.exists():
+                    with open(log_file) as f:
+                        prior_content = f.read()
+                    prior_processed += prior_content.count('Processing PMC')
+                    prior_repos += prior_content.count('Found repositories')
+                    prior_files += prior_content.count('✓ Downloaded')
+
+        # If part2, count part1
+        elif active_log == high_impact_part2_log and high_impact_log.exists():
+            with open(high_impact_log) as f:
+                part1_content = f.read()
+            prior_processed = part1_content.count('Processing PMC')
+            prior_repos = part1_content.count('Found repositories')
+            prior_files = part1_content.count('✓ Downloaded')
+
+        with open(active_log) as f:
+            content = f.read()
+
+        # Count total PMC IDs
+        if total_expected > 0:
+            total_pmcs = total_expected
+        else:
+            total_match = re.search(r'Found (\d+) unique PMC IDs', content)
+            total_pmcs = int(total_match.group(1)) if total_match else 0
+
+        # Count processed (add prior parts)
+        processed = content.count('Processing PMC') + prior_processed
+
+        # Count repos found
+        repos_found = content.count('Found repositories') + prior_repos
+
+        # Count files downloaded
+        files_downloaded = content.count('✓ Downloaded') + prior_files
+
+        return processed, total_pmcs, repos_found, files_downloaded
+    except:
+        return 0, 0, 0, 0
+
 def create_dashboard():
     """Create rich dashboard layout"""
 
@@ -136,6 +214,7 @@ def create_dashboard():
     queries_done, papers, supplements = count_completed_queries()
     geo_complete = count_geo_complete()
     sra_done, sra_total = get_sra_progress()
+    extraction_done, extraction_total, repos_found, files_downloaded = get_data_extraction_progress()
 
     # Calculate data sizes
     geo_dir = project_root / "data/raw/geo"
@@ -205,9 +284,32 @@ def create_dashboard():
         f"{gwas_size:.2f} GB"
     )
 
+    # Data Extraction from Papers
+    extraction_progress = (extraction_done / extraction_total * 100) if extraction_total > 0 else 0
+    extraction_bar = "█" * int(extraction_progress / 2.5) + "░" * (40 - int(extraction_progress / 2.5))
+    extraction_color = "green" if extraction_done == extraction_total else "yellow"
+    extraction_status = f"{repos_found} repos\n{files_downloaded} files"
+
+    # Check which extraction is active
+    high_impact_log = project_root / "logs/downloads/data_extraction_high_impact.log"
+    top50_log = project_root / "logs/downloads/data_extraction_top50.log"
+    extraction_label = "🔍 Data Extraction (Papers)"
+
+    if high_impact_log.exists() and high_impact_log.stat().st_size > 0:
+        extraction_label = "🏆 High-Impact Journals (100)"
+    elif top50_log.exists() and top50_log.stat().st_size > 0:
+        extraction_label = "⭐ Top-50 High-Impact Papers"
+
+    table.add_row(
+        extraction_label,
+        f"[{extraction_color}]{extraction_bar}[/{extraction_color}] {extraction_progress:.1f}%",
+        f"[bold]{extraction_done}/{extraction_total}\n{extraction_status}",
+        f"{papers_size:.2f} GB"  # Using papers_size since extracted data goes there
+    )
+
     # Create summary panel
-    total_items = len(PAPER_QUERIES) + len(GEO_DATASETS) + (sra_total if sra_total > 0 else 50) + 3
-    completed_items = queries_done + len(geo_complete) + sra_done + gwas_files
+    total_items = len(PAPER_QUERIES) + len(GEO_DATASETS) + (sra_total if sra_total > 0 else 50) + 3 + (extraction_total if extraction_total > 0 else 0)
+    completed_items = queries_done + len(geo_complete) + sra_done + gwas_files + extraction_done
     overall_progress = (completed_items / total_items) * 100 if total_items > 0 else 0
 
     summary = Text()
@@ -220,25 +322,91 @@ def create_dashboard():
 
     summary_panel = Panel(summary, title="Summary", border_style="green")
 
-    # Recent activity
-    paper_log = project_root / "logs/downloads/paper_scraping.log"
+    # Recent activity - check all extraction logs
     recent_text = Text()
-    if paper_log.exists():
+
+    # Priority: part2 > high_impact > top50 > regular extraction
+    high_impact_part2_log = project_root / "logs/downloads/data_extraction_high_impact_part2.log"
+    high_impact_log = project_root / "logs/downloads/data_extraction_high_impact.log"
+    top50_log = project_root / "logs/downloads/data_extraction_top50.log"
+    extraction_log = project_root / "logs/downloads/data_extraction.log"
+
+    activity_found = False
+    if high_impact_part2_log.exists():
         try:
-            with open(paper_log) as f:
+            with open(high_impact_part2_log) as f:
                 lines = f.readlines()
             if lines:
                 last_line = lines[-1].strip()
                 if ' - INFO - ' in last_line:
                     msg = last_line.split(' - INFO - ', 1)[1]
-                    recent_text.append("📝 ", style="bold blue")
+                    recent_text.append("🏆 ", style="bold cyan")
                     recent_text.append(msg[:90] + "..." if len(msg) > 90 else msg, style="dim")
-                else:
-                    recent_text.append("Waiting for updates...", style="dim")
+                    activity_found = True
         except:
-            recent_text.append("Initializing...", style="dim")
-    else:
-        recent_text.append("Starting downloads...", style="dim")
+            pass
+
+    if not activity_found and high_impact_log.exists():
+        try:
+            with open(high_impact_log) as f:
+                lines = f.readlines()
+            if lines:
+                last_line = lines[-1].strip()
+                if ' - INFO - ' in last_line:
+                    msg = last_line.split(' - INFO - ', 1)[1]
+                    recent_text.append("🏆 ", style="bold cyan")
+                    recent_text.append(msg[:90] + "..." if len(msg) > 90 else msg, style="dim")
+                    activity_found = True
+        except:
+            pass
+
+    if not activity_found and top50_log.exists():
+        try:
+            with open(top50_log) as f:
+                lines = f.readlines()
+            if lines:
+                last_line = lines[-1].strip()
+                if ' - INFO - ' in last_line:
+                    msg = last_line.split(' - INFO - ', 1)[1]
+                    recent_text.append("⭐ ", style="bold yellow")
+                    recent_text.append(msg[:90] + "..." if len(msg) > 90 else msg, style="dim")
+                    activity_found = True
+        except:
+            pass
+
+    if not activity_found and extraction_log.exists():
+        try:
+            with open(extraction_log) as f:
+                lines = f.readlines()
+            if lines:
+                last_line = lines[-1].strip()
+                if ' - INFO - ' in last_line:
+                    msg = last_line.split(' - INFO - ', 1)[1]
+                    recent_text.append("🔍 ", style="bold magenta")
+                    recent_text.append(msg[:90] + "..." if len(msg) > 90 else msg, style="dim")
+                    activity_found = True
+        except:
+            pass
+
+    if not activity_found:
+        # Fall back to paper scraping log
+        paper_log = project_root / "logs/downloads/paper_scraping.log"
+        if paper_log.exists():
+            try:
+                with open(paper_log) as f:
+                    lines = f.readlines()
+                if lines:
+                    last_line = lines[-1].strip()
+                    if ' - INFO - ' in last_line:
+                        msg = last_line.split(' - INFO - ', 1)[1]
+                        recent_text.append("📝 ", style="bold blue")
+                        recent_text.append(msg[:90] + "..." if len(msg) > 90 else msg, style="dim")
+                    else:
+                        recent_text.append("Waiting for updates...", style="dim")
+            except:
+                recent_text.append("Initializing...", style="dim")
+        else:
+            recent_text.append("Starting downloads...", style="dim")
 
     activity_panel = Panel(recent_text, title="Recent Activity", border_style="blue")
 
