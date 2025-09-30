@@ -1,0 +1,303 @@
+# UK Biobank Extraction Configuration
+# Configuration for extracting ADHD/Autism relevant data from UK Biobank
+
+extraction:
+  # UK Biobank encrypted file
+  ukb_file: "ukb12345.enc_ukb"  # Update with your application number
+
+  # Output directory
+  output_dir: "data/ukb"
+
+  # Field groups to extract
+  field_groups:
+    - diagnosis
+    - medications
+    - metabolomics
+    - genetics
+    - demographics
+    - mental_health
+    - sleep
+    - family_history
+    - environmental
+    - ses
+
+  # Output format
+  format: "csv"  # csv, r, docs
+
+  # Create separate files per group
+  separate_files: false
+
+cohort_building:
+  # Case definitions
+  adhd:
+    # ICD-10 codes
+    icd10_codes:
+      - "F90.0"  # Disturbance of activity and attention
+      - "F90.1"  # Hyperkinetic conduct disorder
+      - "F90.8"  # Other hyperkinetic disorders
+      - "F90.9"  # Hyperkinetic disorder, unspecified
+
+    # Self-report codes (field 20002)
+    self_report_codes: [1117]
+
+    # Medication codes (field 20003)
+    medication_codes:
+      - "1140926662"  # Methylphenidate
+      - "1140888594"  # Atomoxetine
+      - "1141173882"  # Dexamfetamine
+      - "1140888648"  # Lisdexamfetamine
+
+  autism:
+    # ICD-10 codes
+    icd10_codes:
+      - "F84.0"  # Childhood autism
+      - "F84.1"  # Atypical autism
+      - "F84.5"  # Asperger syndrome
+      - "F84.8"  # Other pervasive developmental disorders
+      - "F84.9"  # Pervasive developmental disorder, unspecified
+
+    # Self-report codes
+    self_report_codes: [1111]
+
+  # Control selection
+  controls:
+    n_controls: 10000
+    match_age_sex: true
+    exclude_psychiatric: true
+    require_metabolomics: false
+
+  # Metabolomics subset
+  metabolomics:
+    # Only include participants with metabolomics data
+    filter_by_metabolomics: false
+
+    # Minimum number of non-missing biomarkers required
+    min_biomarkers: 100
+
+    # Nightingale NMR platform fields (249 biomarkers)
+    field_range: [23400, 23649]
+
+metabolomics:
+  # Nightingale NMR metabolomics categories
+  categories:
+    lipoproteins:
+      - "Total cholesterol"
+      - "LDL cholesterol"
+      - "HDL cholesterol"
+      - "VLDL cholesterol"
+      - "Triglycerides"
+
+    fatty_acids:
+      - "Omega-3"
+      - "Omega-6"
+      - "DHA"
+      - "Linoleic acid"
+      - "Saturated fatty acids"
+
+    amino_acids:
+      - "Alanine"
+      - "Glutamine"
+      - "Glycine"
+      - "Histidine"
+      - "Isoleucine"
+      - "Leucine"
+      - "Valine"
+      - "Phenylalanine"
+      - "Tyrosine"
+
+    glycolysis:
+      - "Glucose"
+      - "Lactate"
+      - "Pyruvate"
+      - "Citrate"
+
+    ketone_bodies:
+      - "Acetoacetate"
+      - "3-hydroxybutyrate"
+
+    inflammation:
+      - "GlycA"
+      - "C-reactive protein"
+
+  # Quality control
+  qc:
+    # Remove outliers (values > X standard deviations)
+    outlier_sd_threshold: 5
+
+    # Missing data threshold (per biomarker)
+    max_missing_rate: 0.3
+
+  # Normalization
+  normalization:
+    # Log transform (many metabolites are log-normal)
+    log_transform: true
+
+    # Scaling method
+    scaling: "standard"  # standard, robust, minmax
+
+genetics:
+  # Genetic principal components
+  n_pcs: 10  # Use first 10 PCs for ancestry adjustment
+
+  # Quality filters
+  qc:
+    # Exclude related individuals
+    remove_related: true
+    kinship_threshold: 0.0884  # 3rd degree relatives
+
+    # Exclude based on het/miss
+    exclude_het_miss_outliers: true
+
+  # Ancestry
+  restrict_ancestry: "White British"  # null for all ancestries
+
+environmental:
+  # Air pollution metrics
+  air_pollution:
+    - "PM2.5"    # Particulate matter < 2.5 μm
+    - "PM10"     # Particulate matter < 10 μm
+    - "NO2"      # Nitrogen dioxide
+    - "NOx"      # Nitrogen oxides
+
+  # Noise pollution
+  noise:
+    - "day"      # Daytime noise (dB)
+    - "evening"  # Evening noise (dB)
+    - "night"    # Nighttime noise (dB)
+
+  # Green space (if available)
+  green_space: true
+
+mental_health:
+  # PHQ-9 depression items
+  phq9_fields: [20510, 20511, 20512, 20513, 20514]
+
+  # GAD-7 anxiety items
+  gad7_fields: [20400, 20401, 20402, 20403, 20404, 20405, 20406, 20407, 20408]
+
+  # Mental health questionnaire
+  mhq_fields: [20400-20450]
+
+sleep:
+  # Sleep metrics
+  metrics:
+    - duration        # Field 1160
+    - chronotype      # Field 1180
+    - insomnia        # Field 1200
+    - snoring         # Field 1210
+    - napping         # Field 1190
+
+diet:
+  # Dietary intake frequencies
+  food_groups:
+    - oily_fish       # Field 6144
+    - fruits          # Field 1309
+    - vegetables      # Field 1299
+    - red_meat        # Field 1349
+    - processed_meat  # Field 1359
+
+  # Alcohol
+  alcohol:
+    - frequency       # Field 1558
+    - red_wine        # Field 1568
+    - beer_cider      # Field 1578
+
+family_history:
+  # Parental illness
+  father: 20107
+  mother: 20110
+  siblings: 20111
+
+  # Age at parental death
+  father_age_death: 20074
+  mother_age_death: 20075
+
+birth_factors:
+  # Birth characteristics
+  birth_weight: 20022
+  gestational_age: 2754
+  breastfed: 1777
+  adopted: 1787
+
+ses:
+  # Socioeconomic indicators
+  income: 738
+  education: 6138
+  qualifications: 6138
+  employment: 6142
+  age_education_completed: 845
+
+preprocessing:
+  # Missing data imputation
+  imputation:
+    method: "knn"  # knn, mice, mean, median
+    n_neighbors: 5
+
+  # Outlier detection
+  outlier_detection:
+    method: "isolation_forest"
+    contamination: 0.05
+
+  # Batch correction
+  batch_correction:
+    enabled: true
+    batch_variable: "genotype_batch"  # Field 22000
+    method: "combat"
+
+output:
+  # Output file naming
+  prefix: "ukb_adhd_autism"
+
+  # Export formats
+  formats:
+    - csv
+    - parquet
+
+  # Generate summary statistics
+  generate_summary: true
+
+  # Create data dictionary
+  create_dictionary: true
+
+  # Export cohort IDs
+  export_cohort_ids: true
+
+  # Export metadata
+  export_metadata: true
+
+notes: |
+  UK Biobank ADHD/Autism Extraction Configuration
+
+  This configuration extracts data for ~5,000 ADHD cases and ~2,000 autism
+  cases from UK Biobank, focusing on:
+
+  1. Diagnosis: ICD-10 codes (F90.x, F84.x), self-report, medications
+  2. Metabolomics: Nightingale NMR platform (249 biomarkers, ~120,000 participants)
+  3. Genetics: 10 PCs for ancestry adjustment
+  4. Environmental: Air pollution, noise, green space
+  5. Mental Health: PHQ-9, GAD-7, full MHQ
+  6. Sleep, diet, family history, SES
+
+  Key considerations:
+  - UK Biobank participants are ages 40-69 (adult ADHD/autism)
+  - Metabolomics available for ~120,000 participants
+  - Cases identified via ICD-10, self-report, or medications
+  - Control selection excludes any psychiatric diagnosis
+
+  Metabolomics subset is KEY unique feature of UK Biobank for this study.
+
+  Access requirements:
+  - UK Biobank application approved
+  - Data Use Agreement executed
+  - Application fee paid (£2,500-6,000)
+  - ukbconv tool downloaded
+
+  Timeline:
+  - Application: 8-12 weeks
+  - Data download: 1-7 days (depending on size)
+  - Extraction: 1-2 hours (this pipeline)
+
+citation: |
+  Sudlow, C., et al. (2015). UK Biobank: An Open Access Resource for
+  Identifying the Causes of a Wide Range of Complex Diseases of Middle
+  and Old Age. PLoS Medicine, 12(3), e1001779.
