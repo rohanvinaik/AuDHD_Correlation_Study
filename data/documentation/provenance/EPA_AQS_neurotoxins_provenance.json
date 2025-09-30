@@ -1,0 +1,29 @@
+{
+  "dataset_id": "EPA_AQS_neurotoxins",
+  "original_source": "EPA Air Quality System",
+  "original_url": "https://aqs.epa.gov/aqsweb/documents/data_api.html",
+  "acquisition_date": "2024-01-01",
+  "current_version": "2024",
+  "current_checksum": "",
+  "events": [
+    {
+      "event_id": "3b6f8d785629",
+      "timestamp": "2025-09-30T05:59:59.150498",
+      "event_type": "acquisition",
+      "description": "Downloaded from EPA Air Quality System",
+      "actor": "automated_pipeline",
+      "input_files": null,
+      "output_files": [
+        "data/raw/EPA_AQS_neurotoxins/"
+      ],
+      "parameters": null,
+      "software_version": "1.0",
+      "checksum_before": null,
+      "checksum_after": null,
+      "notes": null
+    }
+  ],
+  "lineage": [],
+  "access_log": [],
+  "last_updated": "2025-09-30T05:59:59.150529"
+}

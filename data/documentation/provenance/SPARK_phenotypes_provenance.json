@@ -1,0 +1,29 @@
+{
+  "dataset_id": "SPARK_phenotypes",
+  "original_source": "SPARK (Simons Foundation)",
+  "original_url": "https://sparkforautism.org/portal/",
+  "acquisition_date": "2024-03-20",
+  "current_version": "v4.0",
+  "current_checksum": "",
+  "events": [
+    {
+      "event_id": "2ce2ae0cc1c1",
+      "timestamp": "2025-09-30T05:59:59.148623",
+      "event_type": "acquisition",
+      "description": "Downloaded from SPARK (Simons Foundation)",
+      "actor": "automated_pipeline",
+      "input_files": null,
+      "output_files": [
+        "data/raw/SPARK_phenotypes/"
+      ],
+      "parameters": null,
+      "software_version": "1.0",
+      "checksum_before": null,
+      "checksum_after": null,
+      "notes": null
+    }
+  ],
+  "lineage": [],
+  "access_log": [],
+  "last_updated": "2025-09-30T05:59:59.148658"
+}

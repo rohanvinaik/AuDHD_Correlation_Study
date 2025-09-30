@@ -1,0 +1,161 @@
+{
+  "generated_date": "2025-09-30T06:02:29.361076",
+  "version": "1.0",
+  "statistics": {
+    "total_datasets": 4,
+    "by_data_type": {
+      "clinical": 1,
+      "environmental": 1,
+      "genomics": 1,
+      "microbiome": 1
+    },
+    "by_access_type": {
+      "controlled": 2,
+      "public": 2
+    },
+    "total_samples": 195374,
+    "total_size_bytes": 2829058048,
+    "total_size_human": "2.6 GB"
+  },
+  "datasets": [
+    {
+      "dataset_id": "ABCD_microbiome",
+      "name": "ABCD Microbiome",
+      "full_name": "ABCD Study Gut Microbiome Data",
+      "description": "Gut microbiome 16S rRNA sequencing data from the ABCD Study. Includes OTU counts and diversity metrics.",
+      "data_type": "microbiome",
+      "source": "ABCD Study",
+      "url": "https://nda.nih.gov/abcd",
+      "version": "5.1",
+      "release_date": "2024-06-15",
+      "last_updated": "2024-06-15",
+      "sample_size": 5000,
+      "variables": 1250,
+      "size_bytes": 2147483648,
+      "access_type": "controlled",
+      "license": "ABCD Data Use Certification",
+      "citation": "Volkow ND, et al. (2018). Dev Cogn Neurosci. 32:4-7.",
+      "doi": "10.1016/j.dcn.2017.10.002",
+      "documentation_path": "data/documentation/dataset_summaries/ABCD_microbiome_README.md",
+      "data_path": "data/raw/ABCD_microbiome/",
+      "added_to_catalog": "2025-09-30T06:02:29.359415",
+      "file_formats": [
+        "biom",
+        "tsv",
+        "csv"
+      ],
+      "keywords": [
+        "microbiome",
+        "gut",
+        "16S",
+        "ABCD",
+        "diversity",
+        "OTU",
+        "adolescent"
+      ]
+    },
+    {
+      "dataset_id": "EPA_AQS_neurotoxins",
+      "name": "EPA AQS Neurotoxins",
+      "full_name": "EPA Air Quality System - Neurotoxic Pollutants",
+      "description": "EPA Air Quality System data for neurotoxic air pollutants including PM2.5, benzene, lead, and other criteria pollutants.",
+      "data_type": "environmental",
+      "source": "EPA Air Quality System",
+      "url": "https://aqs.epa.gov/aqsweb/documents/data_api.html",
+      "version": "2024",
+      "release_date": "2024-01-01",
+      "last_updated": "2024-09-01",
+      "sample_size": 85000,
+      "variables": 25,
+      "size_bytes": 52428800,
+      "access_type": "public",
+      "license": "Public Domain (US Government)",
+      "citation": "U.S. EPA. Air Quality System Data Mart.",
+      "doi": null,
+      "documentation_path": "data/documentation/dataset_summaries/EPA_AQS_neurotoxins_README.md",
+      "data_path": "data/raw/EPA_AQS_neurotoxins/",
+      "added_to_catalog": "2025-09-30T06:02:29.359885",
+      "file_formats": [
+        "csv"
+      ],
+      "keywords": [
+        "environmental",
+        "air quality",
+        "PM2.5",
+        "ozone",
+        "pollution",
+        "EPA",
+        "neurotoxin"
+      ]
+    },
+    {
+      "dataset_id": "PGC_ADHD_GWAS",
+      "name": "PGC ADHD GWAS",
+      "full_name": "Psychiatric Genomics Consortium ADHD Genome-Wide Association Study",
+      "description": "Large-scale GWAS meta-analysis of ADHD including 20,183 individuals with ADHD and 35,191 controls.",
+      "data_type": "genomics",
+      "source": "Psychiatric Genomics Consortium",
+      "url": "https://www.med.unc.edu/pgc/download-results/",
+      "version": "2019",
+      "release_date": "2019-01-15",
+      "last_updated": "2019-01-15",
+      "sample_size": 55374,
+      "variables": 10,
+      "size_bytes": 524288000,
+      "access_type": "public",
+      "license": "CC BY 4.0",
+      "citation": "Demontis D, et al. (2019). Nat Genet. 51(1):63-75.",
+      "doi": "10.1038/s41588-018-0269-7",
+      "documentation_path": "data/documentation/dataset_summaries/PGC_ADHD_GWAS_README.md",
+      "data_path": "data/raw/PGC_ADHD_GWAS/",
+      "added_to_catalog": "2025-09-30T06:02:29.358294",
+      "file_formats": [
+        "tsv",
+        "gz"
+      ],
+      "keywords": [
+        "ADHD",
+        "GWAS",
+        "genetics",
+        "SNP",
+        "association study",
+        "psychiatric genomics"
+      ]
+    },
+    {
+      "dataset_id": "SPARK_phenotypes",
+      "name": "SPARK Phenotypes",
+      "full_name": "SPARK Autism Phenotype Data",
+      "description": "Detailed phenotype data from SPARK including demographics, diagnostic assessments, and behavioral measures for over 50,000 individuals with autism.",
+      "data_type": "clinical",
+      "source": "SPARK (Simons Foundation)",
+      "url": "https://sparkforautism.org/portal/",
+      "version": "v4.0",
+      "release_date": "2024-03-20",
+      "last_updated": "2024-03-20",
+      "sample_size": 50000,
+      "variables": 450,
+      "size_bytes": 104857600,
+      "access_type": "controlled",
+      "license": "SPARK Data Use Agreement",
+      "citation": "SPARK Consortium (2018). Neuron, 97(3), 488-493.",
+      "doi": "10.1016/j.neuron.2018.01.015",
+      "documentation_path": "data/documentation/dataset_summaries/SPARK_phenotypes_README.md",
+      "data_path": "data/raw/SPARK_phenotypes/",
+      "added_to_catalog": "2025-09-30T06:02:29.358907",
+      "file_formats": [
+        "csv",
+        "gz"
+      ],
+      "keywords": [
+        "autism",
+        "ASD",
+        "phenotype",
+        "clinical",
+        "ADOS",
+        "ADI-R",
+        "SPARK"
+      ]
+    }
+  ]
+}

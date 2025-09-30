@@ -1,0 +1,198 @@
+{
+  "dataset_id": "ABCD_microbiome",
+  "generated_date": "2025-09-30T05:59:59.148882",
+  "version": "1.0",
+  "total_variables": 10,
+  "variables": [
+    {
+      "variable_name": "sample_id",
+      "display_name": "Sample ID",
+      "description": "Unique sample identifier",
+      "data_type": "text",
+      "unit": null,
+      "valid_range": null,
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": true,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": false,
+      "has_missing": false
+    },
+    {
+      "variable_name": "subject_id",
+      "display_name": "Subject ID",
+      "description": "Subject identifier",
+      "data_type": "text",
+      "unit": null,
+      "valid_range": null,
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": "ABCD_subjects.subject_id",
+      "is_categorical": false,
+      "is_numeric": false,
+      "has_missing": false
+    },
+    {
+      "variable_name": "collection_date",
+      "display_name": "Collection Date",
+      "description": "Sample collection date",
+      "data_type": "date",
+      "unit": null,
+      "valid_range": null,
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": false,
+      "has_missing": false
+    },
+    {
+      "variable_name": "shannon_diversity",
+      "display_name": "Shannon Diversity",
+      "description": "Shannon diversity index",
+      "data_type": "numeric",
+      "unit": "index",
+      "valid_range": {
+        "min": 0,
+        "max": 10
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "observed_otus",
+      "display_name": "Observed OTUs",
+      "description": "Number of observed OTUs",
+      "data_type": "numeric",
+      "unit": "count",
+      "valid_range": {
+        "min": 0,
+        "max": 5000
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "chao1",
+      "display_name": "Chao1 Index",
+      "description": "Chao1 richness estimator",
+      "data_type": "numeric",
+      "unit": "index",
+      "valid_range": {
+        "min": 0,
+        "max": 10000
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": false,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "firmicutes_pct",
+      "display_name": "Firmicutes %",
+      "description": "Relative abundance of Firmicutes phylum",
+      "data_type": "numeric",
+      "unit": "percent",
+      "valid_range": {
+        "min": 0,
+        "max": 100
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "bacteroidetes_pct",
+      "display_name": "Bacteroidetes %",
+      "description": "Relative abundance of Bacteroidetes phylum",
+      "data_type": "numeric",
+      "unit": "percent",
+      "valid_range": {
+        "min": 0,
+        "max": 100
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "fb_ratio",
+      "display_name": "F/B Ratio",
+      "description": "Firmicutes to Bacteroidetes ratio",
+      "data_type": "numeric",
+      "unit": "ratio",
+      "valid_range": {
+        "min": 0,
+        "max": 20
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "quality_score",
+      "display_name": "Quality Score",
+      "description": "Sequencing quality score",
+      "data_type": "numeric",
+      "unit": "phred",
+      "valid_range": {
+        "min": 20,
+        "max": 40
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    }
+  ],
+  "summary": {
+    "numeric_vars": 7,
+    "categorical_vars": 0,
+    "binary_vars": 0,
+    "text_vars": 2,
+    "date_vars": 1,
+    "required_vars": 9,
+    "primary_keys": 1
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "dataset_id": "PGC_ADHD_GWAS",
+  "generated_date": "2025-09-30T05:59:59.146615",
+  "version": "1.0",
+  "total_variables": 10,
+  "variables": [
+    {
+      "variable_name": "CHR",
+      "display_name": "Chromosome",
+      "description": "Chromosome number",
+      "data_type": "categorical",
+      "unit": null,
+      "valid_range": null,
+      "categories": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "X"
+      ],
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": true,
+      "is_numeric": false,
+      "has_missing": false
+    },
+    {
+      "variable_name": "SNP",
+      "display_name": "SNP ID",
+      "description": "rs number or variant ID",
+      "data_type": "text",
+      "unit": null,
+      "valid_range": null,
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": true,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": false,
+      "has_missing": false
+    },
+    {
+      "variable_name": "BP",
+      "display_name": "Base Position",
+      "description": "Base pair position (GRCh37)",
+      "data_type": "numeric",
+      "unit": "bp",
+      "valid_range": {
+        "min": 1,
+        "max": 250000000
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "A1",
+      "display_name": "Effect Allele",
+      "description": "Effect allele",
+      "data_type": "categorical",
+      "unit": null,
+      "valid_range": null,
+      "categories": [
+        "A",
+        "C",
+        "G",
+        "T"
+      ],
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": true,
+      "is_numeric": false,
+      "has_missing": false
+    },
+    {
+      "variable_name": "A2",
+      "display_name": "Other Allele",
+      "description": "Non-effect allele",
+      "data_type": "categorical",
+      "unit": null,
+      "valid_range": null,
+      "categories": [
+        "A",
+        "C",
+        "G",
+        "T"
+      ],
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": true,
+      "is_numeric": false,
+      "has_missing": false
+    },
+    {
+      "variable_name": "BETA",
+      "display_name": "Beta Coefficient",
+      "description": "Effect size (log odds ratio)",
+      "data_type": "numeric",
+      "unit": "log(OR)",
+      "valid_range": {
+        "min": -5,
+        "max": 5
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "SE",
+      "display_name": "Standard Error",
+      "description": "Standard error of beta",
+      "data_type": "numeric",
+      "unit": null,
+      "valid_range": {
+        "min": 0,
+        "max": 1
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "P",
+      "display_name": "P-value",
+      "description": "P-value for association",
+      "data_type": "numeric",
+      "unit": null,
+      "valid_range": {
+        "min": 0,
+        "max": 1
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "N",
+      "display_name": "Sample Size",
+      "description": "Total sample size for this SNP",
+      "data_type": "numeric",
+      "unit": "samples",
+      "valid_range": {
+        "min": 1000,
+        "max": 60000
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    },
+    {
+      "variable_name": "INFO",
+      "display_name": "Imputation INFO",
+      "description": "Imputation quality score",
+      "data_type": "numeric",
+      "unit": null,
+      "valid_range": {
+        "min": 0,
+        "max": 1
+      },
+      "categories": null,
+      "missing_codes": null,
+      "required": false,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": false
+    }
+  ],
+  "summary": {
+    "numeric_vars": 6,
+    "categorical_vars": 3,
+    "binary_vars": 0,
+    "text_vars": 1,
+    "date_vars": 0,
+    "required_vars": 9,
+    "primary_keys": 1
+  }
+}

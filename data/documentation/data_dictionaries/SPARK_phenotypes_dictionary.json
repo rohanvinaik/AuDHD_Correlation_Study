@@ -1,0 +1,227 @@
+{
+  "dataset_id": "SPARK_phenotypes",
+  "generated_date": "2025-09-30T05:59:59.147802",
+  "version": "1.0",
+  "total_variables": 10,
+  "variables": [
+    {
+      "variable_name": "subject_sp_id",
+      "display_name": "Subject ID",
+      "description": "Unique subject identifier",
+      "data_type": "text",
+      "unit": null,
+      "valid_range": null,
+      "categories": null,
+      "missing_codes": null,
+      "required": true,
+      "primary_key": true,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": false,
+      "has_missing": false
+    },
+    {
+      "variable_name": "age_at_enrollment",
+      "display_name": "Age at Enrollment",
+      "description": "Age in years at study enrollment",
+      "data_type": "numeric",
+      "unit": "years",
+      "valid_range": {
+        "min": 0,
+        "max": 80
+      },
+      "categories": null,
+      "missing_codes": [
+        "-999"
+      ],
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": true
+    },
+    {
+      "variable_name": "sex",
+      "display_name": "Sex",
+      "description": "Biological sex",
+      "data_type": "categorical",
+      "unit": null,
+      "valid_range": null,
+      "categories": [
+        "Male",
+        "Female"
+      ],
+      "missing_codes": [
+        "-999"
+      ],
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": true,
+      "is_numeric": false,
+      "has_missing": true
+    },
+    {
+      "variable_name": "race",
+      "display_name": "Race",
+      "description": "Self-reported race",
+      "data_type": "categorical",
+      "unit": null,
+      "valid_range": null,
+      "categories": [
+        "White",
+        "Black",
+        "Asian",
+        "Native American",
+        "Pacific Islander",
+        "Other",
+        "Multiracial"
+      ],
+      "missing_codes": [
+        "-999",
+        "Prefer not to answer"
+      ],
+      "required": false,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": true,
+      "is_numeric": false,
+      "has_missing": true
+    },
+    {
+      "variable_name": "ethnicity",
+      "display_name": "Ethnicity",
+      "description": "Hispanic/Latino ethnicity",
+      "data_type": "categorical",
+      "unit": null,
+      "valid_range": null,
+      "categories": [
+        "Hispanic or Latino",
+        "Not Hispanic or Latino"
+      ],
+      "missing_codes": [
+        "-999",
+        "Prefer not to answer"
+      ],
+      "required": false,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": true,
+      "is_numeric": false,
+      "has_missing": true
+    },
+    {
+      "variable_name": "asd_diagnosis",
+      "display_name": "ASD Diagnosis",
+      "description": "Autism spectrum disorder diagnosis",
+      "data_type": "binary",
+      "unit": null,
+      "valid_range": null,
+      "categories": [
+        "Yes",
+        "No"
+      ],
+      "missing_codes": null,
+      "required": true,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": false,
+      "has_missing": false
+    },
+    {
+      "variable_name": "ados_css",
+      "display_name": "ADOS CSS",
+      "description": "ADOS calibrated severity score",
+      "data_type": "numeric",
+      "unit": "score",
+      "valid_range": {
+        "min": 1,
+        "max": 10
+      },
+      "categories": null,
+      "missing_codes": [
+        "-999"
+      ],
+      "required": false,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": true
+    },
+    {
+      "variable_name": "adi_r_total",
+      "display_name": "ADI-R Total",
+      "description": "Autism Diagnostic Interview-Revised total score",
+      "data_type": "numeric",
+      "unit": "score",
+      "valid_range": {
+        "min": 0,
+        "max": 100
+      },
+      "categories": null,
+      "missing_codes": [
+        "-999"
+      ],
+      "required": false,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": true
+    },
+    {
+      "variable_name": "scq_total",
+      "display_name": "SCQ Total",
+      "description": "Social Communication Questionnaire total score",
+      "data_type": "numeric",
+      "unit": "score",
+      "valid_range": {
+        "min": 0,
+        "max": 39
+      },
+      "categories": null,
+      "missing_codes": [
+        "-999"
+      ],
+      "required": false,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": true
+    },
+    {
+      "variable_name": "iq_full_scale",
+      "display_name": "Full Scale IQ",
+      "description": "Full scale intelligence quotient",
+      "data_type": "numeric",
+      "unit": "IQ points",
+      "valid_range": {
+        "min": 40,
+        "max": 160
+      },
+      "categories": null,
+      "missing_codes": [
+        "-999"
+      ],
+      "required": false,
+      "primary_key": false,
+      "foreign_key": null,
+      "is_categorical": false,
+      "is_numeric": true,
+      "has_missing": true
+    }
+  ],
+  "summary": {
+    "numeric_vars": 5,
+    "categorical_vars": 3,
+    "binary_vars": 1,
+    "text_vars": 1,
+    "date_vars": 0,
+    "required_vars": 4,
+    "primary_keys": 1
+  }
+}
