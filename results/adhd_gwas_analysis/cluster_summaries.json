@@ -1,0 +1,406 @@
+{
+  "0": {
+    "cluster_id": 0,
+    "n_snps": 42,
+    "dominant_chromosome": 5,
+    "chr_purity_pct": 38.1,
+    "chr_distribution": {
+      "5": 16,
+      "12": 13,
+      "10": 7,
+      "7": 6
+    },
+    "genomic_span_mb": 0.08,
+    "bp_range": {
+      "start": 87854395,
+      "end": 87932809
+    },
+    "mean_or": 0.9995,
+    "median_or": 0.9283,
+    "std_or": 0.0816,
+    "risk_classification": "Balanced",
+    "maf_cases": 0.508,
+    "maf_controls": 0.509,
+    "maf_diff": -0.001,
+    "p_value_range": {
+      "min": 1.349e-09,
+      "max": 4.998e-08
+    },
+    "top_snps": [
+      {
+        "SNP": "rs1427829",
+        "CHR": 12,
+        "BP": 89760744,
+        "OR": 1.08567,
+        "P": 1.349e-09
+      },
+      {
+        "SNP": "rs704061",
+        "CHR": 12,
+        "BP": 89771903,
+        "OR": 0.92136,
+        "P": 1.449e-09
+      },
+      {
+        "SNP": "rs3990314",
+        "CHR": 12,
+        "BP": 89771512,
+        "OR": 0.92146,
+        "P": 1.616e-09
+      },
+      {
+        "SNP": "rs35928531",
+        "CHR": 12,
+        "BP": 89748583,
+        "OR": 0.92146,
+        "P": 1.643e-09
+      },
+      {
+        "SNP": "rs10506971",
+        "CHR": 12,
+        "BP": 89757937,
+        "OR": 0.92136,
+        "P": 1.652e-09
+      }
+    ],
+    "nearby_known_genes": []
+  },
+  "1": {
+    "cluster_id": 1,
+    "n_snps": 105,
+    "dominant_chromosome": 1,
+    "chr_purity_pct": 96.2,
+    "chr_distribution": {
+      "1": 101,
+      "4": 2,
+      "3": 1,
+      "16": 1
+    },
+    "genomic_span_mb": 0.49,
+    "bp_range": {
+      "start": 43858637,
+      "end": 44350898
+    },
+    "mean_or": 1.0402,
+    "median_or": 1.092,
+    "std_or": 0.0859,
+    "risk_classification": "Balanced",
+    "maf_cases": 0.692,
+    "maf_controls": 0.685,
+    "maf_diff": 0.008,
+    "p_value_range": {
+      "min": 6.452e-13,
+      "max": 4.839e-08
+    },
+    "top_snps": [
+      {
+        "SNP": "rs11420276",
+        "CHR": 1,
+        "BP": 44184192,
+        "OR": 1.11305,
+        "P": 6.452e-13
+      },
+      {
+        "SNP": "rs17531412",
+        "CHR": 1,
+        "BP": 44182244,
+        "OR": 1.11115,
+        "P": 1.072e-12
+      },
+      {
+        "SNP": "rs12410155",
+        "CHR": 1,
+        "BP": 44188465,
+        "OR": 1.11115,
+        "P": 1.09e-12
+      },
+      {
+        "SNP": "rs11275853",
+        "CHR": 1,
+        "BP": 44196194,
+        "OR": 1.11127,
+        "P": 1.123e-12
+      },
+      {
+        "SNP": "rs58097850",
+        "CHR": 1,
+        "BP": 44189311,
+        "OR": 1.11104,
+        "P": 1.151e-12
+      }
+    ],
+    "nearby_known_genes": [
+      "ST3GAL3",
+      "PTPRF"
+    ]
+  },
+  "2": {
+    "cluster_id": 2,
+    "n_snps": 102,
+    "dominant_chromosome": 1,
+    "chr_purity_pct": 94.1,
+    "chr_distribution": {
+      "1": 96,
+      "15": 4,
+      "3": 1,
+      "4": 1
+    },
+    "genomic_span_mb": 0.61,
+    "bp_range": {
+      "start": 43773033,
+      "end": 44383914
+    },
+    "mean_or": 0.9131,
+    "median_or": 0.9129,
+    "std_or": 0.007,
+    "risk_classification": "Protective",
+    "maf_cases": 0.339,
+    "maf_controls": 0.358,
+    "maf_diff": -0.019,
+    "p_value_range": {
+      "min": 1.083e-12,
+      "max": 4.302e-08
+    },
+    "top_snps": [
+      {
+        "SNP": "rs112984125",
+        "CHR": 1,
+        "BP": 44173423,
+        "OR": 0.8996,
+        "P": 1.083e-12
+      },
+      {
+        "SNP": "rs112361411",
+        "CHR": 1,
+        "BP": 44183923,
+        "OR": 0.90005,
+        "P": 1.125e-12
+      },
+      {
+        "SNP": "rs17401357",
+        "CHR": 1,
+        "BP": 44153619,
+        "OR": 0.90249,
+        "P": 3.973e-12
+      },
+      {
+        "SNP": "rs11805774",
+        "CHR": 1,
+        "BP": 44152715,
+        "OR": 0.90249,
+        "P": 4.053e-12
+      },
+      {
+        "SNP": "rs1971342",
+        "CHR": 1,
+        "BP": 44152189,
+        "OR": 0.90249,
+        "P": 4.092e-12
+      }
+    ],
+    "nearby_known_genes": [
+      "ST3GAL3",
+      "PTPRF"
+    ]
+  },
+  "3": {
+    "cluster_id": 3,
+    "n_snps": 8,
+    "dominant_chromosome": 1,
+    "chr_purity_pct": 87.5,
+    "chr_distribution": {
+      "1": 7,
+      "5": 1
+    },
+    "genomic_span_mb": 52.62,
+    "bp_range": {
+      "start": 43983679,
+      "end": 96602440
+    },
+    "mean_or": 1.0293,
+    "median_or": 1.0983,
+    "std_or": 0.1012,
+    "risk_classification": "Balanced",
+    "maf_cases": 0.461,
+    "maf_controls": 0.456,
+    "maf_diff": 0.005,
+    "p_value_range": {
+      "min": 4.59e-12,
+      "max": 3.068e-08
+    },
+    "top_snps": [
+      {
+        "SNP": "rs112767823",
+        "CHR": 1,
+        "BP": 44181245,
+        "OR": 0.89951,
+        "P": 4.59e-12
+      },
+      {
+        "SNP": "rs113551349",
+        "CHR": 1,
+        "BP": 44475123,
+        "OR": 0.90068,
+        "P": 1.045e-10
+      },
+      {
+        "SNP": "rs201958677",
+        "CHR": 1,
+        "BP": 44210326,
+        "OR": 1.10307,
+        "P": 4.014e-09
+      },
+      {
+        "SNP": "rs34427804",
+        "CHR": 1,
+        "BP": 44247279,
+        "OR": 1.11115,
+        "P": 5.291e-09
+      },
+      {
+        "SNP": "rs35947542",
+        "CHR": 1,
+        "BP": 43983679,
+        "OR": 1.10098,
+        "P": 8.788e-09
+      }
+    ],
+    "nearby_known_genes": [
+      "ADGRL2",
+      "LPHN2",
+      "ST3GAL3",
+      "PTPRF"
+    ]
+  },
+  "4": {
+    "cluster_id": 4,
+    "n_snps": 54,
+    "dominant_chromosome": 1,
+    "chr_purity_pct": 90.7,
+    "chr_distribution": {
+      "1": 49,
+      "16": 4,
+      "15": 1
+    },
+    "genomic_span_mb": 0.33,
+    "bp_range": {
+      "start": 44012923,
+      "end": 44338575
+    },
+    "mean_or": 1.0955,
+    "median_or": 1.092,
+    "std_or": 0.0093,
+    "risk_classification": "High Risk",
+    "maf_cases": 0.27,
+    "maf_controls": 0.254,
+    "maf_diff": 0.016,
+    "p_value_range": {
+      "min": 4.94e-10,
+      "max": 4.821e-08
+    },
+    "top_snps": [
+      {
+        "SNP": "rs3001723",
+        "CHR": 1,
+        "BP": 44037685,
+        "OR": 1.09505,
+        "P": 4.94e-10
+      },
+      {
+        "SNP": "rs3791036",
+        "CHR": 1,
+        "BP": 44155383,
+        "OR": 1.09636,
+        "P": 5.059e-10
+      },
+      {
+        "SNP": "rs6697354",
+        "CHR": 1,
+        "BP": 44151015,
+        "OR": 1.09582,
+        "P": 6.061e-10
+      },
+      {
+        "SNP": "rs10890275",
+        "CHR": 1,
+        "BP": 44194216,
+        "OR": 1.09461,
+        "P": 1.015e-09
+      },
+      {
+        "SNP": "rs55803885",
+        "CHR": 1,
+        "BP": 44195619,
+        "OR": 1.0945,
+        "P": 1.037e-09
+      }
+    ],
+    "nearby_known_genes": [
+      "ST3GAL3",
+      "PTPRF"
+    ]
+  },
+  "5": {
+    "cluster_id": 5,
+    "n_snps": 6,
+    "dominant_chromosome": 8,
+    "chr_purity_pct": 100.0,
+    "chr_distribution": {
+      "8": 6
+    },
+    "genomic_span_mb": 0.28,
+    "bp_range": {
+      "start": 34223422,
+      "end": 34499840
+    },
+    "mean_or": 1.0146,
+    "median_or": 1.0132,
+    "std_or": 0.1944,
+    "risk_classification": "Balanced",
+    "maf_cases": 0.5,
+    "maf_controls": 0.5,
+    "maf_diff": -0.0,
+    "p_value_range": {
+      "min": 1.393e-08,
+      "max": 4.023e-08
+    },
+    "top_snps": [
+      {
+        "SNP": "rs74760947",
+        "CHR": 8,
+        "BP": 34352610,
+        "OR": 0.8356,
+        "P": 1.393e-08
+      },
+      {
+        "SNP": "rs74427054",
+        "CHR": 8,
+        "BP": 34317437,
+        "OR": 1.19423,
+        "P": 2.071e-08
+      },
+      {
+        "SNP": "rs117396993",
+        "CHR": 8,
+        "BP": 34225030,
+        "OR": 1.19375,
+        "P": 2.381e-08
+      },
+      {
+        "SNP": "rs118041269",
+        "CHR": 8,
+        "BP": 34223422,
+        "OR": 0.8377,
+        "P": 2.384e-08
+      },
+      {
+        "SNP": "rs80318442",
+        "CHR": 8,
+        "BP": 34285545,
+        "OR": 0.83828,
+        "P": 2.672e-08
+      }
+    ],
+    "nearby_known_genes": []
+  }
+}

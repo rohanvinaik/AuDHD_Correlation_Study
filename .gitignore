@@ -109,4 +109,5 @@ multirun/
 *.h5
 *.hdf5
 *.parquet
-*.feather
+*.featherdata/benchmarks/*.csv
+data/cache/
