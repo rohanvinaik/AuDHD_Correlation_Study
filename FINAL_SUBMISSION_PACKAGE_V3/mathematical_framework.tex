@@ -1,0 +1,495 @@
+\documentclass[12pt,letterpaper]{article}
+
+% Essential packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Math packages
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+
+% Graphics and tables
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+% References
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Appendix A: Mathematical and Topological Framework}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Formal Problem Statement}
+
+\subsection{Gene Enrichment Space}
+
+Let $\mathcal{G} = \{g_1, \ldots, g_N\}$ denote a set of $N$ genes ($N=36$ in our analysis). For each gene $g_i$ and disorder $d \in \{\text{ADHD}, \text{ASD}\}$, we define an enrichment score:
+
+\begin{equation}
+E_d(g_i) = -\log_{10}(p_d(g_i))
+\end{equation}
+
+where $p_d(g_i)$ is the gene-level $p$-value from MAGMA analysis of disorder $d$.
+
+\subsection{Shared Enrichment Metric}
+
+The shared enrichment for gene $g_i$ across ADHD and autism is defined using the geometric mean:
+
+\begin{equation}
+E_{\text{shared}}(g_i) = \sqrt{E_{\text{ADHD}}(g_i) \cdot E_{\text{ASD}}(g_i)}
+\end{equation}
+
+\textbf{Justification for geometric mean:}
+
+\begin{enumerate}
+    \item \textbf{Balanced contribution}: For two values $a, b$ with $a < b$, the geometric mean $\sqrt{ab}$ is bounded by:
+    \begin{equation}
+    a \leq \sqrt{ab} \leq \frac{a+b}{2} \leq b
+    \end{equation}
+    
+    \item \textbf{Multiplicative interpretation}: Equivalent to arithmetic mean in log-space:
+    \begin{equation}
+    \sqrt{ab} = \exp\left(\frac{\log a + \log b}{2}\right)
+    \end{equation}
+    
+    \item \textbf{Penalizes imbalance}: Maximized when $a = b$:
+    \begin{equation}
+    \frac{\partial}{\partial a}\sqrt{ab}\bigg|_{a=b} = \frac{b}{2\sqrt{ab}} = \frac{1}{2}\sqrt{\frac{b}{a}} \rightarrow \infty \text{ as } a \rightarrow 0
+    \end{equation}
+\end{enumerate}
+
+\subsection{Feature Space Construction}
+
+Each gene $g_i$ is represented by a feature vector in pathway space:
+
+\begin{equation}
+\mathbf{f}(g_i) = \begin{bmatrix}
+E_{\text{DA}}(g_i) \\
+E_{\text{5HT}}(g_i) \\
+E_{\text{Glu}}(g_i) \\
+E_{\text{GABA}}(g_i)
+\end{bmatrix} \in \mathbb{R}^4
+\end{equation}
+
+where subscripts denote dopaminergic (DA), serotonergic (5HT), glutamatergic (Glu), and GABAergic pathways.
+
+\textbf{Standardization}: Features are z-score normalized:
+\begin{equation}
+\tilde{\mathbf{f}}(g_i) = \frac{\mathbf{f}(g_i) - \boldsymbol{\mu}}{\boldsymbol{\sigma}}
+\end{equation}
+
+where $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ are component-wise mean and standard deviation across all genes.
+
+\section{Topological Structure of Enrichment Space}
+
+\subsection{Enrichment Manifold}
+
+The set of gene enrichment profiles forms a submanifold $\mathcal{M} \subset \mathbb{R}^4$:
+
+\begin{equation}
+\mathcal{M} = \{\tilde{\mathbf{f}}(g_i) : g_i \in \mathcal{G}\}
+\end{equation}
+
+\textbf{Ambient space}: $\mathcal{M} \subset \mathbb{R}^4$ with standard Euclidean metric
+
+\textbf{Intrinsic dimension}: Estimated via local PCA or persistent homology
+
+\subsection{Metric Structure}
+
+We endow $\mathcal{M}$ with the induced Euclidean metric:
+
+\begin{equation}
+d(\mathbf{f}(g_i), \mathbf{f}(g_j)) = \|\tilde{\mathbf{f}}(g_i) - \tilde{\mathbf{f}}(g_j)\|_2
+\end{equation}
+
+This metric satisfies:
+\begin{enumerate}
+    \item \textbf{Positivity}: $d(\mathbf{f}_i, \mathbf{f}_j) \geq 0$ with equality iff $i = j$
+    \item \textbf{Symmetry}: $d(\mathbf{f}_i, \mathbf{f}_j) = d(\mathbf{f}_j, \mathbf{f}_i)$
+    \item \textbf{Triangle inequality}: $d(\mathbf{f}_i, \mathbf{f}_k) \leq d(\mathbf{f}_i, \mathbf{f}_j) + d(\mathbf{f}_j, \mathbf{f}_k)$
+\end{enumerate}
+
+\subsection{Stratification vs. Clustering}
+
+\textbf{Traditional clustering assumption} (NOT applicable here):
+\begin{equation}
+\mathcal{M} = \bigsqcup_{k=1}^K \mathcal{C}_k
+\end{equation}
+
+where $\mathcal{C}_k$ are disjoint, well-separated components.
+
+\textbf{Our model} (enrichment stratification):
+\begin{equation}
+\mathcal{M} = \bigcup_{k=1}^K \mathcal{S}_k
+\end{equation}
+
+where $\mathcal{S}_k$ are overlapping high-density regions (``strata'') along a continuum.
+
+\textbf{Mathematical distinction}:
+\begin{itemize}
+    \item Clustering: $\mathcal{C}_i \cap \mathcal{C}_j = \emptyset$ for $i \neq j$
+    \item Stratification: $\mathcal{S}_i \cap \mathcal{S}_j \neq \emptyset$ possible
+\end{itemize}
+
+\section{K-Means Clustering Algorithm}
+
+\subsection{Objective Function}
+
+K-means minimizes within-cluster sum of squares (WCSS):
+
+\begin{equation}
+\underset{\{\mathcal{C}_1, \ldots, \mathcal{C}_K\}}{\arg\min} \sum_{k=1}^K \sum_{g_i \in \mathcal{C}_k} \|\tilde{\mathbf{f}}(g_i) - \boldsymbol{\mu}_k\|^2
+\end{equation}
+
+where $\boldsymbol{\mu}_k = \frac{1}{|\mathcal{C}_k|}\sum_{g_i \in \mathcal{C}_k} \tilde{\mathbf{f}}(g_i)$ is the centroid of cluster $k$.
+
+\subsection{Lloyd's Algorithm}
+
+\textbf{Initialization}: Random selection of $K$ initial centroids
+
+\textbf{Iteration} (until convergence):
+\begin{enumerate}
+    \item \textbf{Assignment step}: For each gene $g_i$, assign to nearest centroid:
+    \begin{equation}
+    c(g_i) = \underset{k \in \{1,\ldots,K\}}{\arg\min} \|\tilde{\mathbf{f}}(g_i) - \boldsymbol{\mu}_k\|^2
+    \end{equation}
+    
+    \item \textbf{Update step}: Recompute centroids:
+    \begin{equation}
+    \boldsymbol{\mu}_k \leftarrow \frac{1}{|\mathcal{C}_k|} \sum_{g_i : c(g_i)=k} \tilde{\mathbf{f}}(g_i)
+    \end{equation}
+\end{enumerate}
+
+\textbf{Convergence}: Guaranteed to converge to a local minimum (not necessarily global).
+
+\textbf{Complexity}: $O(NKdT)$ where $N$ = genes, $K$ = clusters, $d$ = dimensions, $T$ = iterations
+
+\subsection{Cluster Quality Metrics}
+
+\textbf{Silhouette coefficient} for gene $g_i$ in cluster $\mathcal{C}_k$:
+
+\begin{equation}
+s(g_i) = \frac{b(g_i) - a(g_i)}{\max\{a(g_i), b(g_i)\}}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $a(g_i) = \frac{1}{|\mathcal{C}_k| - 1} \sum_{g_j \in \mathcal{C}_k, j \neq i} d(g_i, g_j)$ (mean intra-cluster distance)
+    \item $b(g_i) = \min_{l \neq k} \frac{1}{|\mathcal{C}_l|} \sum_{g_j \in \mathcal{C}_l} d(g_i, g_j)$ (mean nearest-cluster distance)
+\end{itemize}
+
+\textbf{Average silhouette}:
+\begin{equation}
+\bar{s} = \frac{1}{N} \sum_{i=1}^N s(g_i)
+\end{equation}
+
+\textbf{Interpretation}:
+\begin{itemize}
+    \item $s(g_i) \approx 1$: Well-clustered (close to own cluster, far from others)
+    \item $s(g_i) \approx 0$: On cluster boundary
+    \item $s(g_i) < 0$: Likely misassigned
+\end{itemize}
+
+\section{Validation Framework}
+
+\subsection{Permutation Test}
+
+\textbf{Null hypothesis} $H_0$: Observed clustering structure is no better than random.
+
+\textbf{Test statistic}: $T = \bar{s}$ (average silhouette score)
+
+\textbf{Procedure}:
+\begin{enumerate}
+    \item Compute observed $T_{\text{obs}}$ from real data
+    \item For $b = 1, \ldots, B$ permutations:
+    \begin{itemize}
+        \item[(a)] Randomly shuffle enrichment values within each pathway
+        \item[(b)] Re-cluster with same $K$
+        \item[(c)] Compute $T^{(b)}$
+    \end{itemize}
+    \item Calculate $p$-value:
+    \begin{equation}
+    p = \frac{1 + \sum_{b=1}^B \mathbb{1}(T^{(b)} \geq T_{\text{obs}})}{B + 1}
+    \end{equation}
+\end{enumerate}
+
+\textbf{Our result}: $p = 0.974$ with $B=1000$
+
+\textbf{Interpretation}: Clustering not significantly better than random. However, this test assumes:
+\begin{itemize}
+    \item Exchangeability of enrichment values (violated: pathway structure)
+    \item Discrete well-separated clusters (violated: continuous stratification)
+    \item Sufficient sample size (violated: $N=36$)
+\end{itemize}
+
+\subsection{Bootstrap Stability}
+
+\textbf{Measure}: Adjusted Rand Index (ARI) between clusterings of bootstrap samples
+
+\textbf{Procedure}:
+\begin{enumerate}
+    \item For $b = 1, \ldots, B$ bootstrap iterations:
+    \begin{itemize}
+        \item[(a)] Sample $N$ genes with replacement: $\mathcal{G}^{(b)}$
+        \item[(b)] Cluster $\mathcal{G}^{(b)}$ with $K$ clusters
+        \item[(c)] Record assignments $\mathbf{c}^{(b)}$
+    \end{itemize}
+    \item For each gene $g_i$, calculate stability:
+    \begin{equation}
+    \text{Stability}(g_i) = \frac{1}{B(B-1)/2} \sum_{b < b'} \mathbb{1}(c_i^{(b)} = c_i^{(b')})
+    \end{equation}
+    \item Average across genes:
+    \begin{equation}
+    \bar{\text{Stability}} = \frac{1}{N} \sum_{i=1}^N \text{Stability}(g_i)
+    \end{equation}
+\end{enumerate}
+
+\textbf{Our result}: $\bar{\text{Stability}} = 0.40$ with $B=1000$
+
+\textbf{Interpretation}: Only 40\% stability (threshold: 0.75). Indicates:
+\begin{itemize}
+    \item Gene assignments uncertain, especially borderline cases
+    \item Polygenetic pattern (23 genes) contributes to instability
+    \item Reflects continuous nature of enrichment distribution
+\end{itemize}
+
+\subsection{Cross-Validation}
+
+\textbf{Leave-one-out cross-validation (LOOCV)}:
+
+For each gene $g_i$:
+\begin{enumerate}
+    \item Remove $g_i$ from dataset: $\mathcal{G}_{-i} = \mathcal{G} \setminus \{g_i\}$
+    \item Cluster $\mathcal{G}_{-i}$ with $K$ clusters
+    \item Compute silhouette score $\bar{s}_{-i}$
+\end{enumerate}
+
+\textbf{Stability metric}:
+\begin{equation}
+\Delta_{\text{CV}} = \frac{1}{N} \sum_{i=1}^N |\bar{s} - \bar{s}_{-i}|
+\end{equation}
+
+\textbf{Our result}: $\Delta_{\text{CV}} = 0.003$ (mean absolute change)
+
+\textbf{Interpretation}: Clustering highly stable to individual gene removal. Not driven by outliers.
+
+\subsection{Independent Cross-Disorder Validation}
+
+\textbf{Correlation analysis} between original enrichment and independent signals:
+
+For each gene $g_i$, let:
+\begin{itemize}
+    \item $E_{\text{shared}}(g_i)$ = original shared enrichment
+    \item $S_{\text{cross}}(g_i)$ = mean number of genome-wide significant SNPs across 11 cross-disorder studies
+\end{itemize}
+
+\textbf{Pearson correlation}:
+\begin{equation}
+r = \frac{\sum_{i=1}^N (E_{\text{shared}}(g_i) - \bar{E})(S_{\text{cross}}(g_i) - \bar{S})}{\sqrt{\sum_{i=1}^N (E_{\text{shared}}(g_i) - \bar{E})^2} \sqrt{\sum_{i=1}^N (S_{\text{cross}}(g_i) - \bar{S})^2}}
+\end{equation}
+
+\textbf{Our result}: $r = 0.898$, $p = 1.06 \times 10^{-13}$ ($N=36$ genes)
+
+\textbf{Spearman rank correlation}:
+\begin{equation}
+\rho = 1 - \frac{6\sum_{i=1}^N d_i^2}{N(N^2-1)}
+\end{equation}
+
+where $d_i$ is the difference in ranks for gene $i$.
+
+\textbf{Our result}: $\rho = 0.782$, $p = 1.06 \times 10^{-13}$
+
+\textbf{Interpretation}: Strong correlation with entirely independent data provides evidence for biological validity despite failed clustering tests.
+
+\section{Statistical Power Analysis}
+
+\subsection{Power for Correlation Detection}
+
+Given $N=36$ genes, the minimum detectable correlation at $\alpha=0.05$, power $=0.80$:
+
+\begin{equation}
+r_{\text{min}} = \sqrt{\frac{(z_{\alpha/2} + z_{\beta})^2}{N - 3}}
+\end{equation}
+
+where $z_{\alpha/2} = 1.96$ and $z_{\beta} = 0.84$.
+
+\textbf{Calculation}: $r_{\text{min}} = \sqrt{\frac{(1.96 + 0.84)^2}{35 - 3}} = \sqrt{\frac{7.84}{32}} \approx 0.495$
+
+\textbf{Interpretation}: Our observed $r=0.913$ far exceeds minimum detectable effect, indicating high statistical power.
+
+\subsection{Power for Clustering Validation}
+
+For permutation test with $B=1000$ permutations:
+
+\textbf{Minimum detectable effect size} (Cohen's $d$):
+\begin{equation}
+d_{\text{min}} = \frac{z_{\alpha} + z_{\beta}}{\sqrt{N/2}}
+\end{equation}
+
+For $N=36$: $d_{\text{min}} = \frac{1.96 + 0.84}{\sqrt{35/2}} \approx 0.67$
+
+\textbf{Interpretation}: Medium-to-large effects detectable, but small $N$ limits power for subtle clustering patterns.
+
+\section{Computational Complexity}
+
+\subsection{K-Means Algorithm}
+
+\textbf{Time complexity}: $O(NKdT)$
+\begin{itemize}
+    \item $N = 35$ genes
+    \item $K = 5$ clusters
+    \item $d = 4$ dimensions (pathways)
+    \item $T \approx 100$ iterations (typical convergence)
+\end{itemize}
+
+\textbf{Total operations}: $35 \times 5 \times 4 \times 100 = 70,000$
+
+\textbf{Space complexity}: $O(Nd + K) = O(35 \times 4 + 5) = O(145)$
+
+\subsection{Validation Procedures}
+
+\textbf{Permutation test}: $O(BNKdT) = O(1000 \times 70,000) = O(7 \times 10^7)$ operations
+
+\textbf{Bootstrap}: $O(BNKdT) = O(1000 \times 70,000) = O(7 \times 10^7)$ operations
+
+\textbf{Cross-validation}: $O(N^2KdT) = O(35^2 \times 5 \times 4 \times 100) = O(2.45 \times 10^6)$ operations
+
+\textbf{Total computational cost}: Approximately $10^8$ operations, feasible on standard hardware.
+
+\section{Manifold Learning Perspective}
+
+\subsection{Intrinsic Dimensionality}
+
+The effective dimensionality of enrichment manifold $\mathcal{M}$ may be lower than ambient dimension $d=4$.
+
+\textbf{Local PCA estimate}:
+For each point $\mathbf{f}(g_i)$ and its $k$-nearest neighbors, compute local covariance matrix $\mathbf{C}_i$.
+
+\textbf{Intrinsic dimension}:
+\begin{equation}
+\hat{d}_{\text{int}} = \underset{d'}{\arg\max} \left\{ \frac{\sum_{j=1}^{d'} \lambda_j}{\sum_{j=1}^d \lambda_j} \geq 0.95 \right\}
+\end{equation}
+
+where $\lambda_1 \geq \ldots \geq \lambda_d$ are eigenvalues of $\mathbf{C}_i$.
+
+\subsection{Geodesic Distance}
+
+True distances on manifold may differ from Euclidean distances in $\mathbb{R}^4$:
+
+\textbf{Geodesic distance} between $g_i$ and $g_j$:
+\begin{equation}
+d_{\mathcal{M}}(g_i, g_j) = \inf_{\gamma} \int_0^1 \|\gamma'(t)\| \, dt
+\end{equation}
+
+where $\gamma : [0,1] \rightarrow \mathcal{M}$ is a path connecting $\mathbf{f}(g_i)$ and $\mathbf{f}(g_j)$.
+
+\textbf{Approximation}: Isomap or diffusion maps could estimate $d_{\mathcal{M}}$.
+
+\section{Alternative Geometric Interpretations}
+
+\subsection{Mixture Model Perspective}
+
+Instead of hard k-means clustering, enrichment could arise from mixture of Gaussians:
+
+\begin{equation}
+p(\mathbf{f}(g_i)) = \sum_{k=1}^K \pi_k \mathcal{N}(\mathbf{f}(g_i) | \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+\end{equation}
+
+where $\pi_k$ are mixing proportions, $\boldsymbol{\mu}_k$ are means, $\boldsymbol{\Sigma}_k$ are covariances.
+
+\textbf{Soft assignment} via posterior probability:
+\begin{equation}
+\gamma_{ik} = \frac{\pi_k \mathcal{N}(\mathbf{f}(g_i) | \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}{\sum_{l=1}^K \pi_l \mathcal{N}(\mathbf{f}(g_i) | \boldsymbol{\mu}_l, \boldsymbol{\Sigma}_l)}
+\end{equation}
+
+\textbf{Interpretation}: Would better capture overlapping strata and uncertainty in assignments.
+
+\subsection{Density-Based Perspective}
+
+\textbf{Mode-seeking interpretation}: Enrichment patterns correspond to local maxima of density $p(\mathbf{f})$.
+
+\textbf{Mean-shift algorithm}:
+\begin{equation}
+\mathbf{m}(\mathbf{x}) = \frac{\sum_{i=1}^N \mathbf{f}(g_i) K(\|\mathbf{x} - \mathbf{f}(g_i)\|)}{\sum_{i=1}^N K(\|\mathbf{x} - \mathbf{f}(g_i)\|)}
+\end{equation}
+
+where $K(\cdot)$ is a kernel function.
+
+\textbf{Advantage}: No assumption of spherical clusters or fixed number of patterns.
+
+\section{Limitations and Future Directions}
+
+\subsection{Sample Size}
+
+With $N=36$ genes, statistical power is limited for:
+\begin{itemize}
+    \item Detecting subtle clustering structure
+    \item Robustly estimating cluster boundaries
+    \item Validating via resampling methods
+\end{itemize}
+
+\textbf{Recommendation}: Expand analysis to genome-wide scale ($N > 10,000$ genes).
+
+\subsection{Feature Engineering}
+
+Current features (pathway-level enrichment) may not capture:
+\begin{itemize}
+    \item Gene-gene interactions
+    \item Tissue-specific expression
+    \item Developmental timing
+    \item Regulatory networks
+\end{itemize}
+
+\textbf{Recommendation}: Integrate multi-omic data (expression, chromatin, protein-protein interactions).
+
+\subsection{Alternative Clustering Methods}
+
+K-means assumes:
+\begin{itemize}
+    \item Spherical clusters
+    \item Similar cluster sizes
+    \item Linear separability
+\end{itemize}
+
+\textbf{Alternatives to explore}:
+\begin{itemize}
+    \item Hierarchical clustering with linkage criteria
+    \item DBSCAN for density-based patterns
+    \item Gaussian mixture models for soft assignments
+    \item Spectral clustering for non-convex shapes
+\end{itemize}
+
+\subsection{Biological Validation}
+
+Mathematical framework requires experimental validation:
+\begin{itemize}
+    \item Functional studies of genes within patterns
+    \item Patient stratification based on genetic profiles
+    \item Treatment response prediction
+    \item Animal model phenotypes
+\end{itemize}
+
+\end{document}

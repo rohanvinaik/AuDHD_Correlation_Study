@@ -67,6 +67,7 @@ dependencies = [
     "python-dotenv>=1.0.0",
     # Utils
     "tqdm>=4.65.0",
+    "joblib>=1.3.0",
 ]
 
 [project.optional-dependencies]
@@ -88,6 +89,14 @@ docs = [
     "mkdocs>=1.4.0",
     "mkdocs-material>=9.1.0",
     "mkdocstrings[python]>=0.22.0",
+]
+performance = [
+    # Performance optimization libraries
+    "joblib>=1.3.0",      # Parallel processing
+    "numba>=0.57.0",      # JIT compilation
+    # Advanced options (uncomment if needed)
+    # "cupy>=12.0.0",     # GPU acceleration (requires CUDA)
+    # "ray[default]>=2.5.0",  # Distributed computing
 ]
 
 [project.scripts]
